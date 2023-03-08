@@ -107,7 +107,6 @@
 </template>
 
 <script setup lang="ts">
-import { useWindowSize } from '@vueuse/core'
 import { useStore } from '@/store'
 
 const props = defineProps<{
@@ -121,7 +120,6 @@ const { col, gap, filterConfig, showSidebar } = toRefs(store)
 const configLoaded = ref(false)
 const showAuthor = ref(false)
 const showTags = ref(false)
-const { width: windowWidth } = useWindowSize()
 
 const tags = computed(() => {
   const _tags: {
@@ -188,11 +186,6 @@ onMounted(() => {
   filterConfig.value.restrict.sanity.max = Number(localStorage.getItem('sanity')) || 2
   configLoaded.value = true
 })
-
-function switchSidebar(to: boolean) {
-  if (windowWidth.value > 1024)
-    showSidebar.value = to
-}
 </script>
 
 <style>
