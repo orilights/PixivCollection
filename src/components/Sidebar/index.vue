@@ -1,10 +1,15 @@
 <template>
   <div
-    class="fixed hidden sm:block top-0 left-0 h-screen w-[400px] bg-white z-10 overflow-x-hidden overflow-y-auto px-2 transition-all border-r-2 dark:bg-[#242424] dark:border-[#1a1a1a]  duration-500"
+    class="fixed w-full lg:block top-0 left-0 h-screen sm:w-[400px] bg-white z-20 overflow-x-hidden overflow-y-auto px-2 transition-all border-r-2 dark:bg-[#242424] dark:border-[#1a1a1a]  duration-500"
     :class="{
-      'left-[-380px]': !showSidebar,
-    }" @mouseenter="showSidebar = true" @mouseleave="showSidebar = false"
+      '-translate-x-full': !showSidebar,
+    }"
   >
+    <button class="absolute right-2 top-2" @click="showSidebar = false">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
     <div class="my-1">
       列数:
       <select v-model.number="col" class="border rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]">
@@ -102,6 +107,7 @@
 </template>
 
 <script setup lang="ts">
+import { useWindowSize } from '@vueuse/core'
 import { useStore } from '@/store'
 
 const props = defineProps<{
@@ -115,6 +121,7 @@ const { col, gap, filterConfig, showSidebar } = toRefs(store)
 const configLoaded = ref(false)
 const showAuthor = ref(false)
 const showTags = ref(false)
+const { width: windowWidth } = useWindowSize()
 
 const tags = computed(() => {
   const _tags: {
@@ -181,6 +188,11 @@ onMounted(() => {
   filterConfig.value.restrict.sanity.max = Number(localStorage.getItem('sanity')) || 2
   configLoaded.value = true
 })
+
+function switchSidebar(to: boolean) {
+  if (windowWidth.value > 1024)
+    showSidebar.value = to
+}
 </script>
 
 <style>
