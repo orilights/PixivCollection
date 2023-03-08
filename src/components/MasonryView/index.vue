@@ -1,6 +1,6 @@
 <template>
   <div v-show="!imagesFiltered.length" class="w-fit mx-auto px-3 py-1 text-lg bg-black/20 rounded-xl">
-    无数据
+    {{ loading ? '数据加载中...' : '无数据' }}
   </div>
   <div
     ref="container" class="w-full lg:w-[700px] xl:w-[960px]  mx-auto relative overflow-y-hidden" :style="{
@@ -24,6 +24,7 @@ import { useDebounce, useDebounceFn, useElementBounding, useElementSize } from '
 
 const props = withDefaults(
   defineProps<{
+    loading: boolean
     images: Image[]
     config: ComponentOptions
     filter: (image: Image) => boolean

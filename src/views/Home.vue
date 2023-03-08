@@ -12,6 +12,7 @@
 
     <div class="px-2 lg:px-0">
       <MasonryView
+        :loading="loading"
         :images="images"
         :config="{
           col,
@@ -31,6 +32,7 @@ import { useStore } from '@/store'
 const store = useStore()
 const { col, gap, filterConfig, darkMode } = toRefs(store)
 const images = ref<Image[]>([])
+const loading = ref(true)
 
 const imageFilter = computed(() => {
   return (image: Image) => {
@@ -88,6 +90,9 @@ onMounted(() => {
     .then(res => res.json())
     .then((data) => {
       images.value = data
+    })
+    .finally(() => {
+      loading.value = false
     })
 })
 </script>
