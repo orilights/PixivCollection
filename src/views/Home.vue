@@ -1,5 +1,5 @@
 <template>
-  <div class="dark:bg-[#1a1a1a] dark:text-white transition-colors duration-500 min-h-screen">
+  <div class="dark:bg-[#1a1a1a] dark:text-white transition-colors min-h-screen">
     <Sidebar :images="images" :filter-config="filterConfig" />
     <div v-show="showSidebar" class="fixed w-screen h-screen left-0 top-0 bg-black/40 z-10" @click="showSidebar = false" />
     <div class="h-[60px] text-2xl flex items-center justify-center">

@@ -11,6 +11,9 @@ export default defineConfig({
     },
   },
   base: './',
+  build: {
+    copyPublicDir: false,
+  },
   plugins: [
     vue(),
     AutoImport({

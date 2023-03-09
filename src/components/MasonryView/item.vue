@@ -18,7 +18,6 @@
           {{ tag.translated_name || tag.name }}
         </span>
       </p>
-      <!-- <p>sanity_level：{{ image.detail.sanity_level }}</p> -->
     </div>
     <Transition>
       <div
