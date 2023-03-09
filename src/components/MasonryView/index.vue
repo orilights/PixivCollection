@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import { useDebounce, useDebounceFn, useElementBounding, useElementSize } from '@vueuse/core'
+import { useStore } from '@/store'
 
 const props = withDefaults(
   defineProps<{
@@ -42,6 +43,7 @@ const props = withDefaults(
     filter: () => true,
   })
 
+const store = useStore()
 const container = ref()
 const { width: containerWidthO } = useElementSize(container)
 const { top: containerTopO } = useElementBounding(container)
@@ -123,7 +125,9 @@ function getImageHeight(size: [number, number]) {
 }
 
 function openImage(idx: number) {
-  window.open(imagesFiltered.value[idx].original, '_blank')
+  // window.open(imagesFiltered.value[idx].original, '_blank')
+  store.showImageInfo = imagesFiltered.value[idx]
+  store.showImage = true
 }
 
 function openPixiv(idx: number) {

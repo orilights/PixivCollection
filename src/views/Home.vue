@@ -37,6 +37,7 @@
           preload: 3,
         }" :filter="imageFilter"
       />
+      <ImageView />
     </div>
   </div>
 </template>
