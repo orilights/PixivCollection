@@ -34,7 +34,7 @@ import { useMouse } from '@vueuse/core'
 import { useStore } from '@/store'
 
 const store = useStore()
-const { showImage, showImageInfo, showNav } = toRefs(store)
+const { showImageViewer: showImage, showImageInfo } = toRefs(store)
 
 const ratio = ref(1)
 const postiion = ref({ x: 0, y: 0 })
@@ -47,14 +47,15 @@ let startDistance = 0
 watch(showImage, (val) => {
   if (val) {
     document.body.style.overflow = 'hidden'
-    showNav.value = false
     const ratioWidth = window.innerWidth / showImageInfo.value.size[0]
     const ratioHeight = window.innerHeight / showImageInfo.value.size[1]
     ratio.value = Math.min(ratioWidth, ratioHeight)
     postiion.value.x = (window.innerWidth - showImageInfo.value.size[0]) / 2
     postiion.value.y = (window.innerHeight - showImageInfo.value.size[1]) / 2
   }
-  else { document.body.style.overflow = 'visible' }
+  else {
+    document.body.style.overflow = 'visible'
+  }
 })
 
 function handleTouchStart(e: TouchEvent) {

@@ -7,7 +7,7 @@ export const useStore = defineStore('main', {
     gap: 10,
     showSidebar: false,
     showNav: true,
-    showImage: false,
+    showImageViewer: false,
     showImageInfo: {} as Image,
     filterConfig: {
       tag: {

@@ -3,7 +3,7 @@
     <div
       class="fixed top-0 left-0 w-full h-[60px] text-2xl flex items-center justify-center z-10 bg-white dark:bg-[#202020] transition-transform shadow-md"
       :class="{
-        'translate-y-[-60px]': !showNav,
+        'translate-y-[-70px]': !showNav || showImageViewer,
       }"
     >
       <button class="absolute left-0 w-[60px] h-[60px]" @click="showSidebar = !showSidebar">
@@ -37,7 +37,7 @@
 import { useStore } from '@/store'
 
 const store = useStore()
-const { darkMode, showSidebar, showNav } = toRefs(store)
+const { darkMode, showSidebar, showNav, showImageViewer } = toRefs(store)
 
 let oldY = 0
 

@@ -127,7 +127,7 @@ function getImageHeight(size: [number, number]) {
 function openImage(idx: number) {
   // window.open(imagesFiltered.value[idx].original, '_blank')
   store.showImageInfo = imagesFiltered.value[idx]
-  store.showImage = true
+  store.showImageViewer = true
 }
 
 function openPixiv(idx: number) {
