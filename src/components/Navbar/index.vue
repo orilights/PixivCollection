@@ -1,7 +1,7 @@
 <template>
-  <div class="h-[60px]">
+  <div class="h-[60px] mb-2">
     <div
-      class="fixed top-0 left-0 w-full h-[60px] text-2xl flex items-center justify-center z-10 bg-white dark:bg-black transition-transform"
+      class="fixed top-0 left-0 w-full h-[60px] text-2xl flex items-center justify-center z-10 bg-white dark:bg-[#202020] transition-transform shadow-md"
       :class="{
         'translate-y-[-60px]': !showNav,
       }"
