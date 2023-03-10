@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed w-full lg:block top-0 left-0 h-screen sm:w-[400px] bg-white z-20 overflow-x-hidden overflow-y-auto px-2 transition-all border-r-2 dark:bg-[#242424] dark:border-[#1a1a1a]  duration-500"
+    class="fixed w-full lg:block top-0 left-0 h-screen sm:w-[400px] bg-white overflow-x-hidden overflow-y-auto px-2 transition-all border-r-2 dark:bg-[#242424] dark:border-[#1a1a1a]  duration-500 z-30"
     :class="{
       '-translate-x-full': !showSidebar,
     }"
