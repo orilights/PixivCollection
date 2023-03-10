@@ -12,7 +12,7 @@
     </button>
     <div class="my-1">
       列数:
-      <select v-model.number="col" class="border rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]">
+      <select v-model.number="col" class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]">
         <option value="-1">
           自动
         </option>
@@ -27,7 +27,7 @@
         </option>
       </select>
       间隙:
-      <select v-model.number="gap" class="border rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]">
+      <select v-model.number="gap" class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]">
         <option value="2">
           2px
         </option>
@@ -38,8 +38,10 @@
           10px
         </option>
       </select>
+    </div>
+    <div>
       健全度:
-      <select v-model.number="filterConfig.restrict.sanity.max" class="border rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]">
+      <select v-model.number="filterConfig.restrict.sanity.max" class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]">
         <option value="2">
           2
         </option>
@@ -50,7 +52,10 @@
           6
         </option>
       </select>
-      <span>R18：<input v-model="filterConfig.restrict.r18" type="checkbox"></span>
+      <button class="px-2 py-0.5 mx-1 border rounded-md hover:border-blue-500 transition-colors" @click="confirmR18">
+        {{ filterConfig.restrict.r18 ? '隐藏R18内容' : '显示R18内容' }}
+      </button>
+      <!-- <span>R18：<input :checked="filterConfig.restrict.r18" type="checkbox" @click.prevent="confirmR18"></span> -->
     </div>
     <div>标签过滤作者：<input v-model="filterConfig.tag.filterAuthor" type="checkbox"></div>
     <div>标签包含收藏：<input v-model="filterConfig.tag.includeBookmark" type="checkbox"></div>
@@ -73,7 +78,7 @@
     </div>
     <div
       class="overflow-hidden" :class="{
-        'h-[100px] mask': !showAuthor,
+        'h-[200px] mask': !showAuthor,
       }"
     >
       <button
@@ -92,7 +97,7 @@
     </div>
     <div
       class="overflow-hidden" :class="{
-        'h-[100px] mask': !showTags,
+        'h-[200px] mask': !showTags,
       }"
     >
       <button
@@ -186,6 +191,15 @@ onMounted(() => {
   filterConfig.value.restrict.sanity.max = Number(localStorage.getItem('sanity')) || 2
   configLoaded.value = true
 })
+
+function confirmR18() {
+  if (filterConfig.value.restrict.r18)
+    filterConfig.value.restrict.r18 = false
+  // eslint-disable-next-line no-alert
+  else if (confirm('确认显示R18内容？'))
+    filterConfig.value.restrict.r18 = true
+  filterConfig.value.restrict.sanity.max = 6
+}
 </script>
 
 <style>
