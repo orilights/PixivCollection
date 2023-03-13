@@ -1,27 +1,29 @@
 <template>
   <div class="h-[60px] mb-2">
     <div
-      class="fixed top-0 left-0 w-full h-[60px] text-2xl flex items-center justify-center z-10 bg-white dark:bg-[#202020] transition-transform shadow-md"
+      class="fixed top-0 left-0 w-full h-[60px] flex items-center justify-between z-10 bg-white dark:bg-[#202020] transition-[transform,background] shadow-md"
       :class="{
         'translate-y-[-70px]': !showNav || showImageViewer,
       }"
     >
-      <button class="absolute left-0 w-[60px] h-[60px]" @click="showSidebar = !showSidebar">
+      <button class="w-[60px] h-[60px] hover:bg-gray-400/20" @click="showSidebar = !showSidebar">
         <svg
           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="w-9 h-9 mx-auto"
+          class="w-7 h-7 mx-auto"
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
       </button>
-      OriLightの<span class="text-[#0398fa] px-1">Pixiv</span>收藏夹
+      <div class="text-lg h-[60px] leading-[60px] select-none" @dblclick="navToTop">
+        OriLightの<span class="text-[#0398fa] px-1">Pixiv</span>收藏夹
+      </div>
       <button
-        class="absolute right-2 border border-gray-400/50 p-1 hover:border-blue-400 rounded-md transition-colors duration-500"
+        class="w-[60px] h-[60px] hover:bg-gray-400/20"
         @click="darkMode = !darkMode"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="w-4 h-4"
+          class="w-5 h-5 mx-auto"
         >
           <path
             stroke-linecap="round" stroke-linejoin="round"
@@ -51,4 +53,8 @@ onMounted(() => {
     oldY = newY
   })
 })
+
+function navToTop() {
+  document.documentElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 </script>

@@ -1,18 +1,24 @@
 <template>
   <div
-    class="fixed w-full lg:block top-0 left-0 h-screen sm:w-[400px] bg-white overflow-x-hidden overflow-y-auto px-2 transition-all border-r-2 dark:bg-[#242424] dark:border-[#1a1a1a]  duration-500 z-30"
+    class="fixed w-full lg:block top-0 left-0 h-screen sm:w-[400px] bg-white overflow-x-hidden overflow-y-auto px-2 pt-2 transition-all dark:bg-[#242424] duration-500 z-30"
     :class="{
       '-translate-x-full': !showSidebar,
     }"
   >
     <button class="absolute right-2 top-2" @click="showSidebar = false">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <svg
+        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="w-6 h-6"
+      >
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
     <div class="my-1">
       列数:
-      <select v-model.number="col" class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]">
+      <select
+        v-model.number="col"
+        class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
+      >
         <option value="-1">
           自动
         </option>
@@ -27,7 +33,10 @@
         </option>
       </select>
       间隙:
-      <select v-model.number="gap" class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]">
+      <select
+        v-model.number="gap"
+        class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
+      >
         <option value="2">
           2px
         </option>
@@ -41,7 +50,10 @@
     </div>
     <div>
       健全度:
-      <select v-model.number="filterConfig.restrict.sanity.max" class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]">
+      <select
+        v-model.number="filterConfig.restrict.sanity.max"
+        class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
+      >
         <option value="2">
           2
         </option>
@@ -53,26 +65,34 @@
         </option>
       </select>
       <button class="px-2 py-0.5 mx-1 border rounded-md hover:border-blue-500 transition-colors" @click="confirmR18">
-        {{ filterConfig.restrict.r18 ? '隐藏R18内容' : '显示R18内容' }}
+        {{ filterConfig.restrict.r18 ? '隐藏R18内容' : '🔞显示R18内容' }}
       </button>
-      <!-- <span>R18：<input :checked="filterConfig.restrict.r18" type="checkbox" @click.prevent="confirmR18"></span> -->
     </div>
     <div>标签过滤作者：<input v-model="filterConfig.tag.filterAuthor" type="checkbox"></div>
     <div>标签包含收藏：<input v-model="filterConfig.tag.includeBookmark" type="checkbox"></div>
-    <div>
+    <div class="my-1">
       当前选中作者：{{ filterConfig.author.enable ? authors.find((a) => a.id === filterConfig.author.id)?.name : '未选中' }}
-      <button class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors" @click="filterConfig.author.enable = false; filterConfig.author.id = -1">
+      <button
+        class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
+        @click="filterConfig.author.enable = false; filterConfig.author.id = -1"
+      >
         清除
       </button>
     </div>
-    <div>
+    <div class="my-1">
       当前选中标签：{{ filterConfig.tag.enable ? filterConfig.tag.name : '未选中' }}
-      <button class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors" @click="filterConfig.tag.enable = false; filterConfig.tag.name = ''">
+      <button
+        class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
+        @click="filterConfig.tag.enable = false; filterConfig.tag.name = ''"
+      >
         清除
       </button>
     </div>
     <div>
-      <button class="px-2 mx-1 my-2 border rounded-md hover:border-blue-500 transition-colors" @click="showAuthor = !showAuthor">
+      <button
+        class="px-2 mx-1 my-2 border rounded-md hover:border-blue-500 transition-colors"
+        @click="showAuthor = !showAuthor"
+      >
         {{ showAuthor ? '收起' : '展开' }}作者列表
       </button>
     </div>
@@ -82,16 +102,21 @@
       }"
     >
       <button
-        v-for="author in authors" :key="author.id" class="bg-blue-500/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+        v-for="author in authors" :key="author.id"
+        class="bg-blue-500/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
         :class="{
           'bg-gray-400': author.id === filterConfig.author.id,
-        }" @click="filterConfig.author.enable = true; filterConfig.author.id = author.id"
+        }"
+        @click="filterConfig.author.enable = true; filterConfig.author.id = author.id"
       >
         {{ author.name }}
       </button>
     </div>
     <div>
-      <button class="px-2 mx-1 my-2 border rounded-md hover:border-blue-500 transition-colors" @click="showTags = !showTags">
+      <button
+        class="px-2 mx-1 my-2 border rounded-md hover:border-blue-500 transition-colors"
+        @click="showTags = !showTags"
+      >
         {{ showTags ? '收起' : '展开' }}标签列表
       </button>
     </div>
@@ -193,12 +218,14 @@ onMounted(() => {
 })
 
 function confirmR18() {
-  if (filterConfig.value.restrict.r18)
+  if (filterConfig.value.restrict.r18) {
     filterConfig.value.restrict.r18 = false
+  }
   // eslint-disable-next-line no-alert
-  else if (confirm('确认显示R18内容？'))
+  else if (confirm('确认显示R18内容？')) {
     filterConfig.value.restrict.r18 = true
-  filterConfig.value.restrict.sanity.max = 6
+    filterConfig.value.restrict.sanity.max = 6
+  }
 }
 </script>
 
