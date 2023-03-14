@@ -1,7 +1,7 @@
 <template>
   <Transition>
     <div
-      v-show="showImage" class="fixed top-0 left-0 w-screen h-screen bg-black/30"
+      v-if="showImage" class="fixed top-0 left-0 w-screen h-screen bg-black/30"
       @mousemove="imageGragging && (postiion.x += $event.movementX, postiion.y += $event.movementY)"
       @mouseup="imageGragging = false" @mouseleave="imageGragging = false"
       @touchmove="imageGragging && handleTouchMove($event)" @wheel="handleZoom"
@@ -15,15 +15,17 @@
       </button>
       <div class="relative">
         <img
-          :src="showImageInfo.original"
+          :src="resolvePath(showImageInfo.original)"
           class="max-w-none cursor-grab active:cursor-grabbing select-none touch-none absolute" :class="{
             '': !imageGragging,
           }" :style="{
             transform: `scale(${ratio})`,
             left: `${postiion.x}px`,
             top: `${postiion.y}px`,
-          }" @touchstart.prevent="handleTouchStart" @mousedown.prevent="imageGragging = true"
+          }"
+          @touchstart.prevent="handleTouchStart" @mousedown.prevent="imageGragging = true"
         >
+        <img src="@/assets/loading.svg" class="absolute top-[calc(50vh-19px)] left-[calc(50vw-19px)]">
       </div>
     </div>
   </Transition>
@@ -40,12 +42,19 @@ const ratio = ref(1)
 const postiion = ref({ x: 0, y: 0 })
 const imageGragging = ref(false)
 const mouse = useMouse({ type: 'client' })
+const loading = ref(false)
 
 const startPosition = { x: 0, y: 0 }
 let startDistance = 0
 
 watch(showImage, (val) => {
   if (val) {
+    loading.value = true
+    const image = new Image()
+    image.addEventListener('load', () => {
+      loading.value = false
+    })
+    image.src = resolvePath(showImageInfo.value.original)
     document.body.style.overflow = 'hidden'
     const ratioWidth = window.innerWidth / showImageInfo.value.size[0]
     const ratioHeight = window.innerHeight / showImageInfo.value.size[1]
@@ -54,6 +63,7 @@ watch(showImage, (val) => {
     postiion.value.y = (window.innerHeight - showImageInfo.value.size[1]) / 2
   }
   else {
+    loading.value = false
     document.body.style.overflow = 'visible'
   }
 })
@@ -115,6 +125,12 @@ function handleResize(newRatio: number, centerPostiion: { x: number; y: number }
   postiion.value.x -= (newRatio / ratio.value - 1) * deltaX
   postiion.value.y -= (newRatio / ratio.value - 1) * deltaY
   ratio.value = newRatio
+}
+
+function resolvePath(pathStr: string) {
+  if (import.meta.env.MODE === 'production')
+    return `https://dl.orilight.top/d/pixiv/${pathStr.substring(pathStr.search(/\d+_p\d\.(jpg|png)/))}`
+  return pathStr
 }
 </script>
 
