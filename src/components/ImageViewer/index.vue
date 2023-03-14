@@ -25,7 +25,7 @@
           }"
           @touchstart.prevent="handleTouchStart" @mousedown.prevent="imageGragging = true"
         >
-        <img src="@/assets/loading.svg" class="absolute top-[calc(50vh-19px)] left-[calc(50vw-19px)]">
+        <img v-show="loading" src="@/assets/loading.svg" class="absolute top-[calc(50vh-19px)] left-[calc(50vw-19px)]">
       </div>
     </div>
   </Transition>
