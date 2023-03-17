@@ -22,8 +22,8 @@
         <option value="-1">
           自动
         </option>
-        <option v-for="c in 5" :key="c" :value="c">
-          {{ c }}
+        <option v-for="i in 5" :key="i" :value="i">
+          {{ i }}
         </option>
       </select>
       间隙:
@@ -31,17 +31,8 @@
         v-model.number="gap"
         class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
       >
-        <option value="2">
-          2px
-        </option>
-        <option value="5">
-          5px
-        </option>
-        <option value="10">
-          10px
-        </option>
-        <option value="20">
-          20px
+        <option v-for="i in [2, 5, 10, 20]" :key="i" :value="i">
+          {{ `${i}px` }}
         </option>
       </select>
     </div>
@@ -51,14 +42,8 @@
         v-model.number="filterConfig.restrict.sanity.max"
         class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
       >
-        <option value="2">
-          2
-        </option>
-        <option value="4">
-          4
-        </option>
-        <option value="6">
-          6
+        <option v-for="i in [2, 4, 6]" :key="i" :value="i">
+          {{ i }}
         </option>
       </select>
       <button class="px-2 py-0.5 mx-1 border rounded-md hover:border-blue-500 transition-colors" @click="confirmR18">
