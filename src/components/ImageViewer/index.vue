@@ -129,7 +129,7 @@ function handleResize(newRatio: number, centerPostiion: { x: number; y: number }
 
 function resolvePath(pathStr: string) {
   if (import.meta.env.MODE === 'production')
-    return `https://dl.orilight.top/d/pixiv/${pathStr.substring(pathStr.search(/\d+_p\d\.(jpg|png)/))}`
+    return `https://dl.orilight.top/d/pixiv/${pathStr.substring(pathStr.search(/\d+_p\d+\.(jpg|png)/))}`
   return pathStr
 }
 </script>
