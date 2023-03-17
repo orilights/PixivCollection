@@ -62,6 +62,8 @@ const colsTop = ref(Array.from({ length: col.value }, () => 0))
 const imageWidth = computed(() => (containerWidth.value - (col.value - 1) * props.config.gap) / col.value)
 const imagesFiltered = computed(() => props.images.filter(props.filter))
 const imagesRenderList = computed(() => {
+  if (!containerWidth.value)
+    return []
   const _list: Array<{
     image: Image
     place: number
@@ -81,12 +83,11 @@ const imagesRenderList = computed(() => {
     })
     colsTop.value[colPlace] += getImageHeight(image.size) + props.config.gap
   })
-
   return _list.filter((item) => {
     const { preload } = props.config
     if (item.top > (-containerTop.value - preload * window.innerHeight) && item.top < (-containerTop.value + (preload + 1) * window.innerHeight))
-      return item
-    return null
+      return true
+    return false
   })
 })
 const imagesShow = ref<number[]>([])
