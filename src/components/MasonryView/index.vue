@@ -61,7 +61,7 @@ const col = computed(() => {
 const colsTop = ref(Array.from({ length: col.value }, () => 0))
 const imageWidth = computed(() => (containerWidth.value - (col.value - 1) * props.config.gap) / col.value)
 const imagesFiltered = computed(() => props.images.filter(props.filter))
-const imagesRenderList = computed(() => {
+const imagesPlaced = computed(() => {
   if (!containerWidth.value)
     return []
   const _list: Array<{
@@ -83,7 +83,10 @@ const imagesRenderList = computed(() => {
     })
     colsTop.value[colPlace] += getImageHeight(image.size) + props.config.gap
   })
-  return _list.filter((item) => {
+  return _list
+})
+const imagesRenderList = computed(() => {
+  return imagesPlaced.value.filter((item) => {
     const { preload } = props.config
     if (item.top > (-containerTop.value - preload * window.innerHeight) && item.top < (-containerTop.value + (preload + 1) * window.innerHeight))
       return true
@@ -126,7 +129,6 @@ function getImageHeight(size: [number, number]) {
 }
 
 function openImage(idx: number) {
-  // window.open(imagesFiltered.value[idx].original, '_blank')
   store.showImageInfo = imagesFiltered.value[idx]
   store.showImageViewer = true
 }

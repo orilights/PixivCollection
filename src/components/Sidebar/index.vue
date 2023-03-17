@@ -22,14 +22,8 @@
         <option value="-1">
           自动
         </option>
-        <option value="2">
-          2
-        </option>
-        <option value="3">
-          3
-        </option>
-        <option value="4">
-          4
+        <option v-for="c in 5" :key="c" :value="c">
+          {{ c }}
         </option>
       </select>
       间隙:
@@ -45,6 +39,9 @@
         </option>
         <option value="10">
           10px
+        </option>
+        <option value="20">
+          20px
         </option>
       </select>
     </div>

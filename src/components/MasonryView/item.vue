@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute wf-image bg-gray-100 rounded-[12px] overflow-hidden transition-transform group">
+  <div class="absolute bg-gray-100 rounded-[12px] overflow-hidden transition-transform group shadow-[0_2px_12px_rgba(0,0,0,0.2)]">
     <div
       class="absolute w-full h-full bg-black/50 opacity-0 group-hover:opacity-100 transition-all cursor-pointer text-white px-2 pt-8 text-sm"
       @click="$emit('openImage', index)"
@@ -19,7 +19,7 @@
         </span>
       </p>
     </div>
-    <Transition>
+    <Transition name="fade">
       <div
         v-show="!imageLoaded"
         class="absolute w-full h-full bg-black flex justify-center items-center text-white"
@@ -52,13 +52,13 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.v-enter-active,
-.v-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
 
-.v-enter-from,
-.v-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>

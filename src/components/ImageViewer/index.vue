@@ -1,5 +1,5 @@
 <template>
-  <Transition>
+  <Transition name="fade">
     <div
       v-if="showImage" class="fixed top-0 left-0 w-screen h-screen bg-black/30"
       @mousemove="imageGragging && (postiion.x += $event.movementX, postiion.y += $event.movementY)"
@@ -134,14 +134,14 @@ function resolvePath(pathStr: string) {
 }
 </script>
 
-<style>
-.v-enter-active,
-.v-leave-active {
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity .3s;
 }
 
-.v-enter-from,
-.v-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
