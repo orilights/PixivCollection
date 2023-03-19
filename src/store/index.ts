@@ -10,12 +10,15 @@ export const useStore = defineStore('main', {
     showImageViewer: false,
     showImageInfo: {} as Image,
     filterConfig: {
+      year: {
+        enable: false,
+        value: 0,
+      },
       tag: {
         enable: false,
         name: '',
         includeBookmark: false,
         includeRatherThan: 5,
-        filterAuthor: false,
       },
       author: {
         enable: false,

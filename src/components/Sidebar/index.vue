@@ -50,11 +50,13 @@
         {{ filterConfig.restrict.r18 ? '隐藏R18内容' : '🔞显示R18内容' }}
       </button>
     </div>
-    <div>标签过滤作者：<input v-model="filterConfig.tag.filterAuthor" type="checkbox"></div>
-    <div>标签包含收藏：<input v-model="filterConfig.tag.includeBookmark" type="checkbox"></div>
+    <div class="my-1">
+      标签包含收藏：<input v-model="filterConfig.tag.includeBookmark" type="checkbox">
+    </div>
     <div class="my-1">
       当前选中作者：{{ filterConfig.author.enable ? authors.find((a) => a.id === filterConfig.author.id)?.name : '未选中' }}
       <button
+        v-show="filterConfig.author.enable"
         class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
         @click="filterConfig.author.enable = false; filterConfig.author.id = -1"
       >
@@ -64,10 +66,33 @@
     <div class="my-1">
       当前选中标签：{{ filterConfig.tag.enable ? filterConfig.tag.name : '未选中' }}
       <button
+        v-show="filterConfig.tag.enable"
         class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
         @click="filterConfig.tag.enable = false; filterConfig.tag.name = ''"
       >
         清除
+      </button>
+    </div>
+    <div class="my-1">
+      年份：
+      <button
+        v-for="year in years" :key="year"
+        class="bg-yellow-300/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+        :class="{
+          '!bg-gray-400': year === filterConfig.year.value,
+        }"
+        @click="handleClickYear(year)"
+      >
+        {{ year }}
+      </button>
+      <button
+        class="bg-yellow-300/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+        :class="{
+          '!bg-gray-400': 1 === filterConfig.year.value,
+        }"
+        @click="handleClickYear(1)"
+      >
+        未知
       </button>
     </div>
     <div>
@@ -87,9 +112,9 @@
         v-for="author in authors" :key="author.id"
         class="bg-blue-500/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
         :class="{
-          'bg-gray-400': author.id === filterConfig.author.id,
+          '!bg-gray-400': author.id === filterConfig.author.id,
         }"
-        @click="filterConfig.author.enable = true; filterConfig.author.id = author.id"
+        @click="handleClickAuthor(author.id)"
       >
         {{ author.name }}
       </button>
@@ -109,8 +134,8 @@
     >
       <button
         v-for="tag in tags" :key="tag.name" class="bg-black/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm" :class="{
-          'bg-gray-400': tag.name === filterConfig.tag.name,
-        }" @click="filterConfig.tag.enable = true; filterConfig.tag.name = tag.name"
+          '!bg-gray-400': tag.name === filterConfig.tag.name,
+        }" @click="handleClickTag(tag.name)"
       >
         {{ `${tag.translated_name || tag.name} ${tag.count}` }}
       </button>
@@ -133,13 +158,51 @@ const configLoaded = ref(false)
 const showAuthor = ref(false)
 const showTags = ref(false)
 
-const tags = computed(() => {
-  const _tags: {
-    [index: string]: TagData
-  } = {}
+const years = ref([] as number[])
+const authors = ref([] as AuthorData[])
+const tags = ref([] as TagData[])
+
+watchEffect(() => {
+  const _years: number[] = []
+  const _tags: { [index: string]: TagData } = {}
+  const _authors: { [index: string]: AuthorData } = {}
   props.images.forEach((image) => {
+    // 统计年份
+    const year = Number(image.detail.created_at.split('-')[0])
+    if (!_years.includes(year) && year > 2000)
+      _years.push(year)
+
+    // 过滤年份
+    if (filterConfig.value.year.enable) {
+      if (filterConfig.value.year.value === 1) {
+        if (year > 2000)
+          return false
+      }
+      else if (year !== filterConfig.value.year.value) {
+        return false
+      }
+    }
+
+    // 过滤 R18 图片
+    if (!filterConfig.value.restrict.r18) {
+      if (image.detail.x_restrict >= 1)
+        return
+    }
+
+    // 过滤健全度
+    if (image.detail.sanity_level > filterConfig.value.restrict.sanity.max)
+      return
+
+    // 计算作者数据
+    const { author } = image.detail
+    if (Object.hasOwn(_authors, author.id))
+      _authors[author.id].count++
+    else
+      _authors[author.id] = { ...author, count: 1 }
+
+    // 计算标签数据
     image.detail.tags.forEach((tag) => {
-      if (filterConfig.value.author.enable && filterConfig.value.tag.filterAuthor) {
+      if (filterConfig.value.author.enable) {
         if (image.detail.author.id !== filterConfig.value.author.id)
           return
       }
@@ -155,29 +218,13 @@ const tags = computed(() => {
         _tags[tag.name] = { ...tag, count: 1 }
     })
   })
-  return Object.keys(_tags)
+  years.value = _years
+  tags.value = Object.keys(_tags)
     .map(tagName => _tags[tagName])
     .filter(tag => !tag.name.includes('users入り') || filterConfig.value.tag.includeBookmark)
     .filter(tag => tag.count >= filterConfig.value.tag.includeRatherThan)
     .sort((a, b) => b.count - a.count)
-})
-
-const authors = computed(() => {
-  const _authors: { [index: string]: AuthorData } = {}
-  props.images.forEach((image) => {
-    if (!filterConfig.value.restrict.r18) {
-      if (image.detail.x_restrict >= 1)
-        return
-    }
-    if (image.detail.sanity_level > filterConfig.value.restrict.sanity.max)
-      return
-    const { author } = image.detail
-    if (Object.hasOwn(_authors, author.id))
-      _authors[author.id].count++
-    else
-      _authors[author.id] = { ...author, count: 1 }
-  })
-  return Object.keys(_authors)
+  authors.value = Object.keys(_authors)
     .map(authorId => _authors[authorId])
     .sort((a, b) => b.count - a.count)
 })
@@ -207,6 +254,39 @@ function confirmR18() {
   else if (confirm('确认显示R18内容？')) {
     filterConfig.value.restrict.r18 = true
     filterConfig.value.restrict.sanity.max = 6
+  }
+}
+
+function handleClickYear(year: number) {
+  if (filterConfig.value.year.enable && filterConfig.value.year.value === year) {
+    filterConfig.value.year.enable = false
+    filterConfig.value.year.value = 0
+  }
+  else {
+    filterConfig.value.year.value = year
+    filterConfig.value.year.enable = true
+  }
+}
+
+function handleClickAuthor(authorId: number) {
+  if (filterConfig.value.author.enable && filterConfig.value.author.id === authorId) {
+    filterConfig.value.author.enable = false
+    filterConfig.value.author.id = -1
+  }
+  else {
+    filterConfig.value.author.id = authorId
+    filterConfig.value.author.enable = true
+  }
+}
+
+function handleClickTag(tagName: string) {
+  if (filterConfig.value.tag.enable && filterConfig.value.tag.name === tagName) {
+    filterConfig.value.tag.enable = false
+    filterConfig.value.tag.name = ''
+  }
+  else {
+    filterConfig.value.tag.name = tagName
+    filterConfig.value.tag.enable = true
   }
 }
 </script>

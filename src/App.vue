@@ -54,6 +54,17 @@ onMounted(() => {
 
 const imageFilter = computed(() => {
   return (image: Image) => {
+    // 过滤_年份
+    if (filterConfig.value.year.enable) {
+      const year = Number(image.detail.created_at.split('-')[0])
+      if (filterConfig.value.year.value === 1) {
+        if (year > 2000)
+          return false
+      }
+      else if (year !== filterConfig.value.year.value) {
+        return false
+      }
+    }
     // 过滤_作者
     if (filterConfig.value.author.enable) {
       if (image.detail.author.id !== filterConfig.value.author.id)
