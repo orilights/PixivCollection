@@ -9,6 +9,7 @@ export const useStore = defineStore('main', {
     showNav: true,
     showImageViewer: false,
     showImageInfo: {} as Image,
+    showTagTranslation: false,
     filterConfig: {
       year: {
         enable: false,

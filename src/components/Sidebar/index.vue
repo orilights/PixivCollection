@@ -54,6 +54,9 @@
       标签包含收藏：<input v-model="filterConfig.tag.includeBookmark" type="checkbox">
     </div>
     <div class="my-1">
+      开启Tag翻译：<input v-model="showTagTranslation" type="checkbox">
+    </div>
+    <div class="my-1">
       当前选中作者：{{ filterConfig.author.enable ? authors.find((a) => a.id === filterConfig.author.id)?.name : '未选中' }}
       <button
         v-show="filterConfig.author.enable"
@@ -74,8 +77,7 @@
       </button>
     </div>
     <div class="my-1">
-      年份：
-      <button
+      年份：<button
         v-for="year in years" :key="year"
         class="bg-yellow-300/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
         :class="{
@@ -116,7 +118,7 @@
         }"
         @click="handleClickAuthor(author.id)"
       >
-        {{ author.name }}
+        {{ `${author.name} ${author.count}` }}
       </button>
     </div>
     <div>
@@ -137,7 +139,7 @@
           '!bg-gray-400': tag.name === filterConfig.tag.name,
         }" @click="handleClickTag(tag.name)"
       >
-        {{ `${tag.translated_name || tag.name} ${tag.count}` }}
+        {{ `${showTagTranslation ? tag.translated_name || tag.name : tag.name} ${tag.count}` }}
       </button>
     </div>
   </div>
@@ -152,7 +154,7 @@ const props = defineProps<{
 >()
 
 const store = useStore()
-const { col, gap, filterConfig, showSidebar } = toRefs(store)
+const { col, gap, filterConfig, showSidebar, showTagTranslation } = toRefs(store)
 
 const configLoaded = ref(false)
 const showAuthor = ref(false)
@@ -236,6 +238,7 @@ watchEffect(() => {
   localStorage.setItem('gap', gap.value.toString())
   localStorage.setItem('r18', filterConfig.value.restrict.r18.toString())
   localStorage.setItem('sanity', filterConfig.value.restrict.sanity.max.toString())
+  localStorage.setItem('tagTranslation', showTagTranslation.value.toString())
 })
 
 onMounted(() => {
@@ -243,6 +246,7 @@ onMounted(() => {
   gap.value = Number(localStorage.getItem('gap')) || 10
   filterConfig.value.restrict.r18 = localStorage.getItem('r18') === 'true'
   filterConfig.value.restrict.sanity.max = Number(localStorage.getItem('sanity')) || 2
+  showTagTranslation.value = localStorage.getItem('tagTranslation') === 'true'
   configLoaded.value = true
 })
 

@@ -11,11 +11,11 @@
       <p>作者： <span @click.stop="$emit('openPixivUser', index)">{{ image.detail.author.name }}</span></p>
       <p>
         标签：<span
-          v-for="tag, idx in image.detail.tags" :key="idx"
+          v-for="tag, idx in image.detail.tags" v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
           class="px-1 mx-1 my-0.5 inline-block bg-black/30 rounded-sm"
           :class="tag.name === 'R-18' ? 'bg-red-500/80' : ''"
         >
-          {{ tag.translated_name || tag.name }}
+          {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
         </span>
       </p>
     </div>
@@ -40,6 +40,8 @@ const props = defineProps<{
   index: number
   loadImage: boolean
   showNo: boolean
+  tagIncludeBookmark: boolean
+  tagTranslation: boolean
 }>()
 
 const emits = defineEmits(['openImage', 'openPixiv', 'openPixivUser', 'destory'])

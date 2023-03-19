@@ -9,7 +9,10 @@
   >
     <MasonryViewItem
       v-for="item in imagesRenderList" :key="`${item.image.id}_${item.image.part}`" :index="item.idx"
-      :image="item.image" :show-no="config.showNo" :load-image="imagesShow.includes(item.idx)" :style="{
+      :image="item.image" :show-no="config.showNo"
+      :tag-include-bookmark="filterConfig.tag.includeBookmark"
+      :tag-translation="showTagTranslation"
+      :load-image="imagesShow.includes(item.idx)" :style="{
         width: `calc((100% - ${config.gap * (col - 1)}px) / ${col})`,
         height: `${getImageHeight(item.image.size)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
@@ -44,6 +47,7 @@ const props = withDefaults(
   })
 
 const store = useStore()
+const { filterConfig, showTagTranslation } = toRefs(store)
 const container = ref()
 const { width: containerWidthO } = useElementSize(container)
 const { top: containerTopO } = useElementBounding(container)

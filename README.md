@@ -12,6 +12,8 @@
 
 原始尺寸的图片是从 OneDrive 上加载的，加载慢、加载失败属于正常现象
 
+Tag 翻译乱是因为P站的源数据就是乱的，暂时无解
+
 ## Todo
 
 - [ ] 搜索功能
@@ -21,4 +23,3 @@
 ## 感谢
 
 [upbit/pixivpy](https://github.com/upbit/pixivpy)
-
