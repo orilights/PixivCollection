@@ -1,3 +1,4 @@
+import { useFullscreen } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
 export const useStore = defineStore('main', {
@@ -7,9 +8,13 @@ export const useStore = defineStore('main', {
     gap: 10,
     showSidebar: false,
     showNav: true,
-    showImageViewer: false,
-    showImageInfo: {} as Image,
     showTagTranslation: false,
+    showImageNo: false,
+    imageViewerShow: false,
+    imageViewerInfo: <Image>{},
+    imageViewerPrev: () => {},
+    imageViewerNext: () => {},
+    fullscreen: useFullscreen(document.documentElement),
     filterConfig: {
       year: {
         enable: false,
@@ -36,4 +41,26 @@ export const useStore = defineStore('main', {
       },
     },
   }),
+  getters: {
+    isFullscreen(): boolean {
+      return this.fullscreen.isFullscreen
+    },
+  },
+  actions: {
+    openImageViewer(image: Image, prev: () => void, next: () => void): void {
+      this.imageViewerShow = true
+      this.imageViewerInfo = image
+      this.imageViewerPrev = prev
+      this.imageViewerNext = next
+    },
+    closeImageViewer(): void {
+      this.imageViewerShow = false
+    },
+    toggleDarkMode(): void {
+      this.darkMode = !this.darkMode
+    },
+    toggleFullscreen(): void {
+      this.fullscreen.toggle()
+    },
+  },
 })

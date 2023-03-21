@@ -3,7 +3,7 @@
     <div
       class="fixed top-0 left-0 w-full h-[60px] z-10 bg-white dark:bg-[#202020] transition-[transform,background] shadow-md"
       :class="{
-        'translate-y-[-70px]': !showNav || showImageViewer,
+        'translate-y-[-70px]': !showNav || imageViewerShow,
       }"
     >
       <div class="absolute top-0 left-0">
@@ -19,7 +19,7 @@
       <div class="text-lg h-[60px] leading-[60px] select-none text-center" @dblclick="navToTop">
         OriLightの<span class="text-[#0398fa] px-1">Pixiv</span>收藏夹
       </div>
-      <div class="absolute top-0 right-0">
+      <div class="absolute top-0 right-0 hidden lg:block">
         <button
           class="w-[60px] h-[60px] hover:bg-gray-400/20"
           @click="openGithub"
@@ -35,13 +35,24 @@
         </button>
         <button
           class="w-[60px] h-[60px] hover:bg-gray-400/20"
-          @click="darkMode = !darkMode"
+          @click="store.toggleDarkMode"
         >
           <svg v-if="!darkMode" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mx-auto">
             <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
           </svg>
           <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mx-auto">
             <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <button
+          class="w-[60px] h-[60px] hover:bg-gray-400/20"
+          @click="store.toggleFullscreen"
+        >
+          <svg v-if="isFullscreen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mx-auto">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mx-auto">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
           </svg>
         </button>
       </div>
@@ -51,9 +62,10 @@
 
 <script setup lang="ts">
 import { useStore } from '@/store'
+import { githubLink } from '@/config'
 
 const store = useStore()
-const { darkMode, showSidebar, showNav, showImageViewer } = toRefs(store)
+const { darkMode, showSidebar, showNav, imageViewerShow, isFullscreen } = toRefs(store)
 
 let oldY = 0
 
@@ -73,6 +85,6 @@ function navToTop() {
 }
 
 function openGithub() {
-  window.open('https://github.com/orilights/PixivCollection')
+  window.open(githubLink, '_blank')
 }
 </script>

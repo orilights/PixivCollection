@@ -13,7 +13,7 @@
           :loading="loading" :images="images" :config="{
             col,
             gap,
-            showNo: true,
+            showNo: showImageNo,
             preload: 3,
           }" :filter="imageFilter"
         />
@@ -28,7 +28,7 @@ import { useStore } from './store'
 
 const store = useStore()
 
-const { darkMode, col, gap, filterConfig, showSidebar } = toRefs(store)
+const { darkMode, col, gap, filterConfig, showSidebar, showImageNo } = toRefs(store)
 
 const settingLoaded = ref(false)
 const images = ref<Image[]>([])

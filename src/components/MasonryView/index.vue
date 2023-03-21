@@ -9,7 +9,8 @@
   >
     <MasonryViewItem
       v-for="item in imagesRenderList" :key="`${item.image.id}_${item.image.part}`" :index="item.idx"
-      :image="item.image" :show-no="config.showNo"
+      :image="item.image"
+      :show-no="config.showNo"
       :tag-include-bookmark="filterConfig.tag.includeBookmark"
       :tag-translation="showTagTranslation"
       :load-image="imagesShow.includes(item.idx)" :style="{
@@ -17,7 +18,7 @@
         height: `${getImageHeight(item.image.size)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
-      @open-image="openImage" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser" @destory="itemDestroy"
+      @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser" @destory="itemDestroy"
     />
   </div>
 </template>
@@ -25,6 +26,7 @@
 <script setup lang="ts">
 import { useDebounce, useDebounceFn, useElementBounding, useElementSize } from '@vueuse/core'
 import { useStore } from '@/store'
+import { pixivArtworkLink, pixivUserLink } from '@/config'
 
 const props = withDefaults(
   defineProps<{
@@ -132,17 +134,25 @@ function getImageHeight(size: [number, number]) {
   return size[1] * (imageWidth.value / size[0])
 }
 
-function openImage(idx: number) {
-  store.showImageInfo = imagesFiltered.value[idx]
-  store.showImageViewer = true
+function openImageViewer(idx: number) {
+  if (idx < 0 || idx >= imagesFiltered.value.length)
+    return
+  store.openImageViewer(
+    imagesFiltered.value[idx],
+    () => {
+      openImageViewer(idx - 1)
+    },
+    () => {
+      openImageViewer(idx + 1)
+    })
 }
 
 function openPixiv(idx: number) {
-  window.open(`https://www.pixiv.net/artworks/${imagesFiltered.value[idx].id}`, '_blank')
+  window.open(pixivArtworkLink + imagesFiltered.value[idx].id, '_blank')
 }
 
 function openPixivUser(idx: number) {
-  window.open(`https://www.pixiv.net/users/${imagesFiltered.value[idx].detail.author.id}`, '_blank')
+  window.open(pixivUserLink + imagesFiltered.value[idx].detail.author.id, '_blank')
 }
 
 function itemDestroy(idx: number) {
