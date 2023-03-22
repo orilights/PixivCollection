@@ -2,9 +2,9 @@
   <Transition name="fade">
     <div
       v-if="imageViewerShow" class="fixed top-0 left-0 w-screen h-screen bg-black/30"
-      @mousemove="imageGragging && (postiion.x += $event.movementX, postiion.y += $event.movementY)"
+      @mousemove="imageGragging && (imagePos.x += $event.movementX, imagePos.y += $event.movementY)"
       @mouseup="imageGragging = false" @mouseleave="imageGragging = false"
-      @touchmove="imageGragging && handleTouchMove($event)" @wheel="handleZoom"
+      @touchmove="imageGragging && handleTouchMove($event)" @wheel="handleWheelScroll"
       @touchend="imageGragging = false"
     >
       <button
@@ -37,9 +37,9 @@
           class="max-w-none cursor-grab active:cursor-grabbing select-none touch-none absolute" :class="{
             '': !imageGragging,
           }" :style="{
-            transform: `scale(${ratio})`,
-            left: `${postiion.x}px`,
-            top: `${postiion.y}px`,
+            transform: `scale(${imageRatio})`,
+            left: `${imagePos.x}px`,
+            top: `${imagePos.y}px`,
           }"
           @touchstart.prevent="handleTouchStart" @mousedown.prevent="imageGragging = true"
         >
@@ -57,49 +57,53 @@ import { originalImageHost } from '@/config'
 const store = useStore()
 const { imageViewerShow, imageViewerInfo } = toRefs(store)
 
-const ratio = ref(1)
-const postiion = ref({ x: 0, y: 0 })
+const imageRatio = ref(1)
+const imagePos = ref({ x: 0, y: 0 })
 const imageGragging = ref(false)
 const imageSrc = ref('')
 const mouse = useMouse({ type: 'client' })
 const loading = ref(false)
 
 const startPosition = { x: 0, y: 0 }
+const minRatio = 0.5
 let startDistance = 0
 let initialRatio = 0
-const minRatio = 0.5
-let image: HTMLImageElement
+let imageLoader: HTMLImageElement
 
 watch(imageViewerShow, (val) => {
   if (!val) {
-    if (image)
-      image.remove()
+    if (imageLoader)
+      imageLoader.remove()
 
     loading.value = false
     document.body.style.overflow = 'visible'
   }
 })
 
-watch(imageViewerInfo, () => {
-  if (image)
-    image.remove()
-  loading.value = true
+watch(imageViewerInfo, (val) => {
+  if (imageLoader)
+    imageLoader.remove()
   imageSrc.value = ''
-  image = new Image()
-  image.addEventListener('load', () => {
+
+  loading.value = true
+  imageLoader = new Image()
+  imageLoader.addEventListener('load', () => {
     loading.value = false
   })
-  image.src = resolvePath(imageViewerInfo.value.original)
+  imageLoader.src = resolvePath(val.original)
   nextTick(() => {
-    imageSrc.value = image.src
+    imageSrc.value = imageLoader.src
   })
   document.body.style.overflow = 'hidden'
-  const ratioWidth = window.innerWidth / imageViewerInfo.value.size[0]
-  const ratioHeight = window.innerHeight / imageViewerInfo.value.size[1]
-  ratio.value = Math.min(ratioWidth, ratioHeight)
-  initialRatio = ratio.value
-  postiion.value.x = (window.innerWidth - imageViewerInfo.value.size[0]) / 2
-  postiion.value.y = (window.innerHeight - imageViewerInfo.value.size[1]) / 2
+
+  // 计算图片初始显示比率
+  const ratioWidth = window.innerWidth / val.size[0]
+  const ratioHeight = window.innerHeight / val.size[1]
+  imageRatio.value = Math.min(ratioWidth, ratioHeight)
+  initialRatio = imageRatio.value
+  // 计算图片初始显示位置
+  imagePos.value.x = (window.innerWidth - val.size[0]) / 2
+  imagePos.value.y = (window.innerHeight - val.size[1]) / 2
 })
 
 function handleTouchStart(e: TouchEvent) {
@@ -119,8 +123,8 @@ function handleTouchMove(e: TouchEvent) {
   if (e.touches.length < 2) {
     const deltaX = e.touches[0].clientX - startPosition.x
     const deltaY = e.touches[0].clientY - startPosition.y
-    postiion.value.x += deltaX
-    postiion.value.y += deltaY
+    imagePos.value.x += deltaX
+    imagePos.value.y += deltaY
     startPosition.x = e.touches[0].clientX
     startPosition.y = e.touches[0].clientY
   }
@@ -134,31 +138,33 @@ function handleTouchMove(e: TouchEvent) {
     const newDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
     const delta = newDistance / startDistance
     startDistance = newDistance
-    let newRatio = ratio.value * delta
+    let newRatio = imageRatio.value * delta
     if (newRatio < initialRatio * minRatio)
       newRatio = initialRatio * minRatio
-    handleResize(newRatio, centerPostiion)
+    handleZoom(newRatio, centerPostiion)
   }
 }
 
-function handleZoom(e: WheelEvent) {
+function handleWheelScroll(e: WheelEvent) {
   const delta = e.deltaY / 1000
   let newRatio
   if (delta > 0)
-    newRatio = ratio.value - delta
+    newRatio = imageRatio.value - delta
   else
-    newRatio = ratio.value - delta
+    newRatio = imageRatio.value - delta
   if (newRatio < initialRatio * minRatio)
     newRatio = initialRatio * minRatio
-  handleResize(newRatio, { x: mouse.x.value, y: mouse.y.value })
+  handleZoom(newRatio, { x: mouse.x.value, y: mouse.y.value })
 }
 
-function handleResize(newRatio: number, centerPostiion: { x: number; y: number }) {
-  const deltaX = centerPostiion.x - (postiion.value.x - ((window.innerWidth - imageViewerInfo.value.size[0]) / 2) + window.innerWidth / 2)
-  const deltaY = centerPostiion.y - (postiion.value.y - ((window.innerHeight - imageViewerInfo.value.size[1]) / 2) + window.innerHeight / 2)
-  postiion.value.x -= (newRatio / ratio.value - 1) * deltaX
-  postiion.value.y -= (newRatio / ratio.value - 1) * deltaY
-  ratio.value = newRatio
+function handleZoom(newRatio: number, centerPostiion: { x: number; y: number }) {
+  const wWidth = window.innerWidth
+  const wHeight = window.innerHeight
+  const deltaX = centerPostiion.x - (imagePos.value.x - ((wWidth - imageViewerInfo.value.size[0]) / 2) + wWidth / 2)
+  const deltaY = centerPostiion.y - (imagePos.value.y - ((wHeight - imageViewerInfo.value.size[1]) / 2) + wHeight / 2)
+  imagePos.value.x -= (newRatio / imageRatio.value - 1) * deltaX
+  imagePos.value.y -= (newRatio / imageRatio.value - 1) * deltaY
+  imageRatio.value = newRatio
 }
 
 function resolvePath(pathStr: string) {
