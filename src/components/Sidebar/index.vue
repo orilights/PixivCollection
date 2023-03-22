@@ -31,7 +31,7 @@
         </svg>
       </button>
       <button
-        class="w-[60px] h-[60px] hover:bg-gray-400/20"
+        class="w-[60px] h-[60px]"
         @click="store.toggleFullscreen"
       >
         <svg v-if="isFullscreen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mx-auto">

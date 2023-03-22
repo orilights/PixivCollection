@@ -107,7 +107,7 @@ const lazyloadImage = useDebounceFn(() => {
       if (imagesShow.value.includes(item.idx))
         return
 
-      if (item.top + getImageHeight(item.image.size) + containerTop.value > -1000 && item.top + containerTop.value - window.innerHeight < 1000)
+      if (item.top + getImageHeight(item.image.size) + containerTop.value > 0 && item.top + containerTop.value - window.innerHeight < 1000)
         imagesShow.value.push(item.idx)
     })
   })
