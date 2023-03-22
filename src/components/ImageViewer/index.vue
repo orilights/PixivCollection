@@ -13,18 +13,24 @@
       >
         <IconClose class="w-6 h-6 mx-auto" />
       </button>
-      <button
-        class="bg-black/40 text-white absolute left-0 top-[calc(50vh-40px)] w-[40px] h-[80px] z-50"
-        @click="store.imageViewerPrev()"
-      >
-        <IconLeft class="w-6 h-6 mx-auto" />
-      </button>
-      <button
-        class="bg-black/40 text-white absolute right-0 top-[calc(50vh-40px)] w-[40px] h-[80px] z-50"
-        @click="store.imageViewerNext()"
-      >
-        <IconRight class="w-6 h-6 mx-auto" />
-      </button>
+      <Transition name="hide-left">
+        <button
+          v-show="!imageGragging"
+          class="bg-black/40 text-white absolute left-0 top-[calc(50vh-40px)] w-[40px] h-[80px] z-50"
+          @click="store.imageViewerPrev()"
+        >
+          <IconLeft class="w-6 h-6 mx-auto" />
+        </button>
+      </Transition>
+      <Transition name="hide-right">
+        <button
+          v-show="!imageGragging"
+          class="bg-black/40 text-white absolute right-0 top-[calc(50vh-40px)] w-[40px] h-[80px] z-50"
+          @click="store.imageViewerNext()"
+        >
+          <IconRight class="w-6 h-6 mx-auto" />
+        </button>
+      </Transition>
       <div class="relative">
         <img
           :src="imageSrc"
@@ -177,5 +183,25 @@ function resolvePath(pathStr: string) {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.hide-left-enter-active,
+.hide-left-leave-active {
+  transition: transform .3s;
+}
+
+.hide-left-enter-from,
+.hide-left-leave-to {
+  transform: translateX(-100%);
+}
+
+.hide-right-enter-active,
+.hide-right-leave-active {
+  transition: transform .3s;
+}
+
+.hide-right-enter-from,
+.hide-right-leave-to {
+  transform: translateX(100%);
 }
 </style>

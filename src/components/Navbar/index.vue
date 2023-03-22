@@ -3,7 +3,7 @@
     <div
       class="fixed top-0 left-0 w-full h-[60px] z-10 bg-white dark:bg-[#202020] transition-[transform,background] shadow-md"
       :class="{
-        'translate-y-[-70px]': !showNav || imageViewerShow,
+        'translate-y-[-70px]': (!showNav || imageViewerShow) && !showSidebar,
       }"
     >
       <div class="absolute top-0 left-0">
@@ -11,7 +11,7 @@
           <IconMenu class="w-7 h-7 mx-auto" />
         </button>
       </div>
-      <div class="text-lg h-[60px] leading-[60px] select-none text-center" @dblclick="navToTop">
+      <div class="text-lg h-[60px] leading-[60px] select-none text-center ml-[60px] sm:ml-0" @dblclick="navToTop">
         OriLightの<span class="text-[#0398fa] px-1">Pixiv</span>收藏夹
       </div>
       <div class="absolute top-0 right-0 hidden lg:block">
