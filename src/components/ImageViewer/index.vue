@@ -11,25 +11,19 @@
         class="bg-black/60 text-white absolute top-0 right-0 text-center w-[80px] h-[80px] z-50"
         @click="store.closeImageViewer()"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mx-auto">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
+        <IconClose class="w-6 h-6 mx-auto" />
       </button>
       <button
         class="bg-black/40 text-white absolute left-0 top-[calc(50vh-40px)] w-[40px] h-[80px] z-50"
         @click="store.imageViewerPrev()"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mx-auto">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-        </svg>
+        <IconLeft class="w-6 h-6 mx-auto" />
       </button>
       <button
         class="bg-black/40 text-white absolute right-0 top-[calc(50vh-40px)] w-[40px] h-[80px] z-50"
         @click="store.imageViewerNext()"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mx-auto">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-        </svg>
+        <IconRight class="w-6 h-6 mx-auto" />
       </button>
       <div class="relative">
         <img

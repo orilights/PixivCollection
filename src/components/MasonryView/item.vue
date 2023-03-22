@@ -8,7 +8,7 @@
         {{ `${image.id} p${image.part}` }} <br>{{ `${image.size[0]}×${image.size[1]}` }}
       </div>
       <p>标题：{{ image.title }}</p>
-      <p>作者： <span @click.stop="$emit('openPixivUser', index)">{{ image.detail.author.name }}</span></p>
+      <p>作者：<span @click.stop="$emit('openPixivUser', index)">{{ image.detail.author.name }}</span></p>
       <p>
         标签：<span
           v-for="tag, idx in image.detail.tags" v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
