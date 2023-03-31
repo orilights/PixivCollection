@@ -30,6 +30,10 @@ export const useStore = defineStore('main', {
         enable: false,
         id: -1,
       },
+      shape: {
+        enable: false,
+        value: '',
+      },
       size: {
         enable: false,
         width: { max: null, min: null },

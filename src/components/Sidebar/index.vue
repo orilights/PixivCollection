@@ -116,6 +116,35 @@
           未知
         </button>
       </div>
+      <div class="my-1">
+        形状：<button
+          class="bg-green-300/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+          :class="{
+            '!bg-gray-400': 'horizontal' === filterConfig.shape.value,
+          }"
+          @click="handleClickShape('horizontal')"
+        >
+          横向
+        </button>
+        <button
+          class="bg-green-300/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+          :class="{
+            '!bg-gray-400': 'vertical' === filterConfig.shape.value,
+          }"
+          @click="handleClickShape('vertical')"
+        >
+          竖向
+        </button>
+        <button
+          class="bg-green-300/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+          :class="{
+            '!bg-gray-400': 'square' === filterConfig.shape.value,
+          }"
+          @click="handleClickShape('square')"
+        >
+          方形
+        </button>
+      </div>
       <div>
         <button
           class="px-2 mx-1 my-2 border rounded-md hover:border-blue-500 transition-colors"
@@ -314,6 +343,17 @@ function handleClickTag(tagName: string) {
   else {
     filterConfig.value.tag.name = tagName
     filterConfig.value.tag.enable = true
+  }
+}
+
+function handleClickShape(shape: string) {
+  if (filterConfig.value.shape.enable && filterConfig.value.shape.value === shape) {
+    filterConfig.value.shape.enable = false
+    filterConfig.value.shape.value = ''
+  }
+  else {
+    filterConfig.value.shape.value = shape
+    filterConfig.value.shape.enable = true
   }
 }
 

@@ -79,6 +79,21 @@ const imageFilter = computed(() => {
       })) === undefined)
         return false
     }
+    // 过滤_形状
+    if (filterConfig.value.shape.enable) {
+      if (Math.abs(image.size[0] - image.size[1]) > 10) {
+        if (filterConfig.value.shape.value === 'square')
+          return false
+      }
+      if (image.size[0] > image.size[1]) {
+        if (filterConfig.value.shape.value === 'vertical')
+          return false
+      }
+      else {
+        if (filterConfig.value.shape.value === 'horizontal')
+          return false
+      }
+    }
     // 过滤_尺寸
     if (filterConfig.value.size.enable) {
       const { max: wMax, min: wMin } = filterConfig.value.size.width
