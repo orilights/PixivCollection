@@ -19,6 +19,7 @@ declare module '@vue/runtime-core' {
     IconRight: typeof import('./src/components/Icon/right.vue')['default']
     IconShrink: typeof import('./src/components/Icon/shrink.vue')['default']
     IconSun: typeof import('./src/components/Icon/sun.vue')['default']
+    IconTablet: typeof import('./src/components/Icon/tablet.vue')['default']
     ImageViewer: typeof import('./src/components/ImageViewer/index.vue')['default']
     MasonryView: typeof import('./src/components/MasonryView/index.vue')['default']
     MasonryViewItem: typeof import('./src/components/MasonryView/item.vue')['default']

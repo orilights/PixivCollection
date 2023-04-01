@@ -8,7 +8,13 @@
       @touchend="imageGragging = false"
     >
       <button
-        class="bg-black/60 text-white absolute top-0 right-0 text-center w-[80px] h-[80px] z-50"
+        class="bg-black/40 text-white absolute top-0 left-0 text-center w-[40px] h-[40px] z-50"
+        @click="restoreImage"
+      >
+        <IconTablet class="w-6 h-6 mx-auto" />
+      </button>
+      <button
+        class="bg-black/40 text-white absolute top-0 right-0 text-center w-[40px] h-[40px] z-50"
         @click="store.closeImageViewer()"
       >
         <IconClose class="w-6 h-6 mx-auto" />
@@ -96,15 +102,19 @@ watch(imageViewerInfo, (val) => {
   })
   document.body.style.overflow = 'hidden'
 
-  // 计算图片初始显示比率
-  const ratioWidth = window.innerWidth / val.size[0]
-  const ratioHeight = window.innerHeight / val.size[1]
-  imageRatio.value = Math.min(ratioWidth, ratioHeight)
-  initialRatio = imageRatio.value
-  // 计算图片初始显示位置
-  imagePos.value.x = (window.innerWidth - val.size[0]) / 2
-  imagePos.value.y = (window.innerHeight - val.size[1]) / 2
+  restoreImage()
 })
+
+function restoreImage() {
+  // 计算图片初始显示比率
+  const ratioWidth = window.innerWidth / imageViewerInfo.value.size[0]
+  const ratioHeight = window.innerHeight / imageViewerInfo.value.size[1]
+  initialRatio = Math.min(ratioWidth, ratioHeight)
+  imageRatio.value = initialRatio
+  // 计算图片初始显示位置
+  imagePos.value.x = (window.innerWidth - imageViewerInfo.value.size[0]) / 2
+  imagePos.value.y = (window.innerHeight - imageViewerInfo.value.size[1]) / 2
+}
 
 function handleTouchStart(e: TouchEvent) {
   if (e.touches.length < 2) {
