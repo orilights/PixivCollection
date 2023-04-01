@@ -81,7 +81,7 @@ const imageFilter = computed(() => {
     }
     // 过滤_形状
     if (filterConfig.value.shape.enable) {
-      if (Math.abs(image.size[0] - image.size[1]) > 10) {
+      if (image.size[0] / image.size[1] < 0.95 || image.size[0] / image.size[1] > 1.05) {
         if (filterConfig.value.shape.value === 'square')
           return false
       }
