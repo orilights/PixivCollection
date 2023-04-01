@@ -82,7 +82,7 @@
           class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
           @click="filterConfig.author.enable = false; filterConfig.author.id = -1"
         >
-          清除
+          取消
         </button>
       </div>
       <div class="my-1">
@@ -92,7 +92,7 @@
           class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
           @click="filterConfig.tag.enable = false; filterConfig.tag.name = ''"
         >
-          清除
+          取消
         </button>
       </div>
       <div class="my-1">

@@ -18,7 +18,9 @@
         height: `${getImageHeight(item.image.size)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
-      @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser" @destory="itemDestroy"
+      @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser"
+      @filter-author="filterAuthor"
+      @destory="itemDestroy"
     />
   </div>
 </template>
@@ -153,6 +155,17 @@ function openPixiv(idx: number) {
 
 function openPixivUser(idx: number) {
   window.open(pixivUserLink + imagesFiltered.value[idx].detail.author.id, '_blank')
+}
+
+function filterAuthor(idx: number) {
+  const authorId = imagesFiltered.value[idx].detail.author.id
+  if (store.filterConfig.author.enable && store.filterConfig.author.id === authorId) {
+    store.filterConfig.author.enable = false
+    store.filterConfig.author.id = -1
+    return
+  }
+  store.filterConfig.author.id = authorId
+  store.filterConfig.author.enable = true
 }
 
 function itemDestroy(idx: number) {

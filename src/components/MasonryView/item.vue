@@ -8,7 +8,15 @@
         {{ `${image.id} p${image.part}` }} <br>{{ `${image.size[0]}×${image.size[1]}` }}
       </div>
       <p>标题：{{ image.title }}</p>
-      <p>作者：<span @click.stop="$emit('openPixivUser', index)">{{ image.detail.author.name }}</span></p>
+      <p>
+        作者：<span
+          @click.stop.prevent="$emit('openPixivUser', index)"
+        >{{ image.detail.author.name }}</span>
+        <IconFunnelSolid
+          class="ml-1 w-3 h-3 inline-block"
+          @click.stop="$emit('filterAuthor', index)"
+        />
+      </p>
       <p>
         标签：<span
           v-for="tag, idx in image.detail.tags" v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
@@ -44,7 +52,7 @@ const props = defineProps<{
   tagTranslation: boolean
 }>()
 
-const emits = defineEmits(['openImage', 'openPixiv', 'openPixivUser', 'destory'])
+const emits = defineEmits(['openImage', 'openPixiv', 'openPixivUser', 'destory', 'filterAuthor'])
 
 const imageLoaded = ref(false)
 

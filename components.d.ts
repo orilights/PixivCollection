@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     IconClose: typeof import('./src/components/Icon/close.vue')['default']
     IconExpand: typeof import('./src/components/Icon/expand.vue')['default']
+    IconFunnelSolid: typeof import('./src/components/Icon/funnelSolid.vue')['default']
     IconGithub: typeof import('./src/components/Icon/github.vue')['default']
     IconLeft: typeof import('./src/components/Icon/left.vue')['default']
     IconMenu: typeof import('./src/components/Icon/menu.vue')['default']
