@@ -1,5 +1,10 @@
 <template>
-  <div class="absolute bg-gray-100 rounded-[12px] overflow-hidden transition-transform group shadow-[0_2px_12px_rgba(0,0,0,0.2)]">
+  <div
+    class="absolute bg-gray-100 overflow-hidden transition-transform group "
+    :class="{
+      'rounded-[12px] shadow-[0_2px_12px_rgba(0,0,0,0.2)]': shadow,
+    }"
+  >
     <div
       class="absolute w-full h-full bg-black/50 opacity-0 group-hover:opacity-100 transition-all cursor-pointer text-white px-2 pt-8 text-sm"
       @click="$emit('openImage', index)"
@@ -46,6 +51,7 @@
 const props = defineProps<{
   image: Image
   index: number
+  shadow: boolean
   loadImage: boolean
   showNo: boolean
   tagIncludeBookmark: boolean

@@ -13,6 +13,7 @@
       :show-no="config.showNo"
       :tag-include-bookmark="filterConfig.tag.includeBookmark"
       :tag-translation="showTagTranslation"
+      :shadow="config.gap > 2"
       :load-image="imagesShow.includes(item.idx)" :style="{
         width: `calc((100% - ${config.gap * (col - 1)}px) / ${col})`,
         height: `${getImageHeight(item.image.size)}px`,

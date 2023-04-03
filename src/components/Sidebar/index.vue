@@ -26,9 +26,6 @@
           <IconExpand v-else class="w-5 h-5 mx-auto" />
         </button>
       </div>
-      <!-- <button class="absolute right-2 top-2" @click="showSidebar = false">
-      <IconClose class="w-6 h-6" />
-    </button> -->
       <div class="my-1">
         列数:
         <select
@@ -47,7 +44,7 @@
           v-model.number="gap"
           class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
         >
-          <option v-for="i in [2, 5, 10, 20]" :key="i" :value="i">
+          <option v-for="i in [0, 1, 2, 5, 10, 20]" :key="i" :value="i">
             {{ `${i}px` }}
           </option>
         </select>
