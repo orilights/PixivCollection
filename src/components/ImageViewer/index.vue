@@ -84,6 +84,9 @@ watch(imageViewerShow, (val) => {
     loading.value = false
     document.body.style.overflow = 'visible'
   }
+  else {
+    document.body.style.overflow = 'hidden'
+  }
 })
 
 watch(imageViewerInfo, (val) => {
@@ -100,7 +103,6 @@ watch(imageViewerInfo, (val) => {
   nextTick(() => {
     imageSrc.value = imageLoader.src
   })
-  document.body.style.overflow = 'hidden'
 
   restoreImage()
 })
