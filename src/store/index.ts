@@ -10,6 +10,7 @@ export const useStore = defineStore('main', {
     showNav: true,
     showTagTranslation: false,
     showImageNo: false,
+    containerFullWidth: false,
     imageViewerShow: false,
     imageViewerInfo: <Image>{},
     imageViewerPrev: () => {},

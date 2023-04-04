@@ -3,7 +3,11 @@
     {{ loading ? '数据加载中...' : '无数据' }}
   </div>
   <div
-    ref="container" class="w-full lg:w-[700px] xl:w-[960px]  mx-auto relative overflow-y-hidden" :style="{
+    ref="container" class="w-full mx-auto relative overflow-y-hidden"
+    :class="{
+      'lg:w-[700px] xl:w-[960px]': !containerFullWidth,
+    }"
+    :style="{
       height: `${Math.max(...colsTop)}px`,
     }"
   >
@@ -52,7 +56,7 @@ const props = withDefaults(
   })
 
 const store = useStore()
-const { filterConfig, showTagTranslation } = toRefs(store)
+const { filterConfig, showTagTranslation, containerFullWidth } = toRefs(store)
 const container = ref()
 const { width: containerWidthO } = useElementSize(container)
 const { top: containerTopO } = useElementBounding(container)
@@ -61,6 +65,10 @@ const containerTop = useDebounce(containerTopO, 200, { maxWait: 400 })
 const col = computed(() => {
   if (props.config.col > 0)
     return props.config.col
+  if (containerWidth.value >= 1024 && containerFullWidth.value)
+    return 6
+  if (containerWidth.value >= 960 && containerFullWidth.value)
+    return 5
   if (containerWidth.value >= 960)
     return 4
   if (containerWidth.value >= 700)

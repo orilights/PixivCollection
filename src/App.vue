@@ -8,7 +8,7 @@
       <Sidebar :images="images" :filter-config="filterConfig" />
       <div v-show="showSidebar" class="fixed w-screen h-screen left-0 top-0 bg-black/40 z-20 hidden sm:block" @click="showSidebar = false" />
       <Navbar />
-      <div class="px-2 lg:px-0">
+      <div class="px-2">
         <MasonryView
           :loading="loading" :images="images" :config="{
             col,
