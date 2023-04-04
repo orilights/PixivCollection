@@ -15,7 +15,10 @@
           <IconClose v-else class="w-6 h-6 mx-auto" />
         </button>
         <div v-show="filterConfig.search.enable" class="flex-1 inline-block">
-          <input v-model="filterConfig.search.value" class="w-full h-[60px] outline-none px-4 box-border border-l border-gray-400/50 bg-transparent" type="text" placeholder="图片id/图片标题/作者id/作者昵称">
+          <input
+            class="w-full h-[60px] outline-none px-4 box-border border-l border-gray-400/50 bg-transparent" type="text" placeholder="图片id/图片标题/作者id/作者昵称"
+            @input="handleSearchInput"
+          >
         </div>
       </div>
       <div v-show="!filterConfig.search.enable" class="text-lg h-[60px] leading-[60px] select-none text-center ml-[60px] sm:ml-0" @dblclick="navToTop">
@@ -48,11 +51,16 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core'
 import { useStore } from '@/store'
 import { githubLink } from '@/config'
 
 const store = useStore()
 const { darkMode, showSidebar, showNav, imageViewerShow, isFullscreen, filterConfig } = toRefs(store)
+
+const updateSearchStr = useDebounceFn((value) => {
+  filterConfig.value.search.value = value
+}, 300)
 
 let oldY = 0
 
@@ -73,5 +81,10 @@ function navToTop() {
 
 function openGithub() {
   window.open(githubLink, '_blank')
+}
+
+function handleSearchInput(e: Event) {
+  const value = (e.target as HTMLInputElement).value
+  updateSearchStr(value)
 }
 </script>
