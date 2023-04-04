@@ -4,18 +4,24 @@ import { defineStore } from 'pinia'
 export const useStore = defineStore('main', {
   state: () => ({
     darkMode: false,
+
     col: -1,
     gap: 10,
+    containerFullWidth: false,
+
     showSidebar: false,
     showNav: true,
+
     showTagTranslation: false,
     showImageNo: false,
-    containerFullWidth: false,
+
     imageViewerShow: false,
     imageViewerInfo: <Image>{},
     imageViewerPrev: () => {},
     imageViewerNext: () => {},
+
     fullscreen: useFullscreen(document.documentElement),
+
     filterConfig: {
       search: {
         enable: false,
