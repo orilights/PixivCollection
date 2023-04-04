@@ -6,15 +6,22 @@
         'translate-y-[-70px]': (!showNav || imageViewerShow) && !showSidebar,
       }"
     >
-      <div class="absolute top-0 left-0">
+      <div class="absolute top-0 left-0 flex w-full">
         <button class="w-[60px] h-[60px] hover:bg-gray-400/20" @click="showSidebar = !showSidebar">
           <IconMenu class="w-7 h-7 mx-auto" />
         </button>
+        <button class="w-[60px] h-[60px] hover:bg-gray-400/20" @click="filterConfig.search.enable = !filterConfig.search.enable">
+          <IconSearch v-if="!filterConfig.search.enable" class="w-6 h-6 mx-auto" />
+          <IconClose v-else class="w-6 h-6 mx-auto" />
+        </button>
+        <div v-show="filterConfig.search.enable" class="flex-1 inline-block">
+          <input v-model="filterConfig.search.value" class="w-full h-[60px] outline-none px-4 box-border border-l border-gray-400/50 bg-transparent" type="text" placeholder="图片id/图片标题/作者id/作者昵称">
+        </div>
       </div>
-      <div class="text-lg h-[60px] leading-[60px] select-none text-center ml-[60px] sm:ml-0" @dblclick="navToTop">
+      <div v-show="!filterConfig.search.enable" class="text-lg h-[60px] leading-[60px] select-none text-center ml-[60px] sm:ml-0" @dblclick="navToTop">
         OriLightの<span class="text-[#0398fa] px-1">Pixiv</span>收藏夹
       </div>
-      <div class="absolute top-0 right-0 hidden lg:block">
+      <div class="absolute top-0 right-0 hidden lg:flex">
         <button
           class="w-[60px] h-[60px] hover:bg-gray-400/20"
           @click="openGithub"
@@ -45,7 +52,7 @@ import { useStore } from '@/store'
 import { githubLink } from '@/config'
 
 const store = useStore()
-const { darkMode, showSidebar, showNav, imageViewerShow, isFullscreen } = toRefs(store)
+const { darkMode, showSidebar, showNav, imageViewerShow, isFullscreen, filterConfig } = toRefs(store)
 
 let oldY = 0
 

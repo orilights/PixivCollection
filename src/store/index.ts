@@ -17,6 +17,10 @@ export const useStore = defineStore('main', {
     imageViewerNext: () => {},
     fullscreen: useFullscreen(document.documentElement),
     filterConfig: {
+      search: {
+        enable: false,
+        value: '',
+      },
       year: {
         enable: false,
         value: 0,

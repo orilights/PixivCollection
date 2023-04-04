@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     IconMenu: typeof import('./src/components/Icon/menu.vue')['default']
     IconMoon: typeof import('./src/components/Icon/moon.vue')['default']
     IconRight: typeof import('./src/components/Icon/right.vue')['default']
+    IconSearch: typeof import('./src/components/Icon/search.vue')['default']
     IconShrink: typeof import('./src/components/Icon/shrink.vue')['default']
     IconSun: typeof import('./src/components/Icon/sun.vue')['default']
     IconTablet: typeof import('./src/components/Icon/tablet.vue')['default']

@@ -54,6 +54,24 @@ onMounted(() => {
 
 const imageFilter = computed(() => {
   return (image: Image) => {
+    // 过滤_健全度
+    if (!filterConfig.value.restrict.r18) {
+      if (image.detail.x_restrict >= 1)
+        return false
+    }
+    if (filterConfig.value.restrict.sanity.max) {
+      if (image.detail.sanity_level > filterConfig.value.restrict.sanity.max)
+        return false
+    }
+    // 搜索
+    if (filterConfig.value.search.enable) {
+      if (filterConfig.value.search.value.trim() !== '') {
+        const searchStr = (image.id + image.title + image.detail.author.id + image.detail.author.name).toLowerCase()
+        if (!searchStr.includes(filterConfig.value.search.value.trim().toLowerCase()))
+          return false
+      }
+      return true
+    }
     // 过滤_年份
     if (filterConfig.value.year.enable) {
       const year = Number(image.detail.created_at.split('-')[0])
@@ -115,16 +133,6 @@ const imageFilter = computed(() => {
           return false
       }
     }
-    // 过滤_健全度
-    if (!filterConfig.value.restrict.r18) {
-      if (image.detail.x_restrict >= 1)
-        return false
-    }
-    if (filterConfig.value.restrict.sanity.max) {
-      if (image.detail.sanity_level > filterConfig.value.restrict.sanity.max)
-        return false
-    }
-
     return true
   }
 })
