@@ -6,7 +6,12 @@
         'translate-y-[-70px]': (!showNav || imageViewerShow) && !showSidebar,
       }"
     >
-      <div class="absolute top-0 left-0 flex w-full">
+      <div
+        class="absolute top-0 left-0 flex"
+        :class="{
+          'w-full': filterConfig.search.enable,
+        }"
+      >
         <button class="w-[60px] h-[60px] hover:bg-gray-400/20" @click="showSidebar = !showSidebar">
           <IconMenu class="w-7 h-7 mx-auto" />
         </button>
