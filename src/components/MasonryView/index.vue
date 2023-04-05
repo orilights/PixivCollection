@@ -5,7 +5,7 @@
   <div
     ref="container" class="w-full mx-auto relative overflow-y-hidden"
     :class="{
-      'lg:w-[700px] xl:w-[960px]': !containerFullWidth,
+      'lg:w-[960px]': !containerFullWidth,
     }"
     :style="{
       height: `${Math.max(...colsTop) + 20}px`,
@@ -67,14 +67,9 @@ const containerTop = useDebounce(containerTopO, 200, { maxWait: 400 })
 const col = computed(() => {
   if (props.config.col > 0)
     return props.config.col
-  if (containerWidth.value >= 1024 && containerFullWidth.value)
-    return 6
-  if (containerWidth.value >= 960 && containerFullWidth.value)
-    return 5
-  if (containerWidth.value >= 960)
-    return 4
-  if (containerWidth.value >= 700)
-    return 3
+  const cWidth = containerWidth.value + props.config.gap * 2
+  if (cWidth >= 480)
+    return Number((cWidth / 240).toFixed(0))
   return 2
 })
 const colsTop = ref(Array.from({ length: col.value }, () => 0))
