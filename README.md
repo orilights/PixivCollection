@@ -1,6 +1,6 @@
 # PixivCollection
 
-![preview](docs\preview.jpg)
+![preview](docs/preview.jpg)
 
 [预览：OriLightの Pixiv 收藏夹](https://pixiv.orilight.top/)
 
