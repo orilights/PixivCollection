@@ -12,21 +12,19 @@
         @click="showSidebar = false"
       />
       <Navbar />
-      <div>
-        <MasonryView
-          :loading="loading"
-          :images="images"
-          :config="{
-            col,
-            gap,
-            showNo: showImageNo,
-            preload: masonryPreload,
-          }"
-          :filter="imageFilter"
-        />
-      </div>
+      <MasonryView
+        :loading="loading"
+        :images="images"
+        :config="{
+          col,
+          gap,
+          showNo: showImageNo,
+          preload: masonryPreload,
+        }"
+        :filter="imageFilter"
+      />
+      <ImageViewer />
     </div>
-    <ImageViewer />
   </div>
 </template>
 
@@ -41,8 +39,8 @@ const {
   col, gap,
   filterConfig,
   showSidebar,
-  showImageNo,
   showTagTranslation,
+  showImageNo,
   infoAtBottom,
   containerFullWidth,
   imageFilter,

@@ -36,7 +36,11 @@
     <Transition name="fade">
       <div
         v-show="!imageLoaded"
-        class="absolute w-full h-[calc(100%-120px)] bg-white dark:bg-black flex justify-center items-center"
+        class="absolute w-full bg-white dark:bg-black flex justify-center items-center"
+        :class="{
+          'h-full': !infoAtBottom,
+          'h-[calc(100%-120px)]': infoAtBottom,
+        }"
       >
         Loading
       </div>
@@ -63,7 +67,7 @@
           @click.stop="$emit('filterAuthor', index)"
         />
       </p>
-      <p class="overflow-y-auto h-[60px]">
+      <p class="overflow-y-auto h-[60px] mx-[-4px]">
         <span
           v-for="tag, idx in image.detail.tags" v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
           class="px-1 mx-1 my-0.5 inline-block bg-black/10 rounded-sm text-sm"

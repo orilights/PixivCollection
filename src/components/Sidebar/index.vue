@@ -4,9 +4,6 @@
       v-show="showSidebar"
       class="fixed w-full lg:block top-[60px] sm:top-0 left-0 h-[calc(100vh-60px)] sm:h-screen sm:w-[400px] bg-white overflow-x-hidden overflow-y-auto px-2 pt-2 transition-all dark:bg-[#242424] duration-500 z-30"
     >
-      <h2 class="font-bold text-2xl py-2">
-        浏览设置
-      </h2>
       <div class="mb-2 mx-10 lg:hidden flex justify-between">
         <button
           class="w-[60px] h-[60px]"
@@ -29,6 +26,9 @@
           <IconExpand v-else class="w-5 h-5 mx-auto" />
         </button>
       </div>
+      <h2 class="font-bold text-2xl py-2">
+        浏览设置
+      </h2>
       <div class="my-1">
         列数:
         <select
