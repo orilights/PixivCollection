@@ -9,6 +9,7 @@
     }"
     :style="{
       height: `${Math.max(...colsTop) + 20}px`,
+      padding: `0 ${config.gap}px`,
     }"
   >
     <MasonryViewItem
@@ -20,7 +21,7 @@
       :info-at-bottom="infoAtBottom"
       :shadow="config.gap > 2"
       :load-image="imagesShow.includes(item.idx)" :style="{
-        width: `calc((100% - ${config.gap * (col - 1)}px) / ${col})`,
+        width: `calc((100% - ${config.gap * (col + 1)}px) / ${col})`,
         height: `${getImageHeight(item.image.size) + (infoAtBottom ? 120 : 0)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
@@ -97,7 +98,7 @@ const imagesPlaced = computed(() => {
       place: colPlace,
       idx,
       top: colsTop.value[colPlace],
-      left: ((containerWidth.value - (col.value - 1) * props.config.gap) / col.value + props.config.gap) * colPlace,
+      left: (imageWidth.value + props.config.gap) * colPlace,
     })
     colsTop.value[colPlace] += getImageHeight(image.size) + props.config.gap + (infoAtBottom.value ? 120 : 0)
   })

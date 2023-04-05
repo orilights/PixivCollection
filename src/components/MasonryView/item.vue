@@ -36,7 +36,7 @@
     <Transition name="fade">
       <div
         v-show="!imageLoaded"
-        class="absolute w-full h-full bg-black flex justify-center items-center text-white"
+        class="absolute w-full h-[calc(100%-120px)] bg-white dark:bg-black flex justify-center items-center"
       >
         Loading
       </div>
@@ -45,11 +45,11 @@
       {{ index + 1 }}
     </div>
     <img
-      v-if="loadImage" class="w-full" :src="image.preview"
+      v-if="loadImage" class="w-full cursor-pointer" :src="image.preview"
       @load="imageLoaded = true"
       @click="$emit('openImage', index)"
     >
-    <div v-if="infoAtBottom" class="px-2 pt-2 relative">
+    <div v-if="infoAtBottom" class="px-2 absolute w-full bottom-1.5">
       <p
         class="font-bold hover:text-blue-500 whitespace-nowrap overflow-hidden overflow-ellipsis cursor-pointer"
         @click="$emit('openPixiv', index)"

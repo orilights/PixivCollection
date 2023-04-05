@@ -12,11 +12,7 @@
         @click="showSidebar = false"
       />
       <Navbar />
-      <div
-        :style="{
-          padding: `0 ${gap}px`,
-        }"
-      >
+      <div>
         <MasonryView
           :loading="loading"
           :images="images"
