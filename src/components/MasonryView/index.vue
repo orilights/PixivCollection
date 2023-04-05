@@ -17,10 +17,11 @@
       :show-no="config.showNo"
       :tag-include-bookmark="filterConfig.tag.includeBookmark"
       :tag-translation="showTagTranslation"
+      :info-at-bottom="infoAtBottom"
       :shadow="config.gap > 2"
       :load-image="imagesShow.includes(item.idx)" :style="{
         width: `calc((100% - ${config.gap * (col - 1)}px) / ${col})`,
-        height: `${getImageHeight(item.image.size)}px`,
+        height: `${getImageHeight(item.image.size) + (infoAtBottom ? 120 : 0)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
       @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser"
@@ -56,7 +57,7 @@ const props = withDefaults(
   })
 
 const store = useStore()
-const { filterConfig, showTagTranslation, containerFullWidth } = toRefs(store)
+const { filterConfig, showTagTranslation, infoAtBottom, containerFullWidth } = toRefs(store)
 const container = ref()
 const { width: containerWidthO } = useElementSize(container)
 const { top: containerTopO } = useElementBounding(container)
@@ -98,7 +99,7 @@ const imagesPlaced = computed(() => {
       top: colsTop.value[colPlace],
       left: ((containerWidth.value - (col.value - 1) * props.config.gap) / col.value + props.config.gap) * colPlace,
     })
-    colsTop.value[colPlace] += getImageHeight(image.size) + props.config.gap
+    colsTop.value[colPlace] += getImageHeight(image.size) + props.config.gap + (infoAtBottom.value ? 120 : 0)
   })
   return _list
 })

@@ -40,7 +40,17 @@ import { masonryPreload } from '@/config'
 
 const store = useStore()
 
-const { darkMode, col, gap, filterConfig, showSidebar, showImageNo, showTagTranslation, containerFullWidth, imageFilter } = toRefs(store)
+const {
+  darkMode,
+  col, gap,
+  filterConfig,
+  showSidebar,
+  showImageNo,
+  showTagTranslation,
+  infoAtBottom,
+  containerFullWidth,
+  imageFilter,
+} = toRefs(store)
 
 const settingLoaded = ref(false)
 const images = ref<Image[]>([])
@@ -55,6 +65,7 @@ watchEffect(() => {
     localStorage.setItem('sanity', filterConfig.value.restrict.sanity.max.toString())
     localStorage.setItem('tagTranslation', showTagTranslation.value.toString())
     localStorage.setItem('showImageNo', showImageNo.value.toString())
+    localStorage.setItem('infoAtBottom', infoAtBottom.value.toString())
     localStorage.setItem('containerFullWidth', containerFullWidth.value.toString())
   }
 })
@@ -67,6 +78,7 @@ onMounted(() => {
   filterConfig.value.restrict.sanity.max = Number(localStorage.getItem('sanity')) || 2
   showTagTranslation.value = localStorage.getItem('tagTranslation') === 'true'
   showImageNo.value = localStorage.getItem('showImageNo') === 'true'
+  infoAtBottom.value = localStorage.getItem('infoAtBottom') === 'true'
   containerFullWidth.value = localStorage.getItem('containerFullWidth') === 'true'
   settingLoaded.value = true
 

@@ -4,6 +4,9 @@
       v-show="showSidebar"
       class="fixed w-full lg:block top-[60px] sm:top-0 left-0 h-[calc(100vh-60px)] sm:h-screen sm:w-[400px] bg-white overflow-x-hidden overflow-y-auto px-2 pt-2 transition-all dark:bg-[#242424] duration-500 z-30"
     >
+      <h2 class="font-bold text-2xl py-2">
+        浏览设置
+      </h2>
       <div class="mb-2 mx-10 lg:hidden flex justify-between">
         <button
           class="w-[60px] h-[60px]"
@@ -52,8 +55,23 @@
       <div class="my-1">
         图片铺满屏幕：<input v-model="containerFullWidth" type="checkbox">
       </div>
+      <div class="my-1">
+        标签包含收藏：<input v-model="filterConfig.tag.includeBookmark" type="checkbox">
+      </div>
+      <div class="my-1">
+        显示图片序号：<input v-model="showImageNo" type="checkbox">
+      </div>
+      <div class="my-1">
+        显示 Tag 翻译：<input v-model="showTagTranslation" type="checkbox">
+      </div>
+      <div class="my-1">
+        图片信息外置：<input v-model="infoAtBottom" type="checkbox">
+      </div>
+      <h2 class="font-bold text-2xl py-2">
+        图片筛选
+      </h2>
       <div>
-        健全度:
+        最高健全度:
         <select
           v-model.number="filterConfig.restrict.sanity.max"
           class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
@@ -64,35 +82,6 @@
         </select>
         <button class="px-2 py-0.5 mx-1 border rounded-md hover:border-blue-500 transition-colors" @click="confirmR18">
           {{ filterConfig.restrict.r18 ? '隐藏R18内容' : '🔞显示R18内容' }}
-        </button>
-      </div>
-      <div class="my-1">
-        标签包含收藏：<input v-model="filterConfig.tag.includeBookmark" type="checkbox">
-      </div>
-      <div class="my-1">
-        开启 Tag 翻译：<input v-model="showTagTranslation" type="checkbox">
-      </div>
-      <div class="my-1">
-        显示图片序号：<input v-model="showImageNo" type="checkbox">
-      </div>
-      <div class="my-1">
-        当前选中作者：{{ filterConfig.author.enable ? authors.find((a) => a.id === filterConfig.author.id)?.name : '未选中' }}
-        <button
-          v-show="filterConfig.author.enable"
-          class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
-          @click="filterConfig.author.enable = false; filterConfig.author.id = -1"
-        >
-          取消
-        </button>
-      </div>
-      <div class="my-1">
-        当前选中标签：{{ filterConfig.tag.enable ? filterConfig.tag.name : '未选中' }}
-        <button
-          v-show="filterConfig.tag.enable"
-          class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
-          @click="filterConfig.tag.enable = false; filterConfig.tag.name = ''"
-        >
-          取消
         </button>
       </div>
       <div class="my-1">
@@ -143,6 +132,26 @@
           @click="handleClickShape('square')"
         >
           方形
+        </button>
+      </div>
+      <div class="my-1">
+        当前选中作者：{{ filterConfig.author.enable ? authors.find((a) => a.id === filterConfig.author.id)?.name : '未选中' }}
+        <button
+          v-show="filterConfig.author.enable"
+          class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
+          @click="filterConfig.author.enable = false; filterConfig.author.id = -1"
+        >
+          取消
+        </button>
+      </div>
+      <div class="my-1">
+        当前选中标签：{{ filterConfig.tag.enable ? filterConfig.tag.name : '未选中' }}
+        <button
+          v-show="filterConfig.tag.enable"
+          class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
+          @click="filterConfig.tag.enable = false; filterConfig.tag.name = ''"
+        >
+          取消
         </button>
       </div>
       <div>
@@ -206,7 +215,8 @@ const props = defineProps<{
 const store = useStore()
 const {
   col
-  , gap, filterConfig, showSidebar, showTagTranslation, showImageNo, darkMode, isFullscreen, containerFullWidth,
+  , gap, filterConfig, showSidebar, showTagTranslation, showImageNo, infoAtBottom, darkMode, isFullscreen,
+  containerFullWidth,
 } = toRefs(store)
 
 const showAuthor = ref(false)

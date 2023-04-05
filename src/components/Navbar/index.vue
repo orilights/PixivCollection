@@ -22,6 +22,7 @@
         <div v-show="filterConfig.search.enable" class="flex-1 inline-block">
           <input
             class="w-full h-[60px] outline-none px-4 box-border border-l border-gray-400/50 bg-transparent" type="text" placeholder="图片id/图片标题/作者id/作者昵称"
+            :value="filterConfig.search.value"
             @input="handleSearchInput"
           >
         </div>
