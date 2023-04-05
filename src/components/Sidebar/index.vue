@@ -209,7 +209,6 @@ const {
   , gap, filterConfig, showSidebar, showTagTranslation, showImageNo, darkMode, isFullscreen, containerFullWidth,
 } = toRefs(store)
 
-const configLoaded = ref(false)
 const showAuthor = ref(false)
 const showTags = ref(false)
 
@@ -282,29 +281,6 @@ watchEffect(() => {
   authors.value = Object.keys(_authors)
     .map(authorId => _authors[authorId])
     .sort((a, b) => b.count - a.count)
-})
-
-watchEffect(() => {
-  if (!configLoaded.value)
-    return
-  localStorage.setItem('col', col.value.toString())
-  localStorage.setItem('gap', gap.value.toString())
-  localStorage.setItem('r18', filterConfig.value.restrict.r18.toString())
-  localStorage.setItem('sanity', filterConfig.value.restrict.sanity.max.toString())
-  localStorage.setItem('tagTranslation', showTagTranslation.value.toString())
-  localStorage.setItem('showImageNo', showImageNo.value.toString())
-  localStorage.setItem('containerFullWidth', containerFullWidth.value.toString())
-})
-
-onMounted(() => {
-  col.value = Number(localStorage.getItem('col')) || -1
-  gap.value = Number(localStorage.getItem('gap') || '10')
-  filterConfig.value.restrict.r18 = localStorage.getItem('r18') === 'true'
-  filterConfig.value.restrict.sanity.max = Number(localStorage.getItem('sanity')) || 2
-  showTagTranslation.value = localStorage.getItem('tagTranslation') === 'true'
-  showImageNo.value = localStorage.getItem('showImageNo') === 'true'
-  containerFullWidth.value = localStorage.getItem('containerFullWidth') === 'true'
-  configLoaded.value = true
 })
 
 function confirmR18() {

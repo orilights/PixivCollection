@@ -8,7 +8,7 @@
       'lg:w-[700px] xl:w-[960px]': !containerFullWidth,
     }"
     :style="{
-      height: `${Math.max(...colsTop)}px`,
+      height: `${Math.max(...colsTop) + 20}px`,
     }"
   >
     <MasonryViewItem

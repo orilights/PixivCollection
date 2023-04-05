@@ -86,6 +86,7 @@ watch(imageViewerShow, (val) => {
   }
   else {
     document.body.style.overflow = 'hidden'
+    restoreImage()
   }
 })
 
@@ -188,8 +189,12 @@ function resolvePath(pathStr: string) {
 
 <style>
 .fade-enter-active,
-.fade-leave-active {
-  transition: opacity .3s;
+.fade-leave-active,
+.hide-left-enter-active,
+.hide-left-leave-active,
+.hide-right-enter-active,
+.hide-right-leave-active {
+  transition: transform .3s;
 }
 
 .fade-enter-from,
@@ -197,19 +202,9 @@ function resolvePath(pathStr: string) {
   opacity: 0;
 }
 
-.hide-left-enter-active,
-.hide-left-leave-active {
-  transition: transform .3s;
-}
-
 .hide-left-enter-from,
 .hide-left-leave-to {
   transform: translateX(-100%);
-}
-
-.hide-right-enter-active,
-.hide-right-leave-active {
-  transition: transform .3s;
 }
 
 .hide-right-enter-from,

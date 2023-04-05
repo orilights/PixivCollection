@@ -10,7 +10,7 @@
         <button class="w-[60px] h-[60px] hover:bg-gray-400/20" @click="showSidebar = !showSidebar">
           <IconMenu class="w-7 h-7 mx-auto" />
         </button>
-        <button class="w-[60px] h-[60px] hover:bg-gray-400/20" @click="filterConfig.search.enable = !filterConfig.search.enable">
+        <button class="w-[60px] h-[60px] hover:bg-gray-400/20" @click="store.toggleSearch">
           <IconSearch v-if="!filterConfig.search.enable" class="w-6 h-6 mx-auto" />
           <IconClose v-else class="w-6 h-6 mx-auto" />
         </button>
