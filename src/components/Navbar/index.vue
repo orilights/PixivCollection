@@ -60,17 +60,20 @@
 import { useDebounceFn } from '@vueuse/core'
 import { useStore } from '@/store'
 import { githubLink } from '@/config'
-
 const store = useStore()
 const { darkMode, showSidebar, showNav, imageViewerShow, isFullscreen, filterConfig } = toRefs(store)
 
 const updateSearchStr = useDebounceFn((value) => {
-  filterConfig.value.search.value = value
+  store.updateSeatchValue(value)
 }, 300)
 
 let oldY = 0
 
 onMounted(() => {
+  if (store.urlParams.search) {
+    store.updateSeatchValue(store.urlParams.search as string)
+    store.toggleSearch()
+  }
   window.addEventListener('scroll', () => {
     const newY = document.documentElement.scrollTop
     if (newY > oldY && newY > 200)

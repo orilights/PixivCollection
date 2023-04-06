@@ -1,4 +1,4 @@
-import { useFullscreen } from '@vueuse/core'
+import { useFullscreen, useUrlSearchParams } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
 export const useStore = defineStore('main', {
@@ -22,6 +22,7 @@ export const useStore = defineStore('main', {
     imageViewerPrev: () => {},
     imageViewerNext: () => {},
 
+    urlParams: useUrlSearchParams(),
     fullscreen: useFullscreen(document.documentElement),
 
     filterConfig: {
@@ -157,6 +158,13 @@ export const useStore = defineStore('main', {
     closeImageViewer(): void {
       this.imageViewerShow = false
     },
+    updateSeatchValue(value: string): void {
+      this.filterConfig.search.value = value
+      if (value.trim() === '')
+        this.urlParams.search = undefined
+      else
+        this.urlParams.search = value
+    },
     toggleDarkMode(): void {
       this.darkMode = !this.darkMode
     },
@@ -165,7 +173,7 @@ export const useStore = defineStore('main', {
     },
     toggleSearch(): void {
       if (this.filterConfig.search.enable)
-        this.filterConfig.search.value = ''
+        this.updateSeatchValue('')
       this.filterConfig.search.enable = !this.filterConfig.search.enable
     },
   },
