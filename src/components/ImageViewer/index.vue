@@ -1,10 +1,10 @@
 <template>
   <Transition name="fade">
     <div
-      v-if="imageViewerShow" class="fixed top-0 left-0 w-screen h-screen bg-black/30"
+      v-if="imageViewerShow" class="fixed top-0 left-0 w-full h-screen bg-black/30"
       @mousemove="imageGragging && (imagePos.x += $event.movementX, imagePos.y += $event.movementY)"
       @mouseup="imageGragging = false" @mouseleave="imageGragging = false"
-      @touchmove="imageGragging && handleTouchMove($event)" @wheel="handleWheelScroll"
+      @touchmove.prevent="imageGragging && handleTouchMove($event)" @wheel.prevent="handleWheelScroll"
       @touchend="imageGragging = false"
     >
       <button
@@ -22,7 +22,7 @@
       <Transition name="hide-left">
         <button
           v-show="!imageGragging"
-          class="bg-black/40 text-white absolute left-0 top-[calc(50vh-40px)] w-[40px] h-[80px] z-50"
+          class="bg-black/40 text-white absolute left-0 top-[calc(50%-40px)] w-[40px] h-[80px] z-50"
           @click="store.imageViewerPrev()"
         >
           <IconLeft class="w-6 h-6 mx-auto" />
@@ -31,7 +31,7 @@
       <Transition name="hide-right">
         <button
           v-show="!imageGragging"
-          class="bg-black/40 text-white absolute right-0 top-[calc(50vh-40px)] w-[40px] h-[80px] z-50"
+          class="bg-black/40 text-white absolute right-0 top-[calc(50%-40px)] w-[40px] h-[80px] z-50"
           @click="store.imageViewerNext()"
         >
           <IconRight class="w-6 h-6 mx-auto" />
@@ -82,10 +82,8 @@ watch(imageViewerShow, (val) => {
       imageLoader.remove()
 
     loading.value = false
-    document.body.style.overflow = 'visible'
   }
   else {
-    document.body.style.overflow = 'hidden'
     restoreImage()
   }
 })
