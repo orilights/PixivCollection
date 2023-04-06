@@ -15,19 +15,23 @@
         <button class="w-[60px] h-[60px] hover:bg-gray-400/20" @click="showSidebar = !showSidebar">
           <IconMenu class="w-7 h-7 mx-auto" />
         </button>
-        <button class="w-[60px] h-[60px] hover:bg-gray-400/20" @click="store.toggleSearch">
+        <button class="w-[60px] h-[60px] hover:bg-gray-400/20 hidden sm:block" @click="store.toggleSearch">
           <IconSearch v-if="!filterConfig.search.enable" class="w-6 h-6 mx-auto" />
           <IconClose v-else class="w-6 h-6 mx-auto" />
         </button>
-        <div v-show="filterConfig.search.enable" class="flex-1 inline-block">
+        <div v-show="filterConfig.search.enable" class="flex-1 mr-[60px] sm:mr-0">
           <input
-            class="w-full h-[60px] outline-none px-4 box-border border-l border-gray-400/50 bg-transparent" type="text" placeholder="图片id/图片标题/作者id/作者昵称"
+            class="w-full h-[60px] outline-none px-4 box-border border-x border-gray-400/50 bg-transparent" type="text" placeholder="图片id/图片标题/作者id/作者昵称"
             :value="filterConfig.search.value"
             @input="handleSearchInput"
           >
         </div>
       </div>
-      <div v-show="!filterConfig.search.enable" class="text-lg h-[60px] leading-[60px] select-none text-center ml-[60px] sm:ml-0" @dblclick="navToTop">
+      <button class="w-[60px] h-[60px] hover:bg-gray-400/20 absolute right-0 block sm:hidden" @click="store.toggleSearch">
+        <IconSearch v-if="!filterConfig.search.enable" class="w-6 h-6 mx-auto" />
+        <IconClose v-else class="w-6 h-6 mx-auto" />
+      </button>
+      <div v-show="!filterConfig.search.enable" class="text-lg h-[60px] leading-[60px] select-none text-center mx-[60px] sm:ml-0" @dblclick="navToTop">
         OriLightの<span class="text-[#0398fa] px-1">Pixiv</span>收藏夹
       </div>
       <div class="absolute top-0 right-0 hidden lg:flex">
