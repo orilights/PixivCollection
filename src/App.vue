@@ -34,7 +34,6 @@
           gap,
           showNo: showImageNo,
           preload: masonryPreload,
-          virtualList: true,
         }"
         :filter="imageFilter"
       />
