@@ -12,7 +12,7 @@ export const useStore = defineStore('main', {
     showSidebar: false,
     showNav: true,
 
-    virtualListImpl: 'virtual-scroller',
+    virtualListImpl: 'default',
     showTagTranslation: false,
     showImageNo: false,
     infoAtBottom: false,
