@@ -12,11 +12,13 @@
   "dependencies": {
     "@vueuse/core": "^9.13.0",
     "pinia": "^2.0.32",
-    "vue": "^3.2.45"
+    "vue": "^3.2.45",
+    "vue-virtual-scroller": "^2.0.0-beta.8"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.35.2",
     "@types/node": "^18.14.0",
+    "@types/vue-virtual-scroller": "npm:@earltp/vue-virtual-scroller",
     "@vitejs/plugin-vue": "^4.0.0",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.34.0",

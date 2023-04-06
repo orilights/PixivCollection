@@ -13,6 +13,7 @@
       />
       <Navbar />
       <MasonryView
+        v-if="virtualListImpl === 'default'"
         :loading="loading"
         :images="images"
         :config="{
@@ -20,6 +21,33 @@
           gap,
           showNo: showImageNo,
           preload: masonryPreload,
+          virtualList: true,
+        }"
+        :filter="imageFilter"
+      />
+      <MasonryViewVS
+        v-else-if="virtualListImpl === 'virtual-scroller'"
+        :loading="loading"
+        :images="images"
+        :config="{
+          col,
+          gap,
+          showNo: showImageNo,
+          preload: masonryPreload,
+          virtualList: true,
+        }"
+        :filter="imageFilter"
+      />
+      <MasonryView
+        v-else-if="virtualListImpl === 'none'"
+        :loading="loading"
+        :images="images"
+        :config="{
+          col,
+          gap,
+          showNo: showImageNo,
+          preload: masonryPreload,
+          virtualList: false,
         }"
         :filter="imageFilter"
       />
@@ -39,6 +67,7 @@ const {
   col, gap,
   filterConfig,
   showSidebar,
+  virtualListImpl,
   showTagTranslation,
   showImageNo,
   infoAtBottom,
@@ -57,6 +86,7 @@ watchEffect(() => {
     localStorage.setItem('gap', gap.value.toString())
     localStorage.setItem('r18', filterConfig.value.restrict.r18.toString())
     localStorage.setItem('sanity', filterConfig.value.restrict.sanity.max.toString())
+    localStorage.setItem('masonryImpl', virtualListImpl.value.toString())
     localStorage.setItem('tagTranslation', showTagTranslation.value.toString())
     localStorage.setItem('showImageNo', showImageNo.value.toString())
     localStorage.setItem('infoAtBottom', infoAtBottom.value.toString())
@@ -70,6 +100,7 @@ onMounted(() => {
   gap.value = Number(localStorage.getItem('gap') || '10')
   filterConfig.value.restrict.r18 = localStorage.getItem('r18') === 'true'
   filterConfig.value.restrict.sanity.max = Number(localStorage.getItem('sanity')) || 2
+  virtualListImpl.value = localStorage.getItem('masonryImpl') || 'virtual-scroller'
   showTagTranslation.value = localStorage.getItem('tagTranslation') === 'true'
   showImageNo.value = localStorage.getItem('showImageNo') === 'true'
   infoAtBottom.value = localStorage.getItem('infoAtBottom') === 'true'

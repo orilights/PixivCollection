@@ -30,6 +30,23 @@
         浏览设置
       </h2>
       <div class="my-1">
+        虚拟列表:
+        <select
+          v-model="virtualListImpl"
+          class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
+        >
+          <option value="default">
+            默认
+          </option>
+          <option value="virtual-scroller">
+            Vue Virtual Scroller
+          </option>
+          <option value="none">
+            关闭
+          </option>
+        </select>
+      </div>
+      <div class="my-1">
         列数:
         <select
           v-model.number="col"
@@ -214,8 +231,15 @@ const props = defineProps<{
 
 const store = useStore()
 const {
-  col
-  , gap, filterConfig, showSidebar, showTagTranslation, showImageNo, infoAtBottom, darkMode, isFullscreen,
+  col, gap,
+  filterConfig,
+  showSidebar,
+  virtualListImpl,
+  showTagTranslation,
+  showImageNo,
+  infoAtBottom,
+  darkMode,
+  isFullscreen,
   containerFullWidth,
 } = toRefs(store)
 

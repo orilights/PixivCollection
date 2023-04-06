@@ -3,37 +3,48 @@
     {{ loading ? '数据加载中...' : '无数据' }}
   </div>
   <div
-    ref="container" class="w-full mx-auto relative overflow-y-hidden"
+    ref="container" class="mx-auto flex"
     :class="{
       'lg:w-[960px]': !containerFullWidth,
     }"
     :style="{
-      height: `${Math.max(...colsTop) + 20}px`,
       padding: `0 ${config.gap}px`,
+      gap: `${config.gap}px`,
     }"
   >
-    <MasonryViewItem
-      v-for="item in imagesRenderList" :key="`${item.image.id}_${item.image.part}`" :index="item.idx"
-      :image="item.image"
-      :show-no="config.showNo"
-      :tag-include-bookmark="filterConfig.tag.includeBookmark"
-      :tag-translation="showTagTranslation"
-      :info-at-bottom="infoAtBottom"
-      :shadow="config.gap > 2"
-      :load-image="imagesShow.includes(item.idx)" :style="{
-        width: `calc((100% - ${config.gap * (col + 1)}px) / ${col})`,
-        height: `${getImageHeight(item.image.size) + (infoAtBottom ? 120 : 0)}px`,
-        transform: `translate(${item.left}px, ${item.top}px)`,
-      }"
-      @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser"
-      @filter-author="filterAuthor"
-      @destory="itemDestroy"
-    />
+    <RecycleScroller
+      v-for="index in col"
+      :key="index"
+      v-slot="{ item }"
+      class="scroller h-full flex-1"
+      key-field="idx"
+      size-field="height"
+      :items="imagesPlaced.filter(i => i.place === index - 1)"
+      page-mode
+      :buffer="1000"
+    >
+      <MasonryViewVSItem
+        :index="item.idx"
+        :image="item.image"
+        :show-no="config.showNo"
+        :tag-include-bookmark="filterConfig.tag.includeBookmark"
+        :tag-translation="showTagTranslation"
+        :info-at-bottom="infoAtBottom"
+        :shadow="config.gap > 2"
+        :style="{
+          width: `100%`,
+          height: `${getImageHeight(item.image.size) + (infoAtBottom ? 120 : 0)}px`,
+          // transform: `translate(${item.left}px, ${item.top}px)`,
+        }"
+        @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser"
+        @filter-author="filterAuthor"
+      />
+    </RecycleScroller>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useDebounce, useDebounceFn, useElementBounding, useElementSize } from '@vueuse/core'
+import { useDebounce, useElementSize } from '@vueuse/core'
 import { useStore } from '@/store'
 import { pixivArtworkLink, pixivUserLink } from '@/config'
 
@@ -42,7 +53,6 @@ interface ComponentOptions {
   gap: number
   showNo: boolean
   preload: number
-  virtualList: boolean
 }
 
 const props = withDefaults(
@@ -60,7 +70,6 @@ const props = withDefaults(
         gap: 10,
         showNo: false,
         preload: 3,
-        virtualList: true,
       }
     },
     filter: () => true,
@@ -70,9 +79,7 @@ const store = useStore()
 const { filterConfig, showTagTranslation, infoAtBottom, containerFullWidth } = toRefs(store)
 const container = ref()
 const { width: containerWidthO } = useElementSize(container)
-const { top: containerTopO } = useElementBounding(container)
 const containerWidth = useDebounce(containerWidthO, 200, { maxWait: 400 })
-const containerTop = useDebounce(containerTopO, 200, { maxWait: 400 })
 const col = computed(() => {
   if (props.config.col > 0)
     return props.config.col
@@ -91,8 +98,7 @@ const imagesPlaced = computed(() => {
     image: Image
     place: number
     idx: number
-    top: number
-    left: number
+    height: number
   }> = []
   colsTop.value = Array.from({ length: col.value }, () => 0)
   imagesFiltered.value.forEach((image, idx) => {
@@ -101,49 +107,11 @@ const imagesPlaced = computed(() => {
       image,
       place: colPlace,
       idx,
-      top: colsTop.value[colPlace],
-      left: (imageWidth.value + props.config.gap) * colPlace,
+      height: getImageHeight(image.size) + (infoAtBottom.value ? 120 : 0) + props.config.gap,
     })
     colsTop.value[colPlace] += getImageHeight(image.size) + props.config.gap + (infoAtBottom.value ? 120 : 0)
   })
   return _list
-})
-const imagesRenderList = computed(() => {
-  if (props.config.virtualList) {
-    return imagesPlaced.value.filter((item) => {
-      const { preload } = props.config
-      if (item.top > (-containerTop.value - preload * window.innerHeight) && item.top < (-containerTop.value + (preload + 1) * window.innerHeight))
-        return true
-      return false
-    })
-  }
-  return imagesPlaced.value
-})
-const imagesShow = ref<number[]>([])
-
-const lazyloadImage = useDebounceFn(() => {
-  nextTick(() => {
-    imagesRenderList.value.forEach((item) => {
-      if (imagesShow.value.includes(item.idx))
-        return
-
-      if (item.top + getImageHeight(item.image.size) + containerTop.value > 0 && item.top + containerTop.value - window.innerHeight < 1000)
-        imagesShow.value.push(item.idx)
-    })
-  })
-}, 300, { maxWait: 500 })
-
-onMounted(() => {
-  lazyloadImage()
-  window.addEventListener('scroll', lazyloadImage)
-})
-
-watch(imagesFiltered, () => {
-  lazyloadImage()
-})
-
-watch(imageWidth, () => {
-  lazyloadImage()
 })
 
 function getColPlace() {
@@ -184,10 +152,5 @@ function filterAuthor(idx: number) {
   }
   store.filterConfig.author.id = authorId
   store.filterConfig.author.enable = true
-}
-
-function itemDestroy(idx: number) {
-  if (imagesShow.value.includes(idx))
-    imagesShow.value.splice(imagesShow.value.indexOf(idx), 1)
 }
 </script>
