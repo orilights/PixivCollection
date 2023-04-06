@@ -60,8 +60,8 @@
       >
         {{ image.title }}
       </p>
-      <p class="cursor-pointer">
-        <span class="hover:text-blue-500" @click="$emit('openPixivUser', index)">{{ image.detail.author.name }}</span>
+      <p class="cursor-pointer flex items-center">
+        <span class="hover:text-blue-500 whitespace-nowrap overflow-hidden overflow-ellipsis" @click="$emit('openPixivUser', index)">{{ image.detail.author.name }}</span>
         <IconFunnelSolid
           class="ml-1 w-3 h-3 inline-block"
           @click.stop="$emit('filterAuthor', index)"
