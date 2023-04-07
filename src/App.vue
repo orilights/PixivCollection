@@ -70,12 +70,12 @@ const {
   showTagTranslation,
   showImageNo,
   infoAtBottom,
+  images,
   containerFullWidth,
   imageFilter,
 } = toRefs(store)
 
 const settingLoaded = ref(false)
-const images = ref<Image[]>([])
 const loading = ref(true)
 
 watchEffect(() => {

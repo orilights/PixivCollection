@@ -22,6 +22,8 @@ export const useStore = defineStore('main', {
     imageViewerPrev: () => {},
     imageViewerNext: () => {},
 
+    images: <Image[]>[],
+
     urlParams: useUrlSearchParams(),
     fullscreen: useFullscreen(document.documentElement),
 

@@ -2,7 +2,7 @@
   <Transition name="popup-l">
     <div
       v-show="showSidebar"
-      class="fixed w-full lg:block top-[60px] sm:top-0 left-0 h-[calc(100vh-60px)] sm:h-screen sm:w-[400px] bg-white overflow-x-hidden overflow-y-auto px-2 pt-2 transition-all dark:bg-[#242424] duration-500 z-30"
+      class="fixed w-full lg:block top-[60px] sm:top-0 left-0 h-[calc(100vh-60px)] sm:h-screen sm:w-[400px] bg-white overflow-x-hidden overflow-y-auto px-2 py-3 transition-all dark:bg-[#242424] duration-500 z-30"
     >
       <div class="mb-2 mx-10 lg:hidden flex justify-between">
         <button
@@ -216,6 +216,17 @@
           {{ `${showTagTranslation ? tag.translated_name || tag.name : tag.name} ${tag.count}` }}
         </button>
       </div>
+      <h2 class="font-bold text-2xl py-2">
+        自定义数据源
+      </h2>
+      <div class="my-1">
+        <button
+          class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
+          @click="loadDataFromFile"
+        >
+          从文件加载
+        </button>
+      </div>
     </div>
   </Transition>
 </template>
@@ -374,6 +385,24 @@ function handleClickShape(shape: string) {
 
 function openGithub() {
   window.open(githubLink, '_blank')
+}
+
+function loadDataFromFile() {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'application/json'
+  input.onchange = (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const data = JSON.parse(e.target?.result as string)
+        store.images = data
+      }
+      reader.readAsText(file)
+    }
+  }
+  input.click()
 }
 </script>
 
