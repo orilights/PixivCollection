@@ -4,18 +4,8 @@ import { defineStore } from 'pinia'
 export const useStore = defineStore('main', {
   state: () => ({
     darkMode: false,
-
-    col: -1,
-    gap: 10,
-    containerFullWidth: false,
-
     showSidebar: false,
     showNav: true,
-
-    virtualListImpl: 'default',
-    showTagTranslation: false,
-    showImageNo: false,
-    infoAtBottom: false,
 
     imageViewerShow: false,
     imageViewerInfo: <Image>{},
@@ -27,6 +17,16 @@ export const useStore = defineStore('main', {
     urlParams: useUrlSearchParams(),
     fullscreen: useFullscreen(document.documentElement),
 
+    masonryConfig: {
+      col: -1,
+      gap: 10,
+      containerFullWidth: false,
+      showTagTranslation: false,
+      showImageNo: false,
+      infoAtBottom: false,
+      virtualListImpl: 'default',
+      virtualListPreload: 3,
+    },
     filterConfig: {
       search: {
         enable: false,
@@ -56,7 +56,7 @@ export const useStore = defineStore('main', {
         height: { max: null, min: null },
       },
       restrict: {
-        sanity: { max: 4 },
+        sanityLevel: { max: 4 },
         r18: false,
       },
     },
@@ -72,8 +72,8 @@ export const useStore = defineStore('main', {
           if (image.detail.x_restrict >= 1)
             return false
         }
-        if (this.filterConfig.restrict.sanity.max) {
-          if (image.detail.sanity_level > this.filterConfig.restrict.sanity.max)
+        if (this.filterConfig.restrict.sanityLevel.max) {
+          if (image.detail.sanity_level > this.filterConfig.restrict.sanityLevel.max)
             return false
         }
         // 搜索
@@ -148,6 +148,9 @@ export const useStore = defineStore('main', {
         }
         return true
       }
+    },
+    imagesFiltered(): Image[] {
+      return this.images.filter(this.imageFilter)
     },
   },
   actions: {

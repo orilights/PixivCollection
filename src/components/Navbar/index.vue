@@ -31,7 +31,7 @@
         <IconSearch v-if="!filterConfig.search.enable" class="w-6 h-6 mx-auto" />
         <IconClose v-else class="w-6 h-6 mx-auto" />
       </button>
-      <div v-show="!filterConfig.search.enable" class="text-lg h-[60px] leading-[60px] select-none text-center mx-[60px] sm:ml-0" @dblclick="navToTop">
+      <div v-show="!filterConfig.search.enable" class="text-lg h-[60px] leading-[60px] select-none text-center mx-[60px]" @dblclick="navToTop">
         OriLightの<span class="text-[#0398fa] px-1">Pixiv</span>收藏夹
       </div>
       <div class="absolute top-0 right-0 hidden lg:flex">

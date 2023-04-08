@@ -1,7 +1,7 @@
 <template>
   <Transition name="fade">
     <div
-      v-if="imageViewerShow" class="fixed top-0 left-0 w-full h-screen bg-black/30"
+      v-show="imageViewerShow" class="fixed top-0 left-0 w-full h-screen bg-black/30"
       @mousemove="imageGragging && (imagePos.x += $event.movementX, imagePos.y += $event.movementY)"
       @mouseup="imageGragging = false" @mouseleave="imageGragging = false"
       @touchmove.prevent="imageGragging && handleTouchMove($event)" @wheel.prevent="handleWheelScroll"

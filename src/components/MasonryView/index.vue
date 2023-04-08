@@ -1,28 +1,25 @@
 <template>
-  <div v-show="!imagesFiltered.length" class="w-fit mx-auto px-3 py-1 text-lg bg-black/20 rounded-xl">
-    {{ loading ? '数据加载中...' : '无数据' }}
-  </div>
   <div
     ref="container" class="w-full mx-auto relative overflow-y-hidden"
     :class="{
-      'lg:w-[960px]': !containerFullWidth,
+      'lg:w-[960px]': !masonryConfig.containerFullWidth,
     }"
     :style="{
       height: `${Math.max(...colsTop) + 20}px`,
-      padding: `0 ${config.gap}px`,
+      padding: `0 ${masonryConfig.gap}px`,
     }"
   >
     <MasonryViewItem
       v-for="item in imagesRenderList" :key="`${item.image.id}_${item.image.part}`" :index="item.idx"
       :image="item.image"
-      :show-no="config.showNo"
+      :show-no="masonryConfig.showImageNo"
       :tag-include-bookmark="filterConfig.tag.includeBookmark"
-      :tag-translation="showTagTranslation"
-      :info-at-bottom="infoAtBottom"
-      :shadow="config.gap > 2"
+      :tag-translation="masonryConfig.showTagTranslation"
+      :info-at-bottom="masonryConfig.infoAtBottom"
+      :shadow="masonryConfig.gap > 2"
       :load-image="imagesShow.includes(item.idx)" :style="{
-        width: `calc((100% - ${config.gap * (col + 1)}px) / ${col})`,
-        height: `${getImageHeight(item.image.size) + (infoAtBottom ? 120 : 0)}px`,
+        width: `calc((100% - ${masonryConfig.gap * (col + 1)}px) / ${col})`,
+        height: `${getImageHeight(item.image.size) + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
       @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser"
@@ -37,53 +34,23 @@ import { useDebounce, useDebounceFn, useElementBounding, useElementSize } from '
 import { useStore } from '@/store'
 import { pixivArtworkLink, pixivUserLink } from '@/config'
 
-interface ComponentOptions {
-  col: number
-  gap: number
-  showNo: boolean
-  preload: number
-  virtualList: boolean
-}
-
-const props = withDefaults(
-  defineProps<{
-    loading: boolean
-    images: Image[]
-    config: ComponentOptions
-    filter: (image: Image) => boolean
-  }>(),
-  {
-    images: () => [],
-    config: () => {
-      return {
-        col: 3,
-        gap: 10,
-        showNo: false,
-        preload: 3,
-        virtualList: true,
-      }
-    },
-    filter: () => true,
-  })
-
 const store = useStore()
-const { filterConfig, showTagTranslation, infoAtBottom, containerFullWidth } = toRefs(store)
+const { filterConfig, imagesFiltered, masonryConfig } = toRefs(store)
 const container = ref()
 const { width: containerWidthO } = useElementSize(container)
 const { top: containerTopO } = useElementBounding(container)
 const containerWidth = useDebounce(containerWidthO, 200, { maxWait: 400 })
 const containerTop = useDebounce(containerTopO, 200, { maxWait: 400 })
 const col = computed(() => {
-  if (props.config.col > 0)
-    return props.config.col
-  const cWidth = containerWidth.value + props.config.gap * 2
+  if (masonryConfig.value.col > 0)
+    return masonryConfig.value.col
+  const cWidth = containerWidth.value + masonryConfig.value.gap * 2
   if (cWidth >= 480)
     return Number((cWidth / 240).toFixed(0))
   return 2
 })
 const colsTop = ref(Array.from({ length: col.value }, () => 0))
-const imageWidth = computed(() => (containerWidth.value - (col.value - 1) * props.config.gap) / col.value)
-const imagesFiltered = computed(() => props.images.filter(props.filter))
+const imageWidth = computed(() => (containerWidth.value - (col.value - 1) * masonryConfig.value.gap) / col.value)
 const imagesPlaced = computed(() => {
   if (!containerWidth.value)
     return []
@@ -102,16 +69,16 @@ const imagesPlaced = computed(() => {
       place: colPlace,
       idx,
       top: colsTop.value[colPlace],
-      left: (imageWidth.value + props.config.gap) * colPlace,
+      left: (imageWidth.value + masonryConfig.value.gap) * colPlace,
     })
-    colsTop.value[colPlace] += getImageHeight(image.size) + props.config.gap + (infoAtBottom.value ? 120 : 0)
+    colsTop.value[colPlace] += getImageHeight(image.size) + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? 120 : 0)
   })
   return _list
 })
 const imagesRenderList = computed(() => {
-  if (props.config.virtualList) {
+  if (masonryConfig.value.virtualListImpl !== 'none') {
     return imagesPlaced.value.filter((item) => {
-      const { preload } = props.config
+      const preload = masonryConfig.value.virtualListPreload
       if (item.top > (-containerTop.value - preload * window.innerHeight) && item.top < (-containerTop.value + (preload + 1) * window.innerHeight))
         return true
       return false

@@ -32,7 +32,7 @@
       <div class="my-1">
         虚拟列表:
         <select
-          v-model="virtualListImpl"
+          v-model="masonryConfig.virtualListImpl"
           class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
         >
           <option value="default">
@@ -49,7 +49,7 @@
       <div class="my-1">
         列数:
         <select
-          v-model.number="col"
+          v-model.number="masonryConfig.col"
           class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
         >
           <option value="-1">
@@ -61,7 +61,7 @@
         </select>
         间隙:
         <select
-          v-model.number="gap"
+          v-model.number="masonryConfig.gap"
           class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
         >
           <option v-for="i in [0, 1, 2, 5, 10, 20]" :key="i" :value="i">
@@ -70,19 +70,19 @@
         </select>
       </div>
       <div class="my-1">
-        图片铺满屏幕：<input v-model="containerFullWidth" type="checkbox">
+        图片铺满屏幕：<input v-model="masonryConfig.containerFullWidth" type="checkbox">
       </div>
       <div class="my-1">
         标签包含收藏：<input v-model="filterConfig.tag.includeBookmark" type="checkbox">
       </div>
       <div class="my-1">
-        显示图片序号：<input v-model="showImageNo" type="checkbox">
+        显示图片序号：<input v-model="masonryConfig.showImageNo" type="checkbox">
       </div>
       <div class="my-1">
-        显示 Tag 翻译：<input v-model="showTagTranslation" type="checkbox">
+        显示 Tag 翻译：<input v-model="masonryConfig.showTagTranslation" type="checkbox">
       </div>
       <div class="my-1">
-        图片信息外置：<input v-model="infoAtBottom" type="checkbox">
+        图片信息外置：<input v-model="masonryConfig.infoAtBottom" type="checkbox">
       </div>
       <h2 class="font-bold text-2xl py-2">
         图片筛选
@@ -90,7 +90,7 @@
       <div>
         最高健全度:
         <select
-          v-model.number="filterConfig.restrict.sanity.max"
+          v-model.number="filterConfig.restrict.sanityLevel.max"
           class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
         >
           <option v-for="i in [2, 4, 6]" :key="i" :value="i">
@@ -213,7 +213,7 @@
             '!bg-gray-400': tag.name === filterConfig.tag.name,
           }" @click="handleClickTag(tag.name)"
         >
-          {{ `${showTagTranslation ? tag.translated_name || tag.name : tag.name} ${tag.count}` }}
+          {{ `${masonryConfig.showTagTranslation ? tag.translated_name || tag.name : tag.name} ${tag.count}` }}
         </button>
       </div>
       <h2 class="font-bold text-2xl py-2">
@@ -235,23 +235,14 @@
 import { githubLink } from '@/config'
 import { useStore } from '@/store'
 
-const props = defineProps<{
-  images: Image[]
-}
->()
-
 const store = useStore()
 const {
-  col, gap,
-  filterConfig,
-  showSidebar,
-  virtualListImpl,
-  showTagTranslation,
-  showImageNo,
-  infoAtBottom,
   darkMode,
+  showSidebar,
+  images,
+  filterConfig,
+  masonryConfig,
   isFullscreen,
-  containerFullWidth,
 } = toRefs(store)
 
 const showAuthor = ref(false)
@@ -265,7 +256,7 @@ watchEffect(() => {
   const _years: number[] = []
   const _tags: { [index: string]: TagData } = {}
   const _authors: { [index: string]: AuthorData } = {}
-  props.images.forEach((image) => {
+  images.value.forEach((image) => {
     // 统计年份
     const year = Number(image.detail.created_at.split('-')[0])
     if (!_years.includes(year) && year > 2000)
@@ -289,7 +280,7 @@ watchEffect(() => {
     }
 
     // 过滤健全度
-    if (image.detail.sanity_level > filterConfig.value.restrict.sanity.max)
+    if (image.detail.sanity_level > filterConfig.value.restrict.sanityLevel.max)
       return
 
     // 计算作者数据
@@ -309,7 +300,7 @@ watchEffect(() => {
         if (image.detail.x_restrict >= 1)
           return
       }
-      if (image.detail.sanity_level > filterConfig.value.restrict.sanity.max)
+      if (image.detail.sanity_level > filterConfig.value.restrict.sanityLevel.max)
         return
       if (Object.hasOwn(_tags, tag.name))
         _tags[tag.name].count++
@@ -335,7 +326,7 @@ function confirmR18() {
   // eslint-disable-next-line no-alert
   else if (confirm('确认显示R18内容？')) {
     filterConfig.value.restrict.r18 = true
-    filterConfig.value.restrict.sanity.max = 6
+    filterConfig.value.restrict.sanityLevel.max = 6
   }
 }
 

@@ -1,15 +1,12 @@
 <template>
-  <div v-show="!imagesFiltered.length" class="w-fit mx-auto px-3 py-1 text-lg bg-black/20 rounded-xl">
-    {{ loading ? '数据加载中...' : '无数据' }}
-  </div>
   <div
     ref="container" class="mx-auto flex"
     :class="{
-      'lg:w-[960px]': !containerFullWidth,
+      'lg:w-[960px]': !masonryConfig.containerFullWidth,
     }"
     :style="{
-      padding: `0 ${config.gap}px`,
-      gap: `${config.gap}px`,
+      padding: `0 ${masonryConfig.gap}px`,
+      gap: `${masonryConfig.gap}px`,
     }"
   >
     <RecycleScroller
@@ -26,14 +23,14 @@
       <MasonryViewVSItem
         :index="item.idx"
         :image="item.image"
-        :show-no="config.showNo"
+        :show-no="masonryConfig.showImageNo"
         :tag-include-bookmark="filterConfig.tag.includeBookmark"
-        :tag-translation="showTagTranslation"
-        :info-at-bottom="infoAtBottom"
-        :shadow="config.gap > 2"
+        :tag-translation="masonryConfig.showTagTranslation"
+        :info-at-bottom="masonryConfig.infoAtBottom"
+        :shadow="masonryConfig.gap > 2"
         :style="{
           width: `100%`,
-          height: `${getImageHeight(item.image.size) + (infoAtBottom ? 120 : 0)}px`,
+          height: `${getImageHeight(item.image.size) + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
           // transform: `translate(${item.left}px, ${item.top}px)`,
         }"
         @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser"
@@ -48,49 +45,21 @@ import { useDebounce, useElementSize } from '@vueuse/core'
 import { useStore } from '@/store'
 import { pixivArtworkLink, pixivUserLink } from '@/config'
 
-interface ComponentOptions {
-  col: number
-  gap: number
-  showNo: boolean
-  preload: number
-}
-
-const props = withDefaults(
-  defineProps<{
-    loading: boolean
-    images: Image[]
-    config: ComponentOptions
-    filter: (image: Image) => boolean
-  }>(),
-  {
-    images: () => [],
-    config: () => {
-      return {
-        col: 3,
-        gap: 10,
-        showNo: false,
-        preload: 3,
-      }
-    },
-    filter: () => true,
-  })
-
 const store = useStore()
-const { filterConfig, showTagTranslation, infoAtBottom, containerFullWidth } = toRefs(store)
+const { filterConfig, imagesFiltered, masonryConfig } = toRefs(store)
 const container = ref()
 const { width: containerWidthO } = useElementSize(container)
 const containerWidth = useDebounce(containerWidthO, 200, { maxWait: 400 })
 const col = computed(() => {
-  if (props.config.col > 0)
-    return props.config.col
-  const cWidth = containerWidth.value + props.config.gap * 2
+  if (masonryConfig.value.col > 0)
+    return masonryConfig.value.col
+  const cWidth = containerWidth.value + masonryConfig.value.gap * 2
   if (cWidth >= 480)
     return Number((cWidth / 240).toFixed(0))
   return 2
 })
 const colsTop = ref(Array.from({ length: col.value }, () => 0))
-const imageWidth = computed(() => (containerWidth.value - (col.value - 1) * props.config.gap) / col.value)
-const imagesFiltered = computed(() => props.images.filter(props.filter))
+const imageWidth = computed(() => (containerWidth.value - (col.value - 1) * masonryConfig.value.gap) / col.value)
 const imagesPlaced = computed(() => {
   if (!containerWidth.value)
     return []
@@ -107,9 +76,9 @@ const imagesPlaced = computed(() => {
       image,
       place: colPlace,
       idx,
-      height: getImageHeight(image.size) + (infoAtBottom.value ? 120 : 0) + props.config.gap,
+      height: getImageHeight(image.size) + (masonryConfig.value.infoAtBottom ? 120 : 0) + masonryConfig.value.gap,
     })
-    colsTop.value[colPlace] += getImageHeight(image.size) + props.config.gap + (infoAtBottom.value ? 120 : 0)
+    colsTop.value[colPlace] += getImageHeight(image.size) + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? 120 : 0)
   })
   return _list
 })
