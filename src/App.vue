@@ -49,8 +49,8 @@ watchEffect(() => {
 })
 
 onMounted(() => {
-  filterConfig.value.restrict.r18 = localStorage.getItem('r18') === 'true'
-  filterConfig.value.restrict.sanityLevel.max = Number(localStorage.getItem('sanity_level')) || 2
+  filterConfig.value.restrict.r18 = localStorage.getItem('restrict_r18') === 'true'
+  filterConfig.value.restrict.sanityLevel.max = Number(localStorage.getItem('restrict_sanityLevel')) || 2
   darkMode.value = (localStorage.getItem('config_darkmode') || 'false') === 'true'
   if (localStorage.getItem('config_masonry'))
     masonryConfig.value = JSON.parse(localStorage.getItem('config_masonry') as string)
