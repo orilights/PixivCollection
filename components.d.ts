@@ -28,5 +28,6 @@ declare module '@vue/runtime-core' {
     MasonryViewVSItem: typeof import('./src/components/MasonryViewVS/item.vue')['default']
     Navbar: typeof import('./src/components/Navbar/index.vue')['default']
     Sidebar: typeof import('./src/components/Sidebar/index.vue')['default']
+    Switch: typeof import('./src/components/Switch/index.vue')['default']
   }
 }

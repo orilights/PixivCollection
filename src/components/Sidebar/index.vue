@@ -69,20 +69,20 @@
           </option>
         </select>
       </div>
-      <div class="my-1">
-        图片铺满屏幕：<input v-model="masonryConfig.containerFullWidth" type="checkbox">
+      <div class="my-1 flex items-center">
+        图片铺满屏幕<Switch v-model="masonryConfig.containerFullWidth" class="ml-3" />
       </div>
-      <div class="my-1">
-        标签包含收藏：<input v-model="filterConfig.tag.includeBookmark" type="checkbox">
+      <div class="my-1 flex items-center">
+        标签包含收藏<Switch v-model="filterConfig.tag.includeBookmark" class="ml-3" />
       </div>
-      <div class="my-1">
-        显示图片序号：<input v-model="masonryConfig.showImageNo" type="checkbox">
+      <div class="my-1 flex items-center">
+        显示图片序号<Switch v-model="masonryConfig.showImageNo" class="ml-3" />
       </div>
-      <div class="my-1">
-        显示 Tag 翻译：<input v-model="masonryConfig.showTagTranslation" type="checkbox">
+      <div class="my-1 flex items-center">
+        显示标签翻译<Switch v-model="masonryConfig.showTagTranslation" class="ml-3" />
       </div>
-      <div class="my-1">
-        图片信息外置：<input v-model="masonryConfig.infoAtBottom" type="checkbox">
+      <div class="my-1 flex items-center">
+        图片信息外置<Switch v-model="masonryConfig.infoAtBottom" class="ml-3" />
       </div>
       <h2 class="font-bold text-2xl py-2">
         图片筛选
