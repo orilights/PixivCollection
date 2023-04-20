@@ -1,7 +1,7 @@
 <template>
   <div
     class="relative w-[40px] h-[20px] rounded-[20px] transition-colors duration-300 inline-block"
-    :class="{ 'bg-[#dcdfe6]': !modelValue, 'bg-[#409eff]': modelValue }"
+    :class="{ 'bg-[#dcdfe6] dark:bg-[#4c4d4f]': !modelValue, 'bg-[#409eff]': modelValue }"
     @click="$emit('update:modelValue', !modelValue)"
   >
     <div
