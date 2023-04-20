@@ -56,8 +56,8 @@ export const useStore = defineStore('main', {
         height: { max: null, min: null },
       },
       restrict: {
-        sanityLevel: { max: 4 },
-        r18: false,
+        maxSanityLevel: 4,
+        r18: 'hidden',
       },
     },
   }),
@@ -68,12 +68,16 @@ export const useStore = defineStore('main', {
     imageFilter() {
       return (image: Image) => {
         // 过滤_健全度
-        if (!this.filterConfig.restrict.r18) {
+        if (this.filterConfig.restrict.r18 === 'hidden') {
           if (image.detail.x_restrict >= 1)
             return false
         }
-        if (this.filterConfig.restrict.sanityLevel.max) {
-          if (image.detail.sanity_level > this.filterConfig.restrict.sanityLevel.max)
+        else if (this.filterConfig.restrict.r18 === 'only') {
+          if (image.detail.x_restrict < 1)
+            return false
+        }
+        if (this.filterConfig.restrict.maxSanityLevel) {
+          if (image.detail.sanity_level > this.filterConfig.restrict.maxSanityLevel)
             return false
         }
         // 搜索

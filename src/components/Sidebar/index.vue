@@ -87,18 +87,60 @@
       <h2 class="font-bold text-2xl py-2">
         图片筛选
       </h2>
-      <div>
+      <div class="my-1">
         最高健全度:
         <select
-          v-model.number="filterConfig.restrict.sanityLevel.max"
+          v-model.number="filterConfig.restrict.maxSanityLevel"
           class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
         >
           <option v-for="i in [2, 4, 6]" :key="i" :value="i">
             {{ i }}
           </option>
         </select>
-        <button class="px-2 py-0.5 mx-1 border rounded-md hover:border-blue-500 transition-colors" @click="confirmR18">
-          {{ filterConfig.restrict.r18 ? '隐藏R18内容' : '🔞显示R18内容' }}
+        R18:
+        <select
+          v-model="filterConfig.restrict.r18"
+          class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
+        >
+          <option value="hidden">
+            隐藏
+          </option>
+          <option value="show">
+            显示
+          </option>
+          <option value="only">
+            仅显示
+          </option>
+        </select>
+      </div>
+      <div class="my-1 border rounded-md">
+        <button
+          v-if="filterConfig.year.enable"
+          class="bg-yellow-300/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+          @click="handleClickYear(filterConfig.year.value)"
+        >
+          {{ `年份：${filterConfig.year.value}` }}
+        </button>
+        <button
+          v-if="filterConfig.shape.enable"
+          class="bg-green-300/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+          @click="handleClickShape(filterConfig.shape.value)"
+        >
+          {{ `方向：${filterConfig.shape.value}` }}
+        </button>
+        <button
+          v-if="filterConfig.author.enable"
+          class="bg-blue-500/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+          @click="handleClickAuthor(filterConfig.author.id)"
+        >
+          {{ `作者：${filterConfig.author.id}` }}
+        </button>
+        <button
+          v-if="filterConfig.tag.enable"
+          class="bg-black/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+          @click="handleClickTag(filterConfig.tag.name)"
+        >
+          {{ `标签：${filterConfig.tag.name}` }}
         </button>
       </div>
       <div class="my-1">
@@ -149,26 +191,6 @@
           @click="handleClickShape('square')"
         >
           方形
-        </button>
-      </div>
-      <div class="my-1">
-        当前选中作者：{{ filterConfig.author.enable ? authors.find((a) => a.id === filterConfig.author.id)?.name : '未选中' }}
-        <button
-          v-show="filterConfig.author.enable"
-          class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
-          @click="filterConfig.author.enable = false; filterConfig.author.id = -1"
-        >
-          取消
-        </button>
-      </div>
-      <div class="my-1">
-        当前选中标签：{{ filterConfig.tag.enable ? filterConfig.tag.name : '未选中' }}
-        <button
-          v-show="filterConfig.tag.enable"
-          class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
-          @click="filterConfig.tag.enable = false; filterConfig.tag.name = ''"
-        >
-          取消
         </button>
       </div>
       <div>
@@ -280,7 +302,7 @@ watchEffect(() => {
     }
 
     // 过滤健全度
-    if (image.detail.sanity_level > filterConfig.value.restrict.sanityLevel.max)
+    if (image.detail.sanity_level > filterConfig.value.restrict.maxSanityLevel)
       return
 
     // 计算作者数据
@@ -300,7 +322,7 @@ watchEffect(() => {
         if (image.detail.x_restrict >= 1)
           return
       }
-      if (image.detail.sanity_level > filterConfig.value.restrict.sanityLevel.max)
+      if (image.detail.sanity_level > filterConfig.value.restrict.maxSanityLevel)
         return
       if (Object.hasOwn(_tags, tag.name))
         _tags[tag.name].count++
@@ -318,17 +340,6 @@ watchEffect(() => {
     .map(authorId => _authors[authorId])
     .sort((a, b) => b.count - a.count)
 })
-
-function confirmR18() {
-  if (filterConfig.value.restrict.r18) {
-    filterConfig.value.restrict.r18 = false
-  }
-  // eslint-disable-next-line no-alert
-  else if (confirm('确认显示R18内容？')) {
-    filterConfig.value.restrict.r18 = true
-    filterConfig.value.restrict.sanityLevel.max = 6
-  }
-}
 
 function handleClickYear(year: number) {
   if (filterConfig.value.year.enable && filterConfig.value.year.value === year) {

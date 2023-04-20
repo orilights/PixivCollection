@@ -41,16 +41,16 @@ const loading = ref(true)
 
 watchEffect(() => {
   if (settingLoaded.value) {
-    localStorage.setItem('restrict_r18', filterConfig.value.restrict.r18.toString())
-    localStorage.setItem('restrict_sanityLevel', filterConfig.value.restrict.sanityLevel.max.toString())
+    localStorage.setItem('restrict_r18', filterConfig.value.restrict.r18)
+    localStorage.setItem('restrict_maxSanityLevel', filterConfig.value.restrict.maxSanityLevel.toString())
     localStorage.setItem('config_darkmode', String(darkMode.value))
     localStorage.setItem('config_masonry', JSON.stringify(masonryConfig.value))
   }
 })
 
 onMounted(() => {
-  filterConfig.value.restrict.r18 = localStorage.getItem('restrict_r18') === 'true'
-  filterConfig.value.restrict.sanityLevel.max = Number(localStorage.getItem('restrict_sanityLevel')) || 2
+  filterConfig.value.restrict.r18 = localStorage.getItem('restrict_r18') || 'hidden'
+  filterConfig.value.restrict.maxSanityLevel = Number(localStorage.getItem('restrict_maxSanityLevel')) || 2
   darkMode.value = (localStorage.getItem('config_darkmode') || 'false') === 'true'
   if (localStorage.getItem('config_masonry'))
     masonryConfig.value = JSON.parse(localStorage.getItem('config_masonry') as string)
