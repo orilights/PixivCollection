@@ -295,10 +295,14 @@ watchEffect(() => {
       }
     }
 
-    // 过滤 R18 图片
-    if (!filterConfig.value.restrict.r18) {
+    // 过滤 R18
+    if (filterConfig.value.restrict.r18 === 'hidden') {
       if (image.detail.x_restrict >= 1)
-        return
+        return false
+    }
+    else if (filterConfig.value.restrict.r18 === 'only') {
+      if (image.detail.x_restrict < 1)
+        return false
     }
 
     // 过滤健全度
@@ -316,10 +320,6 @@ watchEffect(() => {
     image.detail.tags.forEach((tag) => {
       if (filterConfig.value.author.enable) {
         if (image.detail.author.id !== filterConfig.value.author.id)
-          return
-      }
-      if (!filterConfig.value.restrict.r18) {
-        if (image.detail.x_restrict >= 1)
           return
       }
       if (image.detail.sanity_level > filterConfig.value.restrict.maxSanityLevel)
