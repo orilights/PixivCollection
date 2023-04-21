@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="container" class="mx-auto"
+    ref="container" class="mx-auto relative"
     :class="{
       'lg:w-[960px]': !masonryConfig.containerFullWidth,
     }"
