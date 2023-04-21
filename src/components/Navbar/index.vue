@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[60px] mb-2">
+  <div class="h-[60px]">
     <div
       class="fixed top-0 left-0 w-full h-[60px] z-10 bg-white dark:bg-[#202020] transition-[transform,background] shadow-md"
       :class="{

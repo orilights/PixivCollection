@@ -1,12 +1,12 @@
 <template>
   <div
-    ref="container" class="w-full mx-auto relative overflow-y-hidden"
+    ref="container" class="mx-auto"
     :class="{
       'lg:w-[960px]': !masonryConfig.containerFullWidth,
     }"
     :style="{
-      height: `${Math.max(...colsTop) + 20}px`,
-      padding: `0 ${masonryConfig.gap}px`,
+      height: `${Math.max(...colsTop) + masonryConfig.gap}px`,
+      padding: `${masonryConfig.gap}px`,
     }"
   >
     <MasonryViewItem

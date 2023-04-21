@@ -5,7 +5,7 @@
       'lg:w-[960px]': !masonryConfig.containerFullWidth,
     }"
     :style="{
-      padding: `0 ${masonryConfig.gap}px`,
+      padding: `${masonryConfig.gap}px`,
       gap: `${masonryConfig.gap}px`,
     }"
   >

@@ -2,7 +2,7 @@
   <div
     class="absolute bg-gray-100 overflow-hidden transition-transform group dark:bg-[#242424]"
     :class="{
-      'rounded-[12px] shadow-[0_2px_12px_rgba(0,0,0,0.2)]': shadow,
+      'rounded-[12px] shadow-[0_0_5px_3px_rgba(0,0,0,0.20)]': shadow,
     }"
   >
     <div
@@ -40,28 +40,32 @@
       class="w-full cursor-pointer" :src="image.preview"
       @click="$emit('openImage', index)"
     >
-    <div v-if="infoAtBottom" class="px-2 absolute w-full bottom-1.5">
+    <div v-if="infoAtBottom" class="px-2 absolute w-full bottom-1">
       <p
         class="font-bold hover:text-blue-500 whitespace-nowrap overflow-hidden overflow-ellipsis cursor-pointer"
         @click="$emit('openPixiv', index)"
       >
         {{ image.title }}
       </p>
-      <p class="cursor-pointer">
-        <span class="hover:text-blue-500" @click="$emit('openPixivUser', index)">{{ image.detail.author.name }}</span>
+      <p class="cursor-pointer flex items-center">
+        <span class="hover:text-blue-500 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm" @click="$emit('openPixivUser', index)">{{ image.detail.author.name }}</span>
         <IconFunnelSolid
           class="ml-1 w-3 h-3 inline-block"
           @click.stop="$emit('filterAuthor', index)"
         />
       </p>
-      <p class="overflow-y-auto h-[60px] mx-[-4px]">
+      <p class="overflow-y-auto h-[50px] mx-[-4px]">
         <span
           v-for="tag, idx in image.detail.tags" v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
-          class="px-1 mx-1 my-0.5 inline-block bg-black/10 rounded-sm text-sm"
+          class="px-1 mx-0.5 my-0.5 float-left bg-black/10 rounded-sm text-xs"
           :class="tag.name === 'R-18' ? '!bg-red-500/60' : ''"
         >
           {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
         </span>
+      </p>
+      <p class="text-xs text-left text-gray-500 flex items-center mt-0.5">
+        {{ image.id }}
+        <IconOpen class="w-3 h-3 inline-block cursor-pointer ml-1" @click="$emit('openPixiv', index)" />
       </p>
     </div>
   </div>
