@@ -193,6 +193,45 @@
           方形
         </button>
       </div>
+      <div class="my-1">
+        <div class="flex items-center">
+          启用尺寸筛选<Switch v-model="filterConfig.size.enable" class="ml-3" />
+        </div>
+        <div v-if="filterConfig.size.enable">
+          <div class="flex my-1">
+            <div>
+              宽度 最小：<input
+                v-model.number="filterConfig.size.width.min" type="number" min="0" max="10000"
+                placeholder="未启用"
+                class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
+              >
+            </div>
+            <div>
+              最大：<input
+                v-model.number="filterConfig.size.width.max" type="number" min="0" max="10000"
+                placeholder="未启用"
+                class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
+              >
+            </div>
+          </div>
+          <div class="flex my-1">
+            <div>
+              高度 最小：<input
+                v-model.number="filterConfig.size.height.min" type="number" min="0" max="10000"
+                placeholder="未启用"
+                class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
+              >
+            </div>
+            <div>
+              最大：<input
+                v-model.number="filterConfig.size.height.max" type="number" min="0" max="10000"
+                placeholder="未启用"
+                class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
       <div>
         <button
           class="px-2 mx-1 my-2 border rounded-md hover:border-blue-500 transition-colors"

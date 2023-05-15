@@ -64,6 +64,7 @@
 import { useDebounceFn } from '@vueuse/core'
 import { useStore } from '@/store'
 import { githubLink } from '@/config'
+
 const store = useStore()
 const { darkMode, showSidebar, showNav, imageViewerShow, isFullscreen, filterConfig } = toRefs(store)
 
