@@ -26,7 +26,7 @@
           <IconExpand v-else class="w-5 h-5 mx-auto" />
         </button>
       </div>
-      <h2 class="font-bold text-2xl py-2">
+      <h2 class="font-bold text-2xl pt-2 pb-1">
         浏览设置
       </h2>
       <div class="my-1">
@@ -95,7 +95,7 @@
       <div class="my-1 flex items-center">
         图片信息外置<Switch v-model="masonryConfig.infoAtBottom" class="ml-3" />
       </div>
-      <h2 class="font-bold text-2xl py-2">
+      <h2 class="font-bold text-2xl pt-2 pb-1">
         图片筛选
       </h2>
       <div class="my-1">
@@ -288,7 +288,7 @@
           {{ `${masonryConfig.showTagTranslation ? tag.translated_name || tag.name : tag.name} ${tag.count}` }}
         </button>
       </div>
-      <h2 class="font-bold text-2xl py-2">
+      <h2 class="font-bold text-2xl pt-2 pb-1">
         自定义数据源
       </h2>
       <div class="my-1">
@@ -297,6 +297,17 @@
           @click="loadDataFromFile"
         >
           从文件加载
+        </button>
+      </div>
+      <h2 class="font-bold text-2xl pt-2 pb-1">
+        高级选项
+      </h2>
+      <div class="my-1">
+        <button
+          class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
+          @click="clearLocalSettings"
+        >
+          还原默认设置
         </button>
       </div>
     </div>
@@ -455,6 +466,11 @@ function loadDataFromFile() {
     }
   }
   input.click()
+}
+
+function clearLocalSettings() {
+  localStorage.clear()
+  location.reload()
 }
 </script>
 
