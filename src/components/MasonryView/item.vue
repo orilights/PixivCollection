@@ -10,13 +10,19 @@
       class="absolute w-full h-full bg-black/50 opacity-0 group-hover:opacity-100 transition-all cursor-pointer text-white px-2 pt-8 text-sm"
       @click="$emit('openImage', index)"
     >
-      <div class="absolute top-1.5 right-1.5 text-right text-xs" @click.stop="$emit('openPixiv', index)">
-        {{ `${image.id} p${image.part}` }} <br>{{ `${image.size[0]}×${image.size[1]}` }}
+      <div class="absolute top-1.5 right-1.5 text-right text-xs">
+        {{ `${image.id} p${image.part}` }} <br>{{ `${image.size[0]}×${image.size[1]} sl${image.detail.sanity_level}` }}
       </div>
-      <p>标题：{{ image.title }}</p>
+      <p>
+        标题：<span
+          class="hover:text-blue-500"
+          @click.stop="$emit('openPixiv', index)"
+        >{{ image.title }}</span>
+      </p>
       <p>
         作者：<span
-          @click.stop.prevent="$emit('openPixivUser', index)"
+          class="hover:text-blue-500"
+          @click.stop="$emit('openPixivUser', index)"
         >{{ image.detail.author.name }}</span>
         <IconFunnelSolid
           class="ml-1 w-3 h-3 inline-block"
@@ -26,7 +32,7 @@
       <p>
         标签：<span
           v-for="tag, idx in image.detail.tags" v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
-          class="px-1 mx-1 my-0.5 inline-block bg-black/30 rounded-sm"
+          class="px-1 mx-1 my-0.5 inline-block bg-black/30 rounded-sm text-xs"
           :class="tag.name === 'R-18' ? 'bg-red-500/80' : ''"
         >
           {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
@@ -61,10 +67,13 @@
         {{ image.title }}
       </p>
       <p class="cursor-pointer flex items-center">
-        <span class="hover:text-blue-500 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm" @click="$emit('openPixivUser', index)">{{ image.detail.author.name }}</span>
+        <span
+          class="hover:text-blue-500 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm"
+          @click="$emit('openPixivUser', index)"
+        >{{ image.detail.author.name }}</span>
         <IconFunnelSolid
           class="ml-1 w-3 h-3 inline-block"
-          @click.stop="$emit('filterAuthor', index)"
+          @click="$emit('filterAuthor', index)"
         />
       </p>
       <p class="overflow-y-auto h-[50px] mx-[-4px]">
@@ -76,9 +85,11 @@
           {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
         </span>
       </p>
-      <p class="text-xs text-left text-gray-500  flex items-center mt-0.5">
+      <p class="text-xs text-left text-gray-500 flex items-center mt-0.5">
         {{ image.id }}
-        <IconOpen class="w-3 h-3 inline-block cursor-pointer ml-1 hover:text-blue-500" @click="$emit('openPixiv', index)" />
+        {{ `p${image.part}` }}
+        {{ `${image.size[0]}×${image.size[1]}` }}
+        {{ `sl${image.detail.sanity_level}` }}
       </p>
     </div>
   </div>
