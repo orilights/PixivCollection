@@ -45,8 +45,8 @@ const col = computed(() => {
   if (masonryConfig.value.col > 0)
     return masonryConfig.value.col
   const cWidth = containerWidth.value + masonryConfig.value.gap * 2
-  if (cWidth >= 480)
-    return Number((cWidth / 240).toFixed(0))
+  if (cWidth >= masonryConfig.value.imageMinWidth * 2)
+    return Number((cWidth / masonryConfig.value.imageMinWidth).toFixed(0))
   return 2
 })
 const colsTop = ref(Array.from({ length: col.value }, () => 0))

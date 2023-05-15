@@ -69,6 +69,17 @@
           </option>
         </select>
       </div>
+      <div v-if="masonryConfig.col === -1" class="my-1">
+        图片最小宽度:
+        <select
+          v-model.number="masonryConfig.imageMinWidth"
+          class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
+        >
+          <option v-for="i in [240, 300, 360, 420, 480]" :key="i" :value="i">
+            {{ i }}px
+          </option>
+        </select>
+      </div>
       <div class="my-1 flex items-center">
         图片铺满屏幕<Switch v-model="masonryConfig.containerFullWidth" class="ml-3" />
       </div>
