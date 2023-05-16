@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ButtonCommon: typeof import('./src/components/Button/common.vue')['default']
     IconClose: typeof import('./src/components/Icon/close.vue')['default']
     IconExpand: typeof import('./src/components/Icon/expand.vue')['default']
     IconFunnelSolid: typeof import('./src/components/Icon/funnelSolid.vue')['default']
@@ -30,5 +31,6 @@ declare module '@vue/runtime-core' {
     Navbar: typeof import('./src/components/Navbar/index.vue')['default']
     Sidebar: typeof import('./src/components/Sidebar/index.vue')['default']
     Switch: typeof import('./src/components/Switch/index.vue')['default']
+    TextBox: typeof import('./src/components/TextBox/index.vue')['default']
   }
 }

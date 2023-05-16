@@ -30,23 +30,6 @@
         浏览设置
       </h2>
       <div class="my-1">
-        虚拟列表:
-        <select
-          v-model="masonryConfig.virtualListImpl"
-          class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
-        >
-          <option value="default">
-            默认
-          </option>
-          <option value="virtual-scroller">
-            Vue Virtual Scroller
-          </option>
-          <option value="none">
-            关闭
-          </option>
-        </select>
-      </div>
-      <div class="my-1">
         列数:
         <select
           v-model.number="masonryConfig.col"
@@ -75,7 +58,7 @@
           v-model.number="masonryConfig.imageMinWidth"
           class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
         >
-          <option v-for="i in [240, 300, 360, 420, 480]" :key="i" :value="i">
+          <option v-for="i in [200, 240, 280, 320, 360, 400]" :key="i" :value="i">
             {{ i }}px
           </option>
         </select>
@@ -211,45 +194,38 @@
         <div v-if="filterConfig.size.enable">
           <div class="flex my-1">
             <div>
-              宽度 最小：<input
+              宽度 最小：<TextBox
                 v-model.number="filterConfig.size.width.min" type="number" min="0" max="10000"
                 placeholder="未启用"
-                class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
-              >
+              />
             </div>
             <div>
-              最大：<input
+              最大：<TextBox
                 v-model.number="filterConfig.size.width.max" type="number" min="0" max="10000"
                 placeholder="未启用"
-                class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
-              >
+              />
             </div>
           </div>
           <div class="flex my-1">
             <div>
-              高度 最小：<input
+              高度 最小：<TextBox
                 v-model.number="filterConfig.size.height.min" type="number" min="0" max="10000"
                 placeholder="未启用"
-                class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
-              >
+              />
             </div>
             <div>
-              最大：<input
+              最大：<TextBox
                 v-model.number="filterConfig.size.height.max" type="number" min="0" max="10000"
                 placeholder="未启用"
-                class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
-              >
+              />
             </div>
           </div>
         </div>
       </div>
       <div>
-        <button
-          class="px-2 mx-1 my-2 border rounded-md hover:border-blue-500 transition-colors"
-          @click="showAuthor = !showAuthor"
-        >
+        <ButtonCommon @click="showAuthor = !showAuthor">
           {{ showAuthor ? '收起' : '展开' }}作者列表
-        </button>
+        </ButtonCommon>
       </div>
       <div
         class="overflow-hidden" :class="{
@@ -268,12 +244,9 @@
         </button>
       </div>
       <div>
-        <button
-          class="px-2 mx-1 my-2 border rounded-md hover:border-blue-500 transition-colors"
-          @click="showTags = !showTags"
-        >
+        <ButtonCommon @click="showTags = !showTags">
           {{ showTags ? '收起' : '展开' }}标签列表
-        </button>
+        </ButtonCommon>
       </div>
       <div
         class="overflow-hidden" :class="{
@@ -295,23 +268,34 @@
         自定义数据源
       </h2>
       <div class="my-1">
-        <button
-          class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
-          @click="loadDataFromFile"
-        >
+        <ButtonCommon @click="loadDataFromFile">
           从文件加载
-        </button>
+        </ButtonCommon>
       </div>
       <h2 class="font-bold text-2xl pt-2 pb-1">
         高级选项
       </h2>
       <div class="my-1">
-        <button
-          class="px-2 mx-1 border rounded-md hover:border-blue-500 transition-colors"
-          @click="clearLocalSettings"
+        虚拟列表:
+        <select
+          v-model="masonryConfig.virtualListImpl"
+          class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
         >
+          <option value="default">
+            默认
+          </option>
+          <option value="virtual-scroller">
+            Vue Virtual Scroller
+          </option>
+          <option value="none">
+            关闭
+          </option>
+        </select>
+      </div>
+      <div class="my-1">
+        <ButtonCommon @click="clearLocalSettings">
           还原默认设置
-        </button>
+        </ButtonCommon>
       </div>
     </div>
   </Transition>

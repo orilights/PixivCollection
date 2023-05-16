@@ -7,25 +7,25 @@
   >
     <div
       v-if="!infoAtBottom"
-      class="absolute w-full h-full bg-black/50 opacity-0 group-hover:opacity-100 transition-all cursor-pointer text-white px-2 pt-8 text-sm"
+      class="absolute w-full h-full bg-black/50 opacity-0 group-hover:opacity-100 transition-all cursor-pointer text-white px-2 pt-10 text-sm"
       @click="$emit('openImage', index)"
     >
       <div class="absolute top-1.5 right-1.5 text-right text-xs">
         {{ `${image.id} p${image.part}` }} <br>{{ `${image.size[0]}×${image.size[1]} sl${image.detail.sanity_level}` }}
       </div>
-      <p>
+      <p class="flex whitespace-nowrap">
         标题：<span
-          class="hover:text-blue-500"
+          class="hover:text-blue-500 transition-colors overflow-hidden overflow-ellipsis"
           @click.stop="$emit('openPixiv', index)"
         >{{ image.title }}</span>
       </p>
-      <p>
+      <p class="flex items-center whitespace-nowrap">
         作者：<span
-          class="hover:text-blue-500"
+          class="hover:text-blue-500 transition-colors overflow-hidden overflow-ellipsis"
           @click.stop="$emit('openPixivUser', index)"
         >{{ image.detail.author.name }}</span>
         <IconFunnelSolid
-          class="ml-1 w-3 h-3 inline-block"
+          class="ml-1 w-3 h-3 inline-block hover:text-blue-500 transition-colors"
           @click.stop="$emit('filterAuthor', index)"
         />
       </p>
@@ -61,18 +61,18 @@
     >
     <div v-if="infoAtBottom" class="px-2 absolute w-full bottom-1">
       <p
-        class="font-bold hover:text-blue-500 whitespace-nowrap overflow-hidden overflow-ellipsis cursor-pointer"
+        class="font-bold hover:text-blue-500 transition-colors whitespace-nowrap overflow-hidden overflow-ellipsis cursor-pointer"
         @click="$emit('openPixiv', index)"
       >
         {{ image.title }}
       </p>
       <p class="cursor-pointer flex items-center">
         <span
-          class="hover:text-blue-500 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm"
+          class="hover:text-blue-500 transition-colors whitespace-nowrap overflow-hidden overflow-ellipsis text-sm"
           @click="$emit('openPixivUser', index)"
         >{{ image.detail.author.name }}</span>
         <IconFunnelSolid
-          class="ml-1 w-3 h-3 inline-block"
+          class="ml-1 w-3 h-3 inline-block hover:text-blue-500 transition-colors"
           @click="$emit('filterAuthor', index)"
         />
       </p>
