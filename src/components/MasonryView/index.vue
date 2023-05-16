@@ -102,7 +102,7 @@ const lazyloadImage = useDebounceFn(() => {
 
 onMounted(() => {
   lazyloadImage()
-  window.addEventListener('scroll', lazyloadImage)
+  window.addEventListener('scroll', lazyloadImage, { passive: true })
 })
 
 watch(imagesFiltered, () => {

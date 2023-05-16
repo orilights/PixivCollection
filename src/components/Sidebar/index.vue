@@ -257,7 +257,7 @@
         }"
       >
         <button
-          v-for="author in authors" :key="author.id"
+          v-for="author in authors.filter((_, i) => { return i < 30 || showAuthor })" :key="author.id"
           class="bg-blue-500/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
           :class="{
             '!bg-gray-400': author.id === filterConfig.author.id,
@@ -281,9 +281,12 @@
         }"
       >
         <button
-          v-for="tag in tags" :key="tag.name" class="bg-black/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm" :class="{
+          v-for="tag in tags.filter((_, i) => { return i < 30 || showTags })" :key="tag.name"
+          class="bg-black/20 rounded-sm mx-1 my-0.5 px-0.5 text-sm"
+          :class="{
             '!bg-gray-400': tag.name === filterConfig.tag.name,
-          }" @click="handleClickTag(tag.name)"
+          }"
+          @click="handleClickTag(tag.name)"
         >
           {{ `${masonryConfig.showTagTranslation ? tag.translated_name || tag.name : tag.name} ${tag.count}` }}
         </button>
