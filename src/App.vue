@@ -15,9 +15,7 @@
       <div v-if="!imagesFiltered.length" class="w-fit mx-auto px-3 py-1 mt-2 text-lg bg-black/20 rounded-xl">
         {{ loading ? '数据加载中...' : '无数据' }}
       </div>
-      <MasonryView v-if="masonryConfig.virtualListImpl === 'default'" />
-      <MasonryViewVS v-else-if="masonryConfig.virtualListImpl === 'virtual-scroller'" />
-      <MasonryView v-else-if="masonryConfig.virtualListImpl === 'none'" />
+      <MasonryView />
       <ImageViewer />
     </div>
   </div>

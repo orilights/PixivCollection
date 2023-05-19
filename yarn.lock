@@ -370,11 +370,6 @@
   resolved "https://registry.npmmirror.com/@types/unist/-/unist-2.0.6.tgz"
   integrity sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==
 
-"@types/vue-virtual-scroller@npm:@earltp/vue-virtual-scroller":
-  version "1.0.1"
-  resolved "https://registry.npmmirror.com/@earltp/vue-virtual-scroller/-/vue-virtual-scroller-1.0.1.tgz#75116ef9b091457a654d92ff0688e991b3cd9e8a"
-  integrity sha512-7UsmP2JALnkfWlheuWRDywuBUTLJcVPE86X5ogA3djUmYFybE6qximgQ7OgyJnrKLteWR7+1Cp0GUXHhdDKaDQ==
-
 "@types/web-bluetooth@^0.0.17":
   version "0.0.17"
   resolved "https://registry.npmmirror.com/@types/web-bluetooth/-/web-bluetooth-0.0.17.tgz#5c9f3c617f64a9735d7b72a7cc671e166d900c40"
@@ -2254,11 +2249,6 @@ minimist@^1.2.0, minimist@^1.2.6:
   resolved "https://registry.npmmirror.com/minimist/-/minimist-1.2.8.tgz"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
-mitt@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.npmmirror.com/mitt/-/mitt-2.1.0.tgz#f740577c23176c6205b121b2973514eade1b2230"
-  integrity sha512-ILj2TpLiysu2wkBbWjAmww7TkZb65aiQO+DkVdUTBpBXq+MHYiETENkKFMtsJZX1Lf4pe4QOrTSjIfUwN5lRdg==
-
 mlly@^1.1.1:
   version "1.1.1"
   resolved "https://registry.npmmirror.com/mlly/-/mlly-1.1.1.tgz"
@@ -3190,16 +3180,6 @@ vue-eslint-parser@^9.0.1:
     lodash "^4.17.21"
     semver "^7.3.6"
 
-vue-observe-visibility@^2.0.0-alpha.1:
-  version "2.0.0-alpha.1"
-  resolved "https://registry.npmmirror.com/vue-observe-visibility/-/vue-observe-visibility-2.0.0-alpha.1.tgz#1e4eda7b12562161d58984b7e0dea676d83bdb13"
-  integrity sha512-flFbp/gs9pZniXR6fans8smv1kDScJ8RS7rEpMjhVabiKeq7Qz3D9+eGsypncjfIyyU84saU88XZ0zjbD6Gq/g==
-
-vue-resize@^2.0.0-alpha.1:
-  version "2.0.0-alpha.1"
-  resolved "https://registry.npmmirror.com/vue-resize/-/vue-resize-2.0.0-alpha.1.tgz#43eeb79e74febe932b9b20c5c57e0ebc14e2df3a"
-  integrity sha512-7+iqOueLU7uc9NrMfrzbG8hwMqchfVfSzpVlCMeJQe4pyibqyoifDNbKTZvwxZKDvGkB+PdFeKvnGZMoEb8esg==
-
 vue-template-compiler@^2.7.14:
   version "2.7.14"
   resolved "https://registry.npmmirror.com/vue-template-compiler/-/vue-template-compiler-2.7.14.tgz"
@@ -3216,15 +3196,6 @@ vue-tsc@^1.6.5:
     "@volar/vue-language-core" "1.6.5"
     "@volar/vue-typescript" "1.6.5"
     semver "^7.3.8"
-
-vue-virtual-scroller@^2.0.0-beta.8:
-  version "2.0.0-beta.8"
-  resolved "https://registry.npmmirror.com/vue-virtual-scroller/-/vue-virtual-scroller-2.0.0-beta.8.tgz#eeceda57e4faa5ba1763994c873923e2a956898b"
-  integrity sha512-b8/f5NQ5nIEBRTNi6GcPItE4s7kxNHw2AIHLtDp+2QvqdTjVN0FgONwX9cr53jWRgnu+HRLPaWDOR2JPI5MTfQ==
-  dependencies:
-    mitt "^2.1.0"
-    vue-observe-visibility "^2.0.0-alpha.1"
-    vue-resize "^2.0.0-alpha.1"
 
 vue@^3.3.2:
   version "3.3.2"

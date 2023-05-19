@@ -275,22 +275,8 @@
       <h2 class="font-bold text-2xl pt-2 pb-1">
         高级选项
       </h2>
-      <div class="my-1">
-        虚拟列表:
-        <select
-          v-model="masonryConfig.virtualListImpl"
-          class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:bg-[#1a1a1a]"
-        >
-          <option value="default">
-            默认
-          </option>
-          <option value="virtual-scroller">
-            Vue Virtual Scroller
-          </option>
-          <option value="none">
-            关闭
-          </option>
-        </select>
+      <div class="my-1 flex items-center">
+        启用虚拟列表<Switch v-model="masonryConfig.virtualListEnable" class="ml-3" />
       </div>
       <div class="my-1">
         <ButtonCommon @click="clearLocalSettings">

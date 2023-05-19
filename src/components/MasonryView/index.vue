@@ -85,7 +85,7 @@ const imagesPlaced = computed(() => {
   return _list
 })
 const imagesRenderList = computed(() => {
-  if (masonryConfig.value.virtualListImpl !== 'none') {
+  if (masonryConfig.value.virtualListEnable) {
     return imagesPlaced.value.filter((item) => {
       const preload = masonryConfig.value.virtualListPreload
       if (item.top > (-containerTop.value - preload * window.innerHeight) && item.top < (-containerTop.value + (preload + 1) * window.innerHeight))

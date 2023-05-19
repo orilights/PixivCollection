@@ -25,7 +25,7 @@ export const useStore = defineStore('main', {
       showTagTranslation: false,
       showImageNo: false,
       infoAtBottom: false,
-      virtualListImpl: 'default',
+      virtualListEnable: true,
       virtualListPreload: 3,
     },
     filterConfig: {
