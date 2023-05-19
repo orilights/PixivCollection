@@ -1,31 +1,39 @@
 <template>
   <div
-    ref="container" class="mx-auto relative"
+    ref="scrollerView" class="overflow-y-scroll"
     :class="{
-      'lg:w-[960px]': !masonryConfig.containerFullWidth,
-    }"
-    :style="{
-      height: `${Math.max(...colsTop) + masonryConfig.gap}px`,
-      padding: `${masonryConfig.gap}px`,
+      'h-[calc(100vh-60px)] mt-[60px]': showNav,
+      'h-screen': !showNav,
     }"
   >
-    <MasonryViewItem
-      v-for="item in imagesRenderList" :key="`${item.image.id}_${item.image.part}`" :index="item.idx"
-      :image="item.image"
-      :show-no="masonryConfig.showImageNo"
-      :tag-include-bookmark="filterConfig.tag.includeBookmark"
-      :tag-translation="masonryConfig.showTagTranslation"
-      :info-at-bottom="masonryConfig.infoAtBottom"
-      :shadow="masonryConfig.gap > 2"
-      :load-image="imagesShow.includes(item.idx)" :style="{
-        width: `calc((100% - ${masonryConfig.gap * (col + 1)}px) / ${col})`,
-        height: `${getImageHeight(item.image.size) + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
-        transform: `translate(${item.left}px, ${item.top}px)`,
+    <div
+      ref="container" class="mx-auto relative"
+      :class="{
+        'lg:w-[960px]': !masonryConfig.containerFullWidth,
       }"
-      @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser"
-      @filter-author="filterAuthor"
-      @destory="itemDestroy"
-    />
+      :style="{
+        height: `${Math.max(...colsTop) + masonryConfig.gap}px`,
+        padding: `${masonryConfig.gap}px`,
+      }"
+    >
+      <MasonryViewItem
+        v-for="item in imagesRenderList" :key="`${item.image.id}_${item.image.part}`" :index="item.idx"
+        :image="item.image"
+        :show-no="masonryConfig.showImageNo"
+        :tag-include-bookmark="filterConfig.tag.includeBookmark"
+        :tag-translation="masonryConfig.showTagTranslation"
+        :info-at-bottom="masonryConfig.infoAtBottom"
+        :shadow="masonryConfig.gap > 2"
+        :load-image="imagesShow.includes(item.idx)" :style="{
+          width: `calc((100% - ${masonryConfig.gap * (col + 1)}px) / ${col})`,
+          height: `${getImageHeight(item.image.size) + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
+          transform: `translate(${item.left}px, ${item.top}px)`,
+        }"
+        @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser"
+        @filter-author="filterAuthor"
+        @destory="itemDestroy"
+      />
+    </div>
   </div>
 </template>
 
@@ -35,7 +43,8 @@ import { useStore } from '@/store'
 import { pixivArtworkLink, pixivUserLink } from '@/config'
 
 const store = useStore()
-const { filterConfig, imagesFiltered, masonryConfig } = toRefs(store)
+const { filterConfig, imagesFiltered, masonryConfig, showNav } = toRefs(store)
+const scrollerView = ref()
 const container = ref()
 const { width: containerWidthO } = useElementSize(container)
 const { top: containerTopO } = useElementBounding(container)
@@ -87,6 +96,7 @@ const imagesRenderList = computed(() => {
   return imagesPlaced.value
 })
 const imagesShow = ref<number[]>([])
+let oldY = 0
 
 const lazyloadImage = useDebounceFn(() => {
   nextTick(() => {
@@ -102,7 +112,18 @@ const lazyloadImage = useDebounceFn(() => {
 
 onMounted(() => {
   lazyloadImage()
-  window.addEventListener('scroll', lazyloadImage, { passive: true })
+  scrollerView.value.addEventListener('scroll', lazyloadImage, { passive: true })
+  scrollerView.value.addEventListener('scroll', () => {
+    const newY = scrollerView.value.scrollTop
+    if (newY > oldY && newY > 200)
+      showNav.value = false
+    else if (newY < oldY)
+      showNav.value = true
+    oldY = newY
+  }, { passive: true })
+  setInterval(() => {
+    lazyloadImage()
+  }, 1000)
 })
 
 watch(imagesFiltered, () => {

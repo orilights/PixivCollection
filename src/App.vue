@@ -4,7 +4,7 @@
       dark: darkMode,
     }"
   >
-    <div class="dark:bg-[#1a1a1a] dark:text-white transition-colors min-h-screen">
+    <div class="dark:bg-[#1a1a1a] dark:text-white transition-colors h-screen overflow-hidden">
       <Sidebar />
       <div
         v-show="showSidebar"
@@ -12,7 +12,7 @@
         @click="showSidebar = false"
       />
       <Navbar />
-      <div v-show="!imagesFiltered.length" class="w-fit mx-auto px-3 py-1 mt-2 text-lg bg-black/20 rounded-xl">
+      <div v-if="!imagesFiltered.length" class="w-fit mx-auto px-3 py-1 mt-2 text-lg bg-black/20 rounded-xl">
         {{ loading ? '数据加载中...' : '无数据' }}
       </div>
       <MasonryView v-if="masonryConfig.virtualListImpl === 'default'" />
