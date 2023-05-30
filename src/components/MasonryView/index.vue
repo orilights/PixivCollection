@@ -1,5 +1,6 @@
 <template>
   <div
+    v-show="imagesFiltered.length"
     ref="scrollerView" class="overflow-y-scroll"
     :class="{
       'h-[calc(100vh-60px)] mt-[60px]': showNav,
