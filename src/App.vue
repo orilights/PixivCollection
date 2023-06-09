@@ -17,8 +17,8 @@
         <div class="text-center">
           {{ loading ? '数据加载中' : '无数据' }}
         </div>
-        <div v-if="contentLength && loading">
-          {{ byteConv(receivedLength) }} / {{ byteConv(contentLength) }}
+        <div v-if="loading" class="text-center">
+          {{ byteConv(receivedLength) }} <span v-if="contentLength"> / {{ byteConv(contentLength) }}</span>
         </div>
       </div>
       <MasonryView />
