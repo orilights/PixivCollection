@@ -19,7 +19,7 @@ export const useStore = defineStore('main', {
 
     masonryConfig: {
       col: -1,
-      gap: 10,
+      gap: 20,
       imageMinWidth: 240,
       containerFullWidth: false,
       showTagTranslation: false,

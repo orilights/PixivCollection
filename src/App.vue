@@ -8,11 +8,11 @@
       <Sidebar />
       <div
         v-show="showSidebar"
-        class="fixed w-screen h-screen left-0 top-0 bg-black/40 z-20 hidden sm:block"
+        class="fixed top-0 left-0 z-20 hidden w-screen h-screen bg-black/40 sm:block"
         @click="showSidebar = false"
       />
       <Navbar />
-      <div v-show="!imagesFiltered.length" class="w-fit mx-auto px-6 py-4 mt-4 text-lg bg-black/20 rounded-xl">
+      <div v-show="!imagesFiltered.length" class="px-6 py-4 mx-auto mt-4 text-lg w-fit bg-black/20 rounded-xl">
         <IconLoading v-if="loading" class="w-[60px] mx-auto pb-2" :dark="!darkMode" />
         <div class="text-center">
           {{ loading ? '数据加载中' : '无数据' }}
@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
 import { useStore } from '@/store'
+import { byteConv } from '@/utils/file'
 
 const store = useStore()
 
@@ -93,13 +94,4 @@ onMounted(async () => {
     loading.value = false
   }
 })
-
-function byteConv(bytes: number) {
-  if (bytes === 0)
-    return '0 B'
-  const k = 1024
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return `${(bytes / k ** i).toFixed(2)} ${sizes[i]}`
-}
 </script>

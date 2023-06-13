@@ -2,7 +2,7 @@
   <div
     ref="container" class="mx-auto relative"
     :class="{
-      'lg:w-[960px]': !masonryConfig.containerFullWidth,
+      'lg:w-[960px] 2xl:w-[1200px]': !masonryConfig.containerFullWidth,
     }"
     :style="{
       height: `${Math.max(...colsTop) + masonryConfig.gap}px`,

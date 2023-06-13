@@ -40,7 +40,7 @@
       <div class="relative">
         <img
           :src="imageSrc"
-          class="max-w-none cursor-grab active:cursor-grabbing select-none touch-none absolute" :class="{
+          class="absolute select-none max-w-none cursor-grab active:cursor-grabbing touch-none" :class="{
             '': !imageGragging,
           }" :style="{
             transform: `scale(${imageRatio})`,
@@ -58,7 +58,6 @@
 <script setup lang="ts">
 import { useMouse } from '@vueuse/core'
 import { useStore } from '@/store'
-import { originalImageHost } from '@/config'
 
 const store = useStore()
 const { imageViewerShow, imageViewerInfo } = toRefs(store)
@@ -94,11 +93,13 @@ watch(imageViewerInfo, (val) => {
   imageSrc.value = ''
 
   loading.value = true
+
   imageLoader = new Image()
   imageLoader.addEventListener('load', () => {
     loading.value = false
   })
-  imageLoader.src = resolvePath(val.original)
+  imageLoader.src = val.original
+
   nextTick(() => {
     imageSrc.value = imageLoader.src
   })
@@ -176,12 +177,6 @@ function handleZoom(newRatio: number, centerPostiion: { x: number; y: number }) 
   imagePos.value.x -= (newRatio / imageRatio.value - 1) * deltaX
   imagePos.value.y -= (newRatio / imageRatio.value - 1) * deltaY
   imageRatio.value = newRatio
-}
-
-function resolvePath(pathStr: string) {
-  if (import.meta.env.MODE === 'production')
-    return originalImageHost + pathStr.substring(pathStr.search(/\d+_p\d+\.(jpg|png)/))
-  return pathStr
 }
 </script>
 
