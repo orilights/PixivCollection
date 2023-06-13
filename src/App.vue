@@ -64,7 +64,7 @@ onMounted(async () => {
   settingLoaded.value = true
 
   try {
-    const response = await fetch('/images.json')
+    const response = await fetch('./images.json')
     const reader = (response.body as ReadableStream<Uint8Array>).getReader()
     contentLength.value = +(response.headers.get('Content-Length') || 0)
     const chunks = []

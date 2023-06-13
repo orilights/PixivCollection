@@ -70,21 +70,21 @@ export const useStore = defineStore('main', {
       return (image: Image) => {
         // 过滤_健全度
         if (this.filterConfig.restrict.r18 === 'hidden') {
-          if (image.detail.x_restrict >= 1)
+          if (image.x_restrict >= 1)
             return false
         }
         else if (this.filterConfig.restrict.r18 === 'only') {
-          if (image.detail.x_restrict < 1)
+          if (image.x_restrict < 1)
             return false
         }
         if (this.filterConfig.restrict.maxSanityLevel) {
-          if (image.detail.sanity_level > this.filterConfig.restrict.maxSanityLevel)
+          if (image.sanity_level > this.filterConfig.restrict.maxSanityLevel)
             return false
         }
         // 搜索
         if (this.filterConfig.search.enable) {
           if (this.filterConfig.search.value.trim() !== '') {
-            const searchStr = (image.id + image.title + image.detail.author.id + image.detail.author.name).toLowerCase()
+            const searchStr = (image.id + image.title + image.author.id + image.author.name).toLowerCase()
             if (!searchStr.includes(this.filterConfig.search.value.trim().toLowerCase()))
               return false
           }
@@ -92,7 +92,7 @@ export const useStore = defineStore('main', {
         }
         // 过滤_年份
         if (this.filterConfig.year.enable) {
-          const year = Number(image.detail.created_at.split('-')[0])
+          const year = Number(image.created_at.split('-')[0])
           if (this.filterConfig.year.value === 1) {
             if (year > 2000)
               return false
@@ -103,12 +103,12 @@ export const useStore = defineStore('main', {
         }
         // 过滤_作者
         if (this.filterConfig.author.enable) {
-          if (image.detail.author.id !== this.filterConfig.author.id)
+          if (image.author.id !== this.filterConfig.author.id)
             return false
         }
         // 过滤_标签
         if (this.filterConfig.tag.enable) {
-          if ((image.detail.tags.find((tag) => {
+          if ((image.tags.find((tag) => {
             if (tag.name === this.filterConfig.tag.name)
               return tag
             return undefined

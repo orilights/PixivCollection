@@ -58,6 +58,7 @@
 <script setup lang="ts">
 import { useMouse } from '@vueuse/core'
 import { useStore } from '@/store'
+import { imagePath } from '@/config'
 
 const store = useStore()
 const { imageViewerShow, imageViewerInfo } = toRefs(store)
@@ -98,7 +99,7 @@ watch(imageViewerInfo, (val) => {
   imageLoader.addEventListener('load', () => {
     loading.value = false
   })
-  imageLoader.src = val.original
+  imageLoader.src = `${imagePath}${val.id}_p${val.part}.${val.ext}`
 
   nextTick(() => {
     imageSrc.value = imageLoader.src

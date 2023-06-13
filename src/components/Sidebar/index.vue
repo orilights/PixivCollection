@@ -317,7 +317,7 @@ watchEffect(() => {
   const _authors: { [index: string]: AuthorData } = {}
   images.value.forEach((image) => {
     // 统计年份
-    const year = Number(image.detail.created_at.split('-')[0])
+    const year = Number(image.created_at.split('-')[0])
     if (!_years.includes(year) && year > 2000)
       _years.push(year)
 
@@ -334,32 +334,32 @@ watchEffect(() => {
 
     // 过滤 R18
     if (filterConfig.value.restrict.r18 === 'hidden') {
-      if (image.detail.x_restrict >= 1)
+      if (image.x_restrict >= 1)
         return false
     }
     else if (filterConfig.value.restrict.r18 === 'only') {
-      if (image.detail.x_restrict < 1)
+      if (image.x_restrict < 1)
         return false
     }
 
     // 过滤健全度
-    if (image.detail.sanity_level > filterConfig.value.restrict.maxSanityLevel)
+    if (image.sanity_level > filterConfig.value.restrict.maxSanityLevel)
       return
 
     // 计算作者数据
-    const { author } = image.detail
+    const { author } = image
     if (Object.hasOwn(_authors, author.id))
       _authors[author.id].count++
     else
       _authors[author.id] = { ...author, count: 1 }
 
     // 计算标签数据
-    image.detail.tags.forEach((tag) => {
+    image.tags.forEach((tag) => {
       if (filterConfig.value.author.enable) {
-        if (image.detail.author.id !== filterConfig.value.author.id)
+        if (image.author.id !== filterConfig.value.author.id)
           return
       }
-      if (image.detail.sanity_level > filterConfig.value.restrict.maxSanityLevel)
+      if (image.sanity_level > filterConfig.value.restrict.maxSanityLevel)
         return
       if (Object.hasOwn(_tags, tag.name))
         _tags[tag.name].count++

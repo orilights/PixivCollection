@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="container" class="mx-auto relative"
+    ref="container" class="relative mx-auto"
     :class="{
       'lg:w-[960px] 2xl:w-[1200px]': !masonryConfig.containerFullWidth,
     }"
@@ -139,11 +139,11 @@ function openPixiv(idx: number) {
 }
 
 function openPixivUser(idx: number) {
-  window.open(pixivUserLink + imagesFiltered.value[idx].detail.author.id, '_blank')
+  window.open(pixivUserLink + imagesFiltered.value[idx].author.id, '_blank')
 }
 
 function filterAuthor(idx: number) {
-  const authorId = imagesFiltered.value[idx].detail.author.id
+  const authorId = imagesFiltered.value[idx].author.id
   if (store.filterConfig.author.enable && store.filterConfig.author.id === authorId) {
     store.filterConfig.author.enable = false
     store.filterConfig.author.id = -1
