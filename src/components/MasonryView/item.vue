@@ -85,7 +85,7 @@
           {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
         </span>
       </p>
-      <p class="text-xs text-left text-gray-500 flex items-center mt-0.5">
+      <p class="text-xs text-left text-gray-500 flex items-center mt-0.5 whitespace-nowrap">
         {{ image.id }}
         {{ `p${image.part}` }}
         {{ `${image.size[0]}×${image.size[1]}` }}
