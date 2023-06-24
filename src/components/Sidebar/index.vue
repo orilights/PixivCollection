@@ -37,7 +37,7 @@
             <option value="-1">
               自动
             </option>
-            <option v-for="i in 10" :key="i" :value="i">
+            <option v-for="i in masonryMaxColumns" :key="i" :value="i">
               {{ i }}
             </option>
           </select>
@@ -46,7 +46,7 @@
             v-model.number="masonryConfig.gap"
             class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
           >
-            <option v-for="i in [0, 10, 20, 30]" :key="i" :value="i">
+            <option v-for="i in imageGaps" :key="i" :value="i">
               {{ `${i}px` }}
             </option>
           </select>
@@ -60,7 +60,7 @@
             v-model.number="masonryConfig.imageMinWidth"
             class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
           >
-            <option v-for="i in [200, 240, 280, 320, 360, 400]" :key="i" :value="i">
+            <option v-for="i in imageSizes" :key="i" :value="i">
               {{ i }}px
             </option>
           </select>
@@ -274,7 +274,7 @@
 </template>
 
 <script setup lang="ts">
-import { githubLink } from '@/config'
+import { githubLink, imageGaps, imageSizes, masonryMaxColumns, shapes } from '@/config'
 import { useStore } from '@/store'
 
 const store = useStore()
@@ -290,17 +290,6 @@ const {
 const showAuthor = ref(false)
 const showTags = ref(false)
 
-const shapes = ref<{ [shape: string]: string }>({
-  'horizontal': '横向',
-  'vertical': '竖向',
-  'square': '方形',
-  'ratio-4:3': '4:3',
-  'ratio-16:9': '16:9',
-  'ratio-21:9': '21:9',
-  'ratio-3:4': '3:4',
-  'ratio-9:16': '9:16',
-  'ratio-9:21': '9:21',
-})
 const years = ref([] as number[])
 const authors = ref([] as AuthorData[])
 const tags = ref([] as TagData[])
