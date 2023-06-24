@@ -117,16 +117,20 @@ export const useStore = defineStore('main', {
         }
         // 过滤_形状
         if (this.filterConfig.shape.enable) {
-          if (image.size[0] / image.size[1] < 0.95 || image.size[0] / image.size[1] > 1.05) {
+          if (image.size[0] / image.size[1] < 0.9 || image.size[0] / image.size[1] > 1.1) {
             if (this.filterConfig.shape.value === 'square')
               return false
-          }
-          if (image.size[0] > image.size[1]) {
-            if (this.filterConfig.shape.value === 'vertical')
-              return false
+            if (image.size[0] > image.size[1]) {
+              if (this.filterConfig.shape.value === 'vertical')
+                return false
+            }
+            else {
+              if (this.filterConfig.shape.value === 'horizontal')
+                return false
+            }
           }
           else {
-            if (this.filterConfig.shape.value === 'horizontal')
+            if (this.filterConfig.shape.value === 'vertical' || this.filterConfig.shape.value === 'horizontal')
               return false
           }
         }
