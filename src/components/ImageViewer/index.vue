@@ -69,6 +69,7 @@ const imageGragging = ref(false)
 const imageSrc = ref('')
 const mouse = useMouse({ type: 'client' })
 const loading = ref(false)
+const loadingImage = ref('')
 
 const startPosition = { x: 0, y: 0 }
 const minRatio = 0.5
@@ -94,10 +95,12 @@ watch(imageViewerInfo, (val) => {
   imageSrc.value = ''
 
   loading.value = true
+  loadingImage.value = `${val.id}_${val.part}`
 
   imageLoader = new Image()
   imageLoader.addEventListener('load', () => {
-    loading.value = false
+    if (`${val.id}_${val.part}` === loadingImage.value)
+      loading.value = false
   })
   imageLoader.src = `${imagePath}${val.id}_p${val.part}.${val.ext}`
 
