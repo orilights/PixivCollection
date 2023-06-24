@@ -166,31 +166,14 @@
         形状
         <br>
         <button
+          v-for="shape in Object.keys(shapes)" :key="shape"
           class="bg-green-300/20 rounded-sm m-0.5 px-0.5 text-sm"
           :class="{
-            '!bg-gray-400': 'horizontal' === filterConfig.shape.value,
+            '!bg-gray-400': shape === filterConfig.shape.value,
           }"
-          @click="handleClickShape('horizontal')"
+          @click="handleClickShape(shape)"
         >
-          横向
-        </button>
-        <button
-          class="bg-green-300/20 rounded-sm m-0.5 px-0.5 text-sm"
-          :class="{
-            '!bg-gray-400': 'vertical' === filterConfig.shape.value,
-          }"
-          @click="handleClickShape('vertical')"
-        >
-          竖向
-        </button>
-        <button
-          class="bg-green-300/20 rounded-sm m-0.5 px-0.5 text-sm"
-          :class="{
-            '!bg-gray-400': 'square' === filterConfig.shape.value,
-          }"
-          @click="handleClickShape('square')"
-        >
-          方形
+          {{ shapes[shape] }}
         </button>
       </SidebarBlock>
       <SidebarBlock>
@@ -307,6 +290,17 @@ const {
 const showAuthor = ref(false)
 const showTags = ref(false)
 
+const shapes = ref<{ [shape: string]: string }>({
+  'horizontal': '横向',
+  'vertical': '竖向',
+  'square': '方形',
+  'ratio-4:3': '4:3',
+  'ratio-16:9': '16:9',
+  'ratio-21:9': '21:9',
+  'ratio-3:4': '3:4',
+  'ratio-9:16': '9:16',
+  'ratio-9:21': '9:21',
+})
 const years = ref([] as number[])
 const authors = ref([] as AuthorData[])
 const tags = ref([] as TagData[])

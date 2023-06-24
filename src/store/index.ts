@@ -117,7 +117,13 @@ export const useStore = defineStore('main', {
         }
         // 过滤_形状
         if (this.filterConfig.shape.enable) {
-          if (image.size[0] / image.size[1] < 0.9 || image.size[0] / image.size[1] > 1.1) {
+          if (this.filterConfig.shape.value.startsWith('ratio-')) {
+            const _ratioStr = this.filterConfig.shape.value.substring(6).split(':').map(str => Number(str))
+            const ratio = _ratioStr[0] / _ratioStr[1]
+            if (image.size[0] / image.size[1] >= ratio / 0.9 || image.size[0] / image.size[1] <= ratio * 0.9)
+              return false
+          }
+          else if (image.size[0] / image.size[1] < 0.9 || image.size[0] / image.size[1] > 1.1) {
             if (this.filterConfig.shape.value === 'square')
               return false
             if (image.size[0] > image.size[1]) {
