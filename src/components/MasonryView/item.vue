@@ -1,6 +1,6 @@
 <template>
   <div
-    class="absolute bg-gray-100 overflow-hidden transition-transform group dark:bg-[#242424]"
+    class="absolute bg-gray-100 overflow-hidden transition-all duration-300 group dark:bg-[#242424]"
     :class="{
       'rounded-[12px] shadow-[0_3px_10px_1px_rgba(0,0,0,0.20)]': shadow,
     }"

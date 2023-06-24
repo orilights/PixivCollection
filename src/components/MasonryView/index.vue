@@ -17,8 +17,9 @@
       :tag-translation="masonryConfig.showTagTranslation"
       :info-at-bottom="masonryConfig.infoAtBottom"
       :shadow="masonryConfig.gap > 2"
-      :load-image="imagesShow.includes(item.idx)" :style="{
-        width: `calc((100% - ${masonryConfig.gap * (col + 1)}px) / ${col})`,
+      :load-image="imagesShow.includes(item.idx)"
+      :style="{
+        width: `${imageWidth}px`,
         height: `${getImageHeight(item.image.size) + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
