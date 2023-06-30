@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{
-      dark: darkMode,
+      dark: colorScheme === 'dark',
     }"
   >
     <div class="dark:bg-[#1a1a1a] dark:text-white transition-colors min-h-screen">
@@ -13,7 +13,7 @@
       />
       <Navbar />
       <div v-show="!imagesFiltered.length" class="px-6 py-4 mx-auto mt-4 text-lg w-fit bg-black/20 rounded-xl">
-        <IconLoading v-if="loading" class="w-[60px] mx-auto pb-2" :dark="!darkMode" />
+        <IconLoading v-if="loading" class="w-[60px] mx-auto pb-2" :dark="colorScheme === 'dark'" />
         <div class="text-center">
           {{ loading ? '数据加载中' : '无数据' }}
         </div>
@@ -34,7 +34,8 @@ import { byteConv } from '@/utils/file'
 const store = useStore()
 
 const {
-  darkMode,
+  preferColorScheme,
+  colorScheme,
   showSidebar,
   imagesFiltered,
   masonryConfig,
@@ -50,7 +51,7 @@ watchEffect(() => {
   if (settingLoaded.value) {
     localStorage.setItem('restrict_r18', filterConfig.value.restrict.r18)
     localStorage.setItem('restrict_maxSanityLevel', filterConfig.value.restrict.maxSanityLevel.toString())
-    localStorage.setItem('config_darkmode', String(darkMode.value))
+    localStorage.setItem('config_preferColorScheme', String(preferColorScheme.value))
     localStorage.setItem('config_masonry', JSON.stringify(masonryConfig.value))
   }
 })
@@ -58,7 +59,7 @@ watchEffect(() => {
 onMounted(async () => {
   filterConfig.value.restrict.r18 = localStorage.getItem('restrict_r18') || 'hidden'
   filterConfig.value.restrict.maxSanityLevel = Number(localStorage.getItem('restrict_maxSanityLevel')) || 2
-  darkMode.value = (localStorage.getItem('config_darkmode') || 'false') === 'true'
+  preferColorScheme.value = localStorage.getItem('config_preferColorScheme') as any || 'auto'
   if (localStorage.getItem('config_masonry'))
     masonryConfig.value = JSON.parse(localStorage.getItem('config_masonry') as string)
   settingLoaded.value = true

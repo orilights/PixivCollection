@@ -1,9 +1,8 @@
-import { useFullscreen, useUrlSearchParams } from '@vueuse/core'
+import { useFullscreen, usePreferredColorScheme, useUrlSearchParams } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
 export const useStore = defineStore('main', {
   state: () => ({
-    darkMode: false,
     showSidebar: false,
     showNav: true,
 
@@ -16,6 +15,9 @@ export const useStore = defineStore('main', {
 
     urlParams: useUrlSearchParams(),
     fullscreen: useFullscreen(document.documentElement),
+
+    preferColorScheme: 'auto' as 'auto' | 'light' | 'dark',
+    browserColorScheme: usePreferredColorScheme(),
 
     masonryConfig: {
       col: -1,
@@ -65,6 +67,14 @@ export const useStore = defineStore('main', {
   getters: {
     isFullscreen(): boolean {
       return this.fullscreen.isFullscreen
+    },
+    colorScheme(): 'light' | 'dark' {
+      if (this.preferColorScheme === 'auto') {
+        if (this.browserColorScheme === 'no-preference')
+          return 'light'
+        return this.browserColorScheme
+      }
+      return this.preferColorScheme
     },
     imageFilter() {
       return (image: Image) => {
@@ -185,8 +195,21 @@ export const useStore = defineStore('main', {
       else
         this.urlParams.search = value
     },
-    toggleDarkMode(): void {
-      this.darkMode = !this.darkMode
+    toggleColorScheme(): void {
+      switch (this.preferColorScheme) {
+        case 'auto':
+          this.preferColorScheme = 'light'
+          break
+        case 'light':
+          this.preferColorScheme = 'dark'
+          break
+        case 'dark':
+          this.preferColorScheme = 'auto'
+          break
+        default:
+          this.preferColorScheme = 'auto'
+          break
+      }
     },
     toggleFullscreen(): void {
       this.fullscreen.toggle()

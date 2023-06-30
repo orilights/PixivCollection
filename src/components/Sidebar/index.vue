@@ -13,10 +13,11 @@
         </button>
         <button
           class="w-[60px] h-[60px] "
-          @click="store.toggleDarkMode"
+          @click="store.toggleColorScheme"
         >
-          <IconSun v-if="!darkMode" class="w-6 h-6 mx-auto" />
-          <IconMoon v-else class="w-5 h-5 mx-auto" />
+          <IconSun v-if="preferColorScheme === 'light'" class="w-6 h-6 mx-auto" />
+          <IconMoon v-if="preferColorScheme === 'dark'" class="w-5 h-5 mx-auto" />
+          <IconAuto v-if="preferColorScheme === 'auto'" class="w-5 h-5 mx-auto" />
         </button>
         <button
           class="w-[60px] h-[60px]"
@@ -279,7 +280,7 @@ import { useStore } from '@/store'
 
 const store = useStore()
 const {
-  darkMode,
+  preferColorScheme,
   showSidebar,
   images,
   filterConfig,
