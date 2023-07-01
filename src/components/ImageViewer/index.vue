@@ -1,58 +1,59 @@
 <template>
   <Transition name="fade">
     <div
-      v-show="imageViewerShow" class="fixed top-0 left-0 w-full h-screen bg-black/30"
-      @mousemove="imageGragging && (imagePos.x += $event.movementX, imagePos.y += $event.movementY)"
-      @mouseup="imageGragging = false" @mouseleave="imageGragging = false"
-      @touchmove.prevent="imageGragging && handleTouchMove($event)" @wheel.prevent="handleWheelScroll"
-      @touchend="imageGragging = false"
+      v-show="imageViewerShow"
+      class="fixed top-0 left-0 w-full h-screen bg-black/30"
+
+      @wheel.prevent="handleWheelScroll"
     >
-      <div class="absolute top-0 left-0 z-50">
+      <div class="absolute z-50 top-2 left-2">
         <button
-          class="bg-black/40 text-white text-center w-[40px] h-[40px]"
+          class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
           @click="restoreImage"
         >
-          <IconTablet class="w-6 h-6 mx-auto" />
+          <IconTablet class="mx-auto w-7 h-7" />
         </button>
-        <div v-show="loading" class="bg-black/40 text-white p-2">
-          <img src="@/assets/loading.svg" class="w-6 h-6">
-        </div>
+        <Transition name="fade">
+          <div
+            v-if="loadingImage"
+            class="bg-black/40 text-white w-[60px] h-[60px] rounded-full transition-colors flex items-center justify-center mt-2"
+          >
+            <img src="@/assets/loading.svg" class="w-7 h-7">
+          </div>
+        </Transition>
       </div>
       <button
-        class="bg-black/40 text-white absolute top-0 right-0 text-center w-[40px] h-[40px] z-50"
+        class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white absolute top-2 right-2 text-center w-[60px] h-[60px] rounded-full transition-colors z-50"
         @click="store.closeImageViewer()"
       >
-        <IconClose class="w-6 h-6 mx-auto" />
+        <IconClose class="mx-auto w-7 h-7" />
       </button>
-      <Transition name="hide-left">
-        <button
-          v-show="!imageGragging"
-          class="bg-black/40 text-white absolute left-0 top-[calc(50%-40px)] w-[40px] h-[80px] z-50"
-          @click="store.imageViewerPrev()"
-        >
-          <IconLeft class="w-6 h-6 mx-auto" />
-        </button>
-      </Transition>
-      <Transition name="hide-right">
-        <button
-          v-show="!imageGragging"
-          class="bg-black/40 text-white absolute right-0 top-[calc(50%-40px)] w-[40px] h-[80px] z-50"
-          @click="store.imageViewerNext()"
-        >
-          <IconRight class="w-6 h-6 mx-auto" />
-        </button>
-      </Transition>
+      <button
+        class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white absolute left-2 top-[calc(50%-40px)] w-[60px] h-[60px] rounded-full transition-colors z-50"
+        @click="store.imageViewerPrev()"
+      >
+        <IconLeft class="w-6 h-6 mx-auto stroke-2 -translate-x-0.5" />
+      </button>
+      <button
+        class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white absolute right-2 top-[calc(50%-40px)] w-[60px] h-[60px] rounded-full transition-colors z-50"
+        @click="store.imageViewerNext()"
+      >
+        <IconRight class="w-6 h-6 mx-auto stroke-2 translate-x-0.5" />
+      </button>
       <div class="relative">
         <img
           :src="imageSrc"
-          class="absolute select-none max-w-none cursor-grab active:cursor-grabbing touch-none" :class="{
+          class="absolute select-none max-w-none cursor-grab active:cursor-grabbing touch-none"
+          :class="{
             '': !imageGragging,
-          }" :style="{
+          }"
+          :style="{
             transform: `scale(${imageRatio})`,
             left: `${imagePos.x}px`,
             top: `${imagePos.y}px`,
           }"
-          @touchstart.prevent="handleTouchStart" @mousedown.prevent="imageGragging = true"
+          @mousedown.prevent="handleMouseDragStart"
+          @touchstart.prevent="handleTouchStart"
         >
       </div>
     </div>
@@ -71,12 +72,14 @@ const imageRatio = ref(1)
 const imagePos = ref({ x: 0, y: 0 })
 const imageGragging = ref(false)
 const imageSrc = ref('')
-const mouse = useMouse({ type: 'client' })
-const loading = ref(false)
-const loadingImage = ref('')
+const mouseRef = useMouse({ type: 'client' })
+const loadingImage = ref(false)
+const loadingImageId = ref('')
 
-const startPosition = { x: 0, y: 0 }
-const minRatio = 0.5
+const touchStartPosition = { x: 0, y: 0 }
+const touchCenterPosition = { x: 0, y: 0 }
+const touchStartImagePosition = { x: 0, y: 0 }
+const minRatio = 0.3
 let startDistance = 0
 let initialRatio = 0
 let imageLoader: HTMLImageElement
@@ -86,7 +89,7 @@ watch(imageViewerShow, (val) => {
     if (imageLoader)
       imageLoader.remove()
 
-    loading.value = false
+    loadingImage.value = false
   }
   else {
     restoreImage()
@@ -98,13 +101,13 @@ watch(imageViewerInfo, (val) => {
     imageLoader.remove()
   imageSrc.value = ''
 
-  loading.value = true
-  loadingImage.value = `${val.id}_${val.part}`
+  loadingImage.value = true
+  loadingImageId.value = `${val.id}_${val.part}`
 
   imageLoader = new Image()
   imageLoader.addEventListener('load', () => {
-    if (`${val.id}_${val.part}` === loadingImage.value)
-      loading.value = false
+    if (`${val.id}_${val.part}` === loadingImageId.value)
+      loadingImage.value = false
   })
   imageLoader.src = `${imagePath}${val.id}_p${val.part}.${val.ext}`
 
@@ -126,27 +129,55 @@ function restoreImage() {
   imagePos.value.y = (window.innerHeight - imageViewerInfo.value.size[1]) / 2
 }
 
+function handleMouseDragStart() {
+  imageGragging.value = true
+
+  window.addEventListener('mousemove', handleMouseMove)
+  window.addEventListener('mouseup', handleMouseDragEnd)
+  window.addEventListener('mouseleave', handleMouseDragEnd)
+}
+
+function handleMouseMove(e: MouseEvent) {
+  imagePos.value.x += e.movementX
+  imagePos.value.y += e.movementY
+}
+
+function handleMouseDragEnd() {
+  imageGragging.value = false
+
+  window.removeEventListener('mousemove', handleMouseMove)
+  window.removeEventListener('mouseup', handleMouseDragEnd)
+  window.removeEventListener('mouseleave', handleMouseDragEnd)
+}
+
 function handleTouchStart(e: TouchEvent) {
   if (e.touches.length < 2) {
     imageGragging.value = true
-    startPosition.x = e.touches[0].clientX
-    startPosition.y = e.touches[0].clientY
+    touchStartPosition.x = e.touches[0].clientX
+    touchStartPosition.y = e.touches[0].clientY
   }
   else {
     const deltaX = e.touches[0].clientX - e.touches[1].clientX
     const deltaY = e.touches[0].clientY - e.touches[1].clientY
     startDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+    touchCenterPosition.x = (e.touches[0].clientX + e.touches[1].clientX) / 2
+    touchCenterPosition.y = (e.touches[0].clientY + e.touches[1].clientY) / 2
+    touchStartImagePosition.x = imagePos.value.x
+    touchStartImagePosition.y = imagePos.value.y
   }
+
+  window.addEventListener('touchmove', handleTouchMove)
+  window.addEventListener('touchend', handleTouchEnd)
 }
 
 function handleTouchMove(e: TouchEvent) {
   if (e.touches.length < 2) {
-    const deltaX = e.touches[0].clientX - startPosition.x
-    const deltaY = e.touches[0].clientY - startPosition.y
+    const deltaX = e.touches[0].clientX - touchStartPosition.x
+    const deltaY = e.touches[0].clientY - touchStartPosition.y
     imagePos.value.x += deltaX
     imagePos.value.y += deltaY
-    startPosition.x = e.touches[0].clientX
-    startPosition.y = e.touches[0].clientY
+    touchStartPosition.x = e.touches[0].clientX
+    touchStartPosition.y = e.touches[0].clientY
   }
   else {
     const deltaX = e.touches[0].clientX - e.touches[1].clientX
@@ -161,8 +192,14 @@ function handleTouchMove(e: TouchEvent) {
     let newRatio = imageRatio.value * delta
     if (newRatio < initialRatio * minRatio)
       newRatio = initialRatio * minRatio
-    handleZoom(newRatio, centerPostiion)
+    handleZoom(newRatio, centerPostiion, true)
   }
+}
+
+function handleTouchEnd() {
+  imageGragging.value = false
+
+  window.removeEventListener('touchmove', handleTouchMove)
 }
 
 function handleWheelScroll(e: WheelEvent) {
@@ -174,42 +211,42 @@ function handleWheelScroll(e: WheelEvent) {
     newRatio = imageRatio.value - delta
   if (newRatio < initialRatio * minRatio)
     newRatio = initialRatio * minRatio
-  handleZoom(newRatio, { x: mouse.x.value, y: mouse.y.value })
+  handleZoom(newRatio, { x: mouseRef.x.value, y: mouseRef.y.value })
 }
 
-function handleZoom(newRatio: number, centerPostiion: { x: number; y: number }) {
+function handleZoom(newRatio: number, centerPostiion: { x: number; y: number }, touch = false) {
   const wWidth = window.innerWidth
   const wHeight = window.innerHeight
   const deltaX = centerPostiion.x - (imagePos.value.x - ((wWidth - imageViewerInfo.value.size[0]) / 2) + wWidth / 2)
   const deltaY = centerPostiion.y - (imagePos.value.y - ((wHeight - imageViewerInfo.value.size[1]) / 2) + wHeight / 2)
-  imagePos.value.x -= (newRatio / imageRatio.value - 1) * deltaX
-  imagePos.value.y -= (newRatio / imageRatio.value - 1) * deltaY
+  if (touch) {
+    imagePos.value.x -= (newRatio / imageRatio.value - 1) * deltaX + (touchCenterPosition.x - centerPostiion.x)
+    imagePos.value.y -= (newRatio / imageRatio.value - 1) * deltaY + (touchCenterPosition.y - centerPostiion.y)
+    touchCenterPosition.x = centerPostiion.x
+    touchCenterPosition.y = centerPostiion.y
+  }
+  else {
+    imagePos.value.x -= (newRatio / imageRatio.value - 1) * deltaX
+    imagePos.value.y -= (newRatio / imageRatio.value - 1) * deltaY
+  }
+
   imageRatio.value = newRatio
 }
 </script>
 
 <style>
 .fade-enter-active,
-.fade-leave-active,
-.hide-left-enter-active,
-.hide-left-leave-active,
-.hide-right-enter-active,
-.hide-right-leave-active {
-  transition: transform .3s;
+.fade-leave-active {
+  transition: opacity .3s;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-.hide-left-enter-from,
-.hide-left-leave-to {
-  transform: translateX(-100%);
-}
-
-.hide-right-enter-from,
-.hide-right-leave-to {
-  transform: translateX(100%);
 }
 </style>
