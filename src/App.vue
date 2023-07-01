@@ -13,7 +13,7 @@
       />
       <Navbar />
       <div v-show="!imagesFiltered.length" class="px-6 py-4 mx-auto mt-4 text-lg w-fit bg-black/20 rounded-xl">
-        <IconLoading v-if="loading" class="w-[60px] mx-auto pb-2" :dark="colorScheme === 'dark'" />
+        <IconLoading v-if="loading" class="w-[60px] mx-auto pb-2" :dark="colorScheme !== 'dark'" />
         <div class="text-center">
           {{ loading ? '数据加载中' : '无数据' }}
         </div>
