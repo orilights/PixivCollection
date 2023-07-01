@@ -7,12 +7,17 @@
       @touchmove.prevent="imageGragging && handleTouchMove($event)" @wheel.prevent="handleWheelScroll"
       @touchend="imageGragging = false"
     >
-      <button
-        class="bg-black/40 text-white absolute top-0 left-0 text-center w-[40px] h-[40px] z-50"
-        @click="restoreImage"
-      >
-        <IconTablet class="w-6 h-6 mx-auto" />
-      </button>
+      <div class="absolute top-0 left-0 z-50">
+        <button
+          class="bg-black/40 text-white text-center w-[40px] h-[40px]"
+          @click="restoreImage"
+        >
+          <IconTablet class="w-6 h-6 mx-auto" />
+        </button>
+        <div v-show="loading" class="bg-black/40 text-white p-2">
+          <img src="@/assets/loading.svg" class="w-6 h-6">
+        </div>
+      </div>
       <button
         class="bg-black/40 text-white absolute top-0 right-0 text-center w-[40px] h-[40px] z-50"
         @click="store.closeImageViewer()"
@@ -49,7 +54,6 @@
           }"
           @touchstart.prevent="handleTouchStart" @mousedown.prevent="imageGragging = true"
         >
-        <img v-show="loading" src="@/assets/loading.svg" class="absolute top-[calc(50vh-19px)] left-[calc(50vw-19px)]">
       </div>
     </div>
   </Transition>
