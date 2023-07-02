@@ -78,7 +78,6 @@ const loadingImageId = ref('')
 
 const touchStartPosition = { x: 0, y: 0 }
 const touchCenterPosition = { x: 0, y: 0 }
-const touchStartImagePosition = { x: 0, y: 0 }
 const minRatio = 0.3
 let startDistance = 0
 let initialRatio = 0
@@ -162,8 +161,6 @@ function handleTouchStart(e: TouchEvent) {
     startDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
     touchCenterPosition.x = (e.touches[0].clientX + e.touches[1].clientX) / 2
     touchCenterPosition.y = (e.touches[0].clientY + e.touches[1].clientY) / 2
-    touchStartImagePosition.x = imagePos.value.x
-    touchStartImagePosition.y = imagePos.value.y
   }
 
   window.addEventListener('touchmove', handleTouchMove)

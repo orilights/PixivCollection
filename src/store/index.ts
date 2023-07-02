@@ -28,7 +28,6 @@ export const useStore = defineStore('main', {
       showImageNo: false,
       infoAtBottom: false,
       virtualListEnable: true,
-      virtualListPreload: 3,
     },
     filterConfig: {
       search: {

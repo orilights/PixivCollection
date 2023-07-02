@@ -5,25 +5,28 @@
       'lg:w-[960px] 2xl:w-[1200px]': !masonryConfig.containerFullWidth,
     }"
     :style="{
-      height: `${Math.max(...colsTop) + masonryConfig.gap}px`,
+      height: `${containerHeight}px`,
       padding: `${masonryConfig.gap}px`,
     }"
   >
     <MasonryViewItem
-      v-for="item in imagesRenderList" :key="`${item.image.id}_${item.image.part}`" :index="item.idx"
-      :image="item.image"
+      v-for="item in imagesRenderList" :key="`${item.image.id}_${item.image.part}`"
+      :image-data="item.image"
+      :image-index="item.index"
       :show-no="masonryConfig.showImageNo"
       :tag-include-bookmark="filterConfig.tag.includeBookmark"
       :tag-translation="masonryConfig.showTagTranslation"
       :info-at-bottom="masonryConfig.infoAtBottom"
       :shadow="masonryConfig.gap > 2"
-      :load-image="imagesShow.includes(item.idx)"
+      :load-image="imagesLoad.includes(item.index)"
       :style="{
         width: `${imageWidth}px`,
-        height: `${getImageHeight(item.image.size) + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
+        height: `${item.height + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
-      @open-image="openImageViewer" @open-pixiv="openPixiv" @open-pixiv-user="openPixivUser"
+      @open-image="openImageViewer"
+      @open-pixiv="openPixiv"
+      @open-pixiv-user="openPixivUser"
       @filter-author="filterAuthor"
       @destory="itemDestroy"
     />
@@ -31,78 +34,86 @@
 </template>
 
 <script setup lang="ts">
-import { useDebounce, useDebounceFn, useElementBounding, useElementSize } from '@vueuse/core'
+import { useElementBounding, useElementSize, useThrottle, useThrottleFn } from '@vueuse/core'
+import { imageInfoAreaHeight, masonryLazyloadHeight, masonryMinColumns, pixivArtworkLink, pixivUserLink, virtualListRenderRange } from '@/config'
 import { useStore } from '@/store'
-import { pixivArtworkLink, pixivUserLink } from '@/config'
 
 const store = useStore()
 const { filterConfig, imagesFiltered, masonryConfig } = toRefs(store)
 const container = ref()
-const { width: containerWidthO } = useElementSize(container)
-const { top: containerTopO } = useElementBounding(container)
-const containerWidth = useDebounce(containerWidthO, 200, { maxWait: 400 })
-const containerTop = useDebounce(containerTopO, 200, { maxWait: 400 })
+
+const containerWidth = useThrottle(useElementSize(container).width, 300, true)
+const containerTop = useThrottle(useElementBounding(container).top, 30, true)
+
+const containerHeight = ref<number>(0)
+const imagesLoad = ref<number[]>([])
+
 const col = computed(() => {
   if (masonryConfig.value.col > 0)
     return masonryConfig.value.col
   const cWidth = containerWidth.value + masonryConfig.value.gap * 2
   if (cWidth >= masonryConfig.value.imageMinWidth * 2)
-    return Number((cWidth / masonryConfig.value.imageMinWidth).toFixed(0))
-  return 2
+    return Math.floor(cWidth / masonryConfig.value.imageMinWidth)
+  return masonryMinColumns
 })
-const colsTop = ref(Array.from({ length: col.value }, () => 0))
+
 const imageWidth = computed(() => (containerWidth.value - (col.value - 1) * masonryConfig.value.gap) / col.value)
+
 const imagesPlaced = computed(() => {
   if (!containerWidth.value)
     return []
-  const _list: Array<{
-    image: Image
-    place: number
-    idx: number
-    top: number
-    left: number
-  }> = []
-  colsTop.value = Array.from({ length: col.value }, () => 0)
-  imagesFiltered.value.forEach((image, idx) => {
-    const colPlace = getColPlace()
-    _list.push({
+
+  const colsTop = new Array(col.value).fill(0)
+  const result = imagesFiltered.value.map((image, idx) => {
+    const colPlace = getColPlace(colsTop)
+    const item = {
       image,
       place: colPlace,
-      idx,
-      top: colsTop.value[colPlace],
+      index: idx,
+      top: colsTop[colPlace],
       left: (imageWidth.value + masonryConfig.value.gap) * colPlace,
-    })
-    colsTop.value[colPlace] += getImageHeight(image.size) + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? 120 : 0)
+      height: getImageHeight(image.size),
+    }
+    colsTop[colPlace] += item.height + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? imageInfoAreaHeight : 0)
+    return Object.freeze(item)
   })
-  return _list
-})
-const imagesRenderList = computed(() => {
-  if (masonryConfig.value.virtualListEnable) {
-    return imagesPlaced.value.filter((item) => {
-      const preload = masonryConfig.value.virtualListPreload
-      if (item.top > (-containerTop.value - preload * window.innerHeight) && item.top < (-containerTop.value + (preload + 1) * window.innerHeight))
-        return true
-      return false
-    })
-  }
-  return imagesPlaced.value
-})
-const imagesShow = ref<number[]>([])
+  containerHeight.value = Math.max(...colsTop) + masonryConfig.value.gap
 
-const lazyloadImage = useDebounceFn(() => {
+  return result
+})
+
+const imagesRenderList = computed(() => {
+  if (!masonryConfig.value.virtualListEnable)
+    return imagesPlaced.value
+
+  const renderRange = virtualListRenderRange
+  const renderRangeTop = -containerTop.value - renderRange.up * window.innerHeight
+  const renderRangeBottom = -containerTop.value + window.innerHeight + renderRange.down * window.innerHeight
+
+  return imagesPlaced.value.filter((item) => {
+    return (item.top + item.height > renderRangeTop && item.top < renderRangeBottom)
+  })
+})
+
+const lazyloadImage = useThrottleFn(() => {
   nextTick(() => {
+    const loadRangeTop = -containerTop.value
+    const loadRangeBottom = -containerTop.value + window.innerHeight + masonryLazyloadHeight
+
     imagesRenderList.value.forEach((item) => {
-      if (imagesShow.value.includes(item.idx))
+      if (imagesLoad.value.includes(item.index))
         return
 
-      if (item.top + getImageHeight(item.image.size) + containerTop.value > 0 && item.top + containerTop.value - window.innerHeight < 1000)
-        imagesShow.value.push(item.idx)
+      if (item.top + item.height > loadRangeTop && item.top < loadRangeBottom)
+        imagesLoad.value.push(item.index)
     })
   })
-}, 300, { maxWait: 500 })
+}, 300, true)
 
 onMounted(() => {
-  lazyloadImage()
+  setInterval(() => {
+    lazyloadImage()
+  }, 1000)
   window.addEventListener('scroll', lazyloadImage, { passive: true })
 })
 
@@ -114,8 +125,8 @@ watch(imageWidth, () => {
   lazyloadImage()
 })
 
-function getColPlace() {
-  return colsTop.value.indexOf(Math.min(...colsTop.value))
+function getColPlace(colsTop: number[]) {
+  return colsTop.indexOf(Math.min(...colsTop))
 }
 
 function getImageHeight(size: [number, number]) {
@@ -155,7 +166,7 @@ function filterAuthor(idx: number) {
 }
 
 function itemDestroy(idx: number) {
-  if (imagesShow.value.includes(idx))
-    imagesShow.value.splice(imagesShow.value.indexOf(idx), 1)
+  if (imagesLoad.value.includes(idx))
+    imagesLoad.value.splice(imagesLoad.value.indexOf(idx), 1)
 }
 </script>
