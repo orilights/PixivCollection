@@ -6,7 +6,6 @@
     }"
     :style="{
       height: `${containerHeight}px`,
-      padding: `${masonryConfig.gap}px`,
     }"
   >
     <MasonryViewItem
@@ -54,13 +53,13 @@ const col = computed(() => {
   return masonryMinColumns
 })
 
-const imageWidth = computed(() => (containerWidth.value - (col.value - 1) * masonryConfig.value.gap) / col.value)
+const imageWidth = computed(() => (containerWidth.value - (col.value + 1) * masonryConfig.value.gap) / col.value)
 
 const imagesPlaced = computed(() => {
   if (!containerWidth.value)
     return []
 
-  const colsTop = new Array(col.value).fill(0)
+  const colsTop = new Array(col.value).fill(masonryConfig.value.gap)
   const result = imagesFiltered.value.map((image, idx) => {
     const colPlace = getColPlace(colsTop)
     const item = {
@@ -68,13 +67,13 @@ const imagesPlaced = computed(() => {
       place: colPlace,
       index: idx,
       top: colsTop[colPlace],
-      left: (imageWidth.value + masonryConfig.value.gap) * colPlace,
+      left: (imageWidth.value + masonryConfig.value.gap) * colPlace + masonryConfig.value.gap,
       height: getImageHeight(image.size),
     }
     colsTop[colPlace] += item.height + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? imageInfoAreaHeight : 0)
     return Object.freeze(item)
   })
-  containerHeight.value = Math.max(...colsTop) + masonryConfig.value.gap
+  containerHeight.value = Math.max(...colsTop)
 
   return result
 })
