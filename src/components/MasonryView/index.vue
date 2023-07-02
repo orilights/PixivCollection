@@ -18,7 +18,6 @@
       :tag-translation="masonryConfig.showTagTranslation"
       :info-at-bottom="masonryConfig.infoAtBottom"
       :shadow="masonryConfig.gap > 2"
-      :load-image="imagesLoad.includes(item.index)"
       :style="{
         width: `${imageWidth}px`,
         height: `${item.height + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
@@ -28,14 +27,13 @@
       @open-pixiv="openPixiv"
       @open-pixiv-user="openPixivUser"
       @filter-author="filterAuthor"
-      @destory="itemDestroy"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useElementBounding, useElementSize, useThrottle, useThrottleFn } from '@vueuse/core'
-import { imageInfoAreaHeight, masonryLazyloadHeight, masonryMinColumns, pixivArtworkLink, pixivUserLink, virtualListRenderRange } from '@/config'
+import { useElementBounding, useElementSize, useThrottle } from '@vueuse/core'
+import { imageInfoAreaHeight, masonryMinColumns, pixivArtworkLink, pixivUserLink, virtualListRenderRange } from '@/config'
 import { useStore } from '@/store'
 
 const store = useStore()
@@ -46,7 +44,6 @@ const containerWidth = useThrottle(useElementSize(container).width, 300, true)
 const containerTop = useThrottle(useElementBounding(container).top, 30, true)
 
 const containerHeight = ref<number>(0)
-const imagesLoad = ref<number[]>([])
 
 const col = computed(() => {
   if (masonryConfig.value.col > 0)
@@ -95,36 +92,6 @@ const imagesRenderList = computed(() => {
   })
 })
 
-const lazyloadImage = useThrottleFn(() => {
-  nextTick(() => {
-    const loadRangeTop = -containerTop.value
-    const loadRangeBottom = -containerTop.value + window.innerHeight + masonryLazyloadHeight
-
-    imagesRenderList.value.forEach((item) => {
-      if (imagesLoad.value.includes(item.index))
-        return
-
-      if (item.top + item.height > loadRangeTop && item.top < loadRangeBottom)
-        imagesLoad.value.push(item.index)
-    })
-  })
-}, 300, true)
-
-onMounted(() => {
-  setInterval(() => {
-    lazyloadImage()
-  }, 1000)
-  window.addEventListener('scroll', lazyloadImage, { passive: true })
-})
-
-watch(imagesFiltered, () => {
-  lazyloadImage()
-})
-
-watch(imageWidth, () => {
-  lazyloadImage()
-})
-
 function getColPlace(colsTop: number[]) {
   return colsTop.indexOf(Math.min(...colsTop))
 }
@@ -163,10 +130,5 @@ function filterAuthor(idx: number) {
   }
   store.filterConfig.author.id = authorId
   store.filterConfig.author.enable = true
-}
-
-function itemDestroy(idx: number) {
-  if (imagesLoad.value.includes(idx))
-    imagesLoad.value.splice(imagesLoad.value.indexOf(idx), 1)
 }
 </script>

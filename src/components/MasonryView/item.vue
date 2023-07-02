@@ -89,7 +89,7 @@
     </div>
     <img
       class="w-full cursor-pointer"
-      :src="loadImage ? `${imagePreviewPath}${imageData.id}_p${imageData.part}.jpg` : ''"
+      :src="`${imagePreviewPath}${imageData.id}_p${imageData.part}.jpg`"
       @load="imageLoaded = true"
       @click="$emit('openImage', imageIndex)"
     >
@@ -99,24 +99,19 @@
 <script setup lang="ts">
 import { imagePreviewPath } from '@/config'
 
-const props = defineProps<{
+defineProps<{
   imageData: Image
   imageIndex: number
   shadow: boolean
-  loadImage: boolean
   showNo: boolean
   infoAtBottom: boolean
   tagIncludeBookmark: boolean
   tagTranslation: boolean
 }>()
 
-const emits = defineEmits(['openImage', 'openPixiv', 'openPixivUser', 'destory', 'filterAuthor'])
+defineEmits(['openImage', 'openPixiv', 'openPixivUser', 'filterAuthor'])
 
 const imageLoaded = ref(false)
-
-// onUnmounted(() => {
-//   emits('destory', props.imageIndex)
-// })
 </script>
 
 <style scoped>

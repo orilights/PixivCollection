@@ -6,7 +6,6 @@ export const imagePath = './image/original/'
 export const imagePreviewPath = './image/preview/'
 
 export const masonryPreload = 3
-export const masonryLazyloadHeight = 1000
 export const masonryMinColumns = 2
 export const masonryMaxColumns = 10
 export const virtualListRenderRange = {
