@@ -90,7 +90,7 @@
     </div>
     <img
       class="w-full cursor-pointer"
-      :src="`${imagePreviewPath}${imageData.id}_p${imageData.part}.jpg`"
+      :src="`${imageThumbPath}${imageData.id}_p${imageData.part}.${imageThumbFormat}`"
       @load="imageLoaded = true"
       @click="$emit('openImage', imageIndex)"
     >
@@ -98,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { imagePreviewPath } from '@/config'
+import { imageThumbFormat, imageThumbPath } from '@/config'
 
 defineProps<{
   imageData: Image

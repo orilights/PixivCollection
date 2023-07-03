@@ -2,8 +2,10 @@ export const githubLink = 'https://github.com/orilights/PixivCollection'
 export const pixivArtworkLink = 'https://www.pixiv.net/artworks/'
 export const pixivUserLink = 'https://www.pixiv.net/users/'
 
-export const imagePath = './image/original/'
-export const imagePreviewPath = './image/preview/'
+export const imagePath = './image/large/'
+export const imageFormat = 'webp'
+export const imageThumbPath = './image/thumbnail/'
+export const imageThumbFormat = 'webp'
 
 export const masonryPreload = 3
 export const masonryMinColumns = 2

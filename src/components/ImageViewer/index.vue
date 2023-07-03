@@ -63,7 +63,7 @@
 <script setup lang="ts">
 import { useMouse } from '@vueuse/core'
 import { useStore } from '@/store'
-import { imagePath } from '@/config'
+import { imageFormat, imagePath } from '@/config'
 
 const store = useStore()
 const { imageViewerShow, imageViewerInfo } = toRefs(store)
@@ -82,6 +82,7 @@ const minRatio = 0.3
 let startDistance = 0
 let initialRatio = 0
 let imageLoader: HTMLImageElement
+const imageSize = { width: 0, height: 0 }
 
 watch(imageViewerShow, (val) => {
   if (!val) {
@@ -108,7 +109,7 @@ watch(imageViewerInfo, (val) => {
     if (`${val.id}_${val.part}` === loadingImageId.value)
       loadingImage.value = false
   })
-  imageLoader.src = `${imagePath}${val.id}_p${val.part}.${val.ext}`
+  imageLoader.src = `${imagePath}${val.id}_p${val.part}.${imageFormat}`
 
   nextTick(() => {
     imageSrc.value = imageLoader.src
@@ -118,14 +119,28 @@ watch(imageViewerInfo, (val) => {
 })
 
 function restoreImage() {
+  if (imageViewerInfo.value.size[0] <= 2000 && imageViewerInfo.value.size[1] <= 2000) {
+    imageSize.width = imageViewerInfo.value.size[0]
+    imageSize.height = imageViewerInfo.value.size[1]
+  }
+  else {
+    if (imageViewerInfo.value.size[0] > imageViewerInfo.value.size[1]) {
+      imageSize.width = 2000
+      imageSize.height = Math.round(imageViewerInfo.value.size[1] * 2000 / imageViewerInfo.value.size[0])
+    }
+    else {
+      imageSize.width = Math.round(imageViewerInfo.value.size[0] * 2000 / imageViewerInfo.value.size[1])
+      imageSize.height = 2000
+    }
+  }
   // 计算图片初始显示比率
-  const ratioWidth = window.innerWidth / imageViewerInfo.value.size[0]
-  const ratioHeight = window.innerHeight / imageViewerInfo.value.size[1]
+  const ratioWidth = window.innerWidth / imageSize.width
+  const ratioHeight = window.innerHeight / imageSize.height
   initialRatio = Math.min(ratioWidth, ratioHeight)
   imageRatio.value = initialRatio
   // 计算图片初始显示位置
-  imagePos.value.x = (window.innerWidth - imageViewerInfo.value.size[0]) / 2
-  imagePos.value.y = (window.innerHeight - imageViewerInfo.value.size[1]) / 2
+  imagePos.value.x = (window.innerWidth - imageSize.width) / 2
+  imagePos.value.y = (window.innerHeight - imageSize.height) / 2
 }
 
 function handleMouseDragStart() {
@@ -212,10 +227,10 @@ function handleWheelScroll(e: WheelEvent) {
 }
 
 function handleZoom(newRatio: number, centerPostiion: { x: number; y: number }, touch = false) {
-  const wWidth = window.innerWidth
-  const wHeight = window.innerHeight
-  const deltaX = centerPostiion.x - (imagePos.value.x - ((wWidth - imageViewerInfo.value.size[0]) / 2) + wWidth / 2)
-  const deltaY = centerPostiion.y - (imagePos.value.y - ((wHeight - imageViewerInfo.value.size[1]) / 2) + wHeight / 2)
+  const windowWidth = window.innerWidth
+  const windowHeight = window.innerHeight
+  const deltaX = centerPostiion.x - (imagePos.value.x - ((windowWidth - imageSize.width) / 2) + windowWidth / 2)
+  const deltaY = centerPostiion.y - (imagePos.value.y - ((windowHeight - imageSize.height) / 2) + windowHeight / 2)
   if (touch) {
     imagePos.value.x -= (newRatio / imageRatio.value - 1) * deltaX + (touchCenterPosition.x - centerPostiion.x)
     imagePos.value.y -= (newRatio / imageRatio.value - 1) * deltaY + (touchCenterPosition.y - centerPostiion.y)
