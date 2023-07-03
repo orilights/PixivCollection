@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     ButtonCommon: typeof import('./src/components/Button/common.vue')['default']
     IconAuto: typeof import('./src/components/Icon/auto.vue')['default']
     IconClose: typeof import('./src/components/Icon/close.vue')['default']
+    IconDownload: typeof import('./src/components/Icon/download.vue')['default']
     IconExpand: typeof import('./src/components/Icon/expand.vue')['default']
     IconFunnelSolid: typeof import('./src/components/Icon/funnelSolid.vue')['default']
     IconGithub: typeof import('./src/components/Icon/github.vue')['default']

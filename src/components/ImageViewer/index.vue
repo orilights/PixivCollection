@@ -6,36 +6,45 @@
 
       @wheel.prevent="handleWheelScroll"
     >
-      <div class="absolute z-50 top-2 left-2">
+      <div class="absolute z-50 top-2 left-2 flex flex-col gap-2">
         <button
           class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
+          title="复位图片"
           @click="restoreImage"
         >
           <IconTablet class="mx-auto w-7 h-7" />
         </button>
-        <Transition name="fade">
-          <div
-            v-if="loadingImage"
-            class="bg-black/40 text-white w-[60px] h-[60px] rounded-full transition-colors flex items-center justify-center mt-2"
-          >
-            <img src="@/assets/loading.svg" class="w-7 h-7">
-          </div>
-        </Transition>
+        <button
+          class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
+          title="下载原图"
+          @click="downloadImage"
+        >
+          <IconDownload class="mx-auto w-7 h-7" />
+        </button>
+        <div
+          v-if="loadingImage"
+          class="bg-black/40 text-white w-[60px] h-[60px] rounded-full transition-colors flex items-center justify-center"
+        >
+          <img src="@/assets/loading.svg" class="w-7 h-7">
+        </div>
       </div>
       <button
         class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white absolute top-2 right-2 text-center w-[60px] h-[60px] rounded-full transition-colors z-50"
+        title="关闭图片浏览器"
         @click="store.closeImageViewer()"
       >
         <IconClose class="mx-auto w-7 h-7" />
       </button>
       <button
         class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white absolute left-2 top-[calc(50%-40px)] w-[60px] h-[60px] rounded-full transition-colors z-50"
+        title="上一张"
         @click="store.imageViewerPrev()"
       >
         <IconLeft class="w-6 h-6 mx-auto stroke-2 -translate-x-0.5" />
       </button>
       <button
         class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white absolute right-2 top-[calc(50%-40px)] w-[60px] h-[60px] rounded-full transition-colors z-50"
+        title="下一张"
         @click="store.imageViewerNext()"
       >
         <IconRight class="w-6 h-6 mx-auto stroke-2 translate-x-0.5" />
@@ -63,7 +72,7 @@
 <script setup lang="ts">
 import { useMouse } from '@vueuse/core'
 import { useStore } from '@/store'
-import { imageFormat, imagePath } from '@/config'
+import { imageLargeFormat, imageLargePath, imagePath } from '@/config'
 
 const store = useStore()
 const { imageViewerShow, imageViewerInfo } = toRefs(store)
@@ -109,7 +118,7 @@ watch(imageViewerInfo, (val) => {
     if (`${val.id}_${val.part}` === loadingImageId.value)
       loadingImage.value = false
   })
-  imageLoader.src = `${imagePath}${val.id}_p${val.part}.${imageFormat}`
+  imageLoader.src = `${imageLargePath}${val.id}_p${val.part}.${imageLargeFormat}`
 
   nextTick(() => {
     imageSrc.value = imageLoader.src
@@ -244,17 +253,19 @@ function handleZoom(newRatio: number, centerPostiion: { x: number; y: number }, 
 
   imageRatio.value = newRatio
 }
+
+function downloadImage() {
+  const link = document.createElement('a')
+  link.href = `${imagePath}${imageViewerInfo.value.id}_p${imageViewerInfo.value.part}.${imageViewerInfo.value.ext}`
+  link.download = `${imageViewerInfo.value.id}_p${imageViewerInfo.value.part}.${imageViewerInfo.value.ext}`
+  link.click()
+}
 </script>
 
 <style>
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity .3s;
-}
-
-.fade-enter-to,
-.fade-leave-from {
-  opacity: 1;
 }
 
 .fade-enter-from,

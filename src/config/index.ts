@@ -2,8 +2,9 @@ export const githubLink = 'https://github.com/orilights/PixivCollection'
 export const pixivArtworkLink = 'https://www.pixiv.net/artworks/'
 export const pixivUserLink = 'https://www.pixiv.net/users/'
 
-export const imagePath = './image/large/'
-export const imageFormat = 'webp'
+export const imagePath = './image/original/'
+export const imageLargePath = './image/large/'
+export const imageLargeFormat = 'webp'
 export const imageThumbPath = './image/thumbnail/'
 export const imageThumbFormat = 'webp'
 
