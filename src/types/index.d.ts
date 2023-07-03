@@ -15,7 +15,7 @@ declare global {
     created_at: string
     sanity_level: number
     x_restrict: number
-
+    dominant_color: string
   }
   interface Tag {
     name: string
