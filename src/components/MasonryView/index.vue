@@ -12,6 +12,7 @@
       v-for="item in imagesRenderList" :key="`${item.image.id}_${item.image.part}`"
       :image-data="item.image"
       :image-index="item.index"
+      :image-height="item.height"
       :show-no="masonryConfig.showImageNo"
       :tag-include-bookmark="filterConfig.tag.includeBookmark"
       :tag-translation="masonryConfig.showTagTranslation"

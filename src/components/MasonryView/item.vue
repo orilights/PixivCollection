@@ -31,7 +31,8 @@
       </p>
       <p>
         标签：<span
-          v-for="tag, idx in imageData.tags" v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
+          v-for="tag, idx in imageData.tags"
+          v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
           class="px-1 mx-1 my-0.5 inline-block bg-black/30 rounded-sm text-xs"
           :class="tag.name === 'R-18' ? 'bg-red-500/80' : ''"
         >
@@ -52,48 +53,64 @@
         }"
       />
     </Transition>
-    <div v-if="showNo" class="absolute top-0 bg-black/60 text-white px-2 rounded-br-[12px]">
+    <div
+      v-if="showNo"
+      class="absolute top-0 bg-black/60 text-white px-2 rounded-br-[12px]"
+    >
       {{ imageIndex + 1 }}
     </div>
-    <div v-if="infoAtBottom" class="absolute w-full px-2 bottom-1">
-      <p
-        class="overflow-hidden font-bold transition-colors cursor-pointer hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
-        @click="$emit('openPixiv', imageIndex)"
-      >
-        {{ imageData.title }}
-      </p>
-      <p class="flex items-center cursor-pointer">
-        <span
-          class="overflow-hidden text-sm transition-colors hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
-          @click="$emit('openPixivUser', imageIndex)"
-        >{{ imageData.author.name }}</span>
-        <IconFunnelSolid
-          class="inline-block w-3 h-3 ml-1 transition-colors hover:text-blue-500"
-          @click="$emit('filterAuthor', imageIndex)"
-        />
-      </p>
-      <p class="overflow-y-auto h-[50px] mx-[-4px]">
-        <span
-          v-for="tag, idx in imageData.tags" v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
-          class="px-1 mx-0.5 my-0.5 float-left bg-black/10 rounded-sm text-xs"
-          :class="tag.name === 'R-18' ? '!bg-red-500/60' : ''"
-        >
-          {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
-        </span>
-      </p>
-      <p class="text-xs text-left text-gray-500 flex items-center mt-0.5 whitespace-nowrap">
-        {{ imageData.id }}
-        {{ `p${imageData.part}` }}
-        {{ `${imageData.size[0]}×${imageData.size[1]}` }}
-        {{ `sl${imageData.sanity_level}` }}
-      </p>
-    </div>
-    <img
-      class="w-full cursor-pointer"
-      :src="`${imageThumbPath}${imageData.id}_p${imageData.part}.${imageThumbFormat}`"
-      @load="imageLoaded = true"
-      @click="$emit('openImage', imageIndex)"
+    <div
+      :style="{
+        height: `${imageHeight}px`,
+      }"
     >
+      <img
+        class="w-full cursor-pointer"
+        :src="`${imageThumbPath}${imageData.id}_p${imageData.part}.${imageThumbFormat}`"
+        @load="imageLoaded = true"
+        @click="$emit('openImage', imageIndex)"
+      >
+    </div>
+
+    <Transition name="fade">
+      <div
+        v-if="infoAtBottom"
+        class="w-full px-2 py-1"
+      >
+        <p
+          class="overflow-hidden font-bold transition-colors cursor-pointer hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
+          @click="$emit('openPixiv', imageIndex)"
+        >
+          {{ imageData.title }}
+        </p>
+        <p class="flex items-center cursor-pointer">
+          <span
+            class="overflow-hidden text-sm transition-colors hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
+            @click="$emit('openPixivUser', imageIndex)"
+          >{{ imageData.author.name }}</span>
+          <IconFunnelSolid
+            class="inline-block w-3 h-3 ml-1 transition-colors hover:text-blue-500"
+            @click="$emit('filterAuthor', imageIndex)"
+          />
+        </p>
+        <p class="overflow-y-auto h-[50px] mx-[-4px]">
+          <span
+            v-for="tag, idx in imageData.tags"
+            v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
+            class="px-1 mx-0.5 my-0.5 float-left bg-black/10 rounded-sm text-xs"
+            :class="tag.name === 'R-18' ? '!bg-red-500/60' : ''"
+          >
+            {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
+          </span>
+        </p>
+        <p class="text-xs text-left text-gray-500 flex items-center mt-0.5 whitespace-nowrap">
+          {{ imageData.id }}
+          {{ `p${imageData.part}` }}
+          {{ `${imageData.size[0]}×${imageData.size[1]}` }}
+          {{ `sl${imageData.sanity_level}` }}
+        </p>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -103,6 +120,7 @@ import { imageThumbFormat, imageThumbPath } from '@/config'
 defineProps<{
   imageData: Image
   imageIndex: number
+  imageHeight: number
   shadow: boolean
   showNo: boolean
   infoAtBottom: boolean
