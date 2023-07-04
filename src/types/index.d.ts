@@ -16,6 +16,7 @@ declare global {
     sanity_level: number
     x_restrict: number
     dominant_color: string
+    searchStr?: string
   }
   interface Tag {
     name: string

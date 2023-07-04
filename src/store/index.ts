@@ -32,6 +32,7 @@ export const useStore = defineStore('main', {
     filterConfig: {
       search: {
         enable: false,
+        indexed: false,
         value: '',
       },
       year: {
@@ -92,9 +93,8 @@ export const useStore = defineStore('main', {
         }
         // 搜索
         if (this.filterConfig.search.enable) {
-          if (this.filterConfig.search.value.trim() !== '') {
-            const searchStr = (image.id + image.title + image.author.id + image.author.name).toLowerCase()
-            if (!searchStr.includes(this.filterConfig.search.value.trim().toLowerCase()))
+          if (this.filterConfig.search.value.trim() !== '' && image.searchStr !== undefined) {
+            if (!image.searchStr.includes(this.filterConfig.search.value.trim().toLowerCase()))
               return false
           }
           return true
@@ -214,8 +214,28 @@ export const useStore = defineStore('main', {
       this.fullscreen.toggle()
     },
     toggleSearch(): void {
-      if (this.filterConfig.search.enable)
+      if (this.filterConfig.search.enable) {
         this.updateSeatchValue('')
+      }
+      else {
+        if (!this.filterConfig.search.indexed) {
+          this.images.forEach((image) => {
+            image.searchStr = (
+              image.id
+              + image.title
+              + image.author.id
+              + image.author.name
+              + image.tags
+                .map(
+                  tag => tag.translated_name
+                    ? tag.name + tag.translated_name
+                    : tag.name,
+                ).join()
+            ).toLowerCase()
+          })
+          this.filterConfig.search.indexed = true
+        }
+      }
       this.filterConfig.search.enable = !this.filterConfig.search.enable
     },
   },
