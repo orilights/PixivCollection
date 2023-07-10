@@ -28,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import { Setting } from './utils'
 import { useStore } from '@/store'
 import { byteConv } from '@/utils/file'
 
@@ -48,20 +49,19 @@ const receivedLength = ref(0)
 const contentLength = ref(0)
 
 watchEffect(() => {
-  if (settingLoaded.value) {
-    localStorage.setItem('restrict_r18', filterConfig.value.restrict.r18)
-    localStorage.setItem('restrict_maxSanityLevel', filterConfig.value.restrict.maxSanityLevel.toString())
-    localStorage.setItem('config_preferColorScheme', String(preferColorScheme.value))
-    localStorage.setItem('config_masonry', JSON.stringify(masonryConfig.value))
-  }
+  if (!settingLoaded.value)
+    return
+
+  Setting.set('preferColorScheme', preferColorScheme.value)
+  Setting.set('masonryConfig', JSON.stringify(masonryConfig.value))
+  Setting.set('restrictConfig', JSON.stringify(filterConfig.value.restrict))
 })
 
 onMounted(async () => {
-  filterConfig.value.restrict.r18 = localStorage.getItem('restrict_r18') || 'hidden'
-  filterConfig.value.restrict.maxSanityLevel = Number(localStorage.getItem('restrict_maxSanityLevel')) || 2
-  preferColorScheme.value = localStorage.getItem('config_preferColorScheme') as any || 'auto'
-  if (localStorage.getItem('config_masonry'))
-    masonryConfig.value = JSON.parse(localStorage.getItem('config_masonry') as string)
+  preferColorScheme.value = Setting.get('preferColorScheme', 'str', 'auto')
+  masonryConfig.value = Setting.get('masonryConfig', 'json', masonryConfig.value)
+  filterConfig.value.restrict = Setting.get('restrictConfig', 'json', filterConfig.value.restrict)
+
   settingLoaded.value = true
 
   try {
