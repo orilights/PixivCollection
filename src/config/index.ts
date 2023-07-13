@@ -7,6 +7,7 @@ export const imageLargePath = './image/large/'
 export const imageLargeFormat = 'webp'
 export const imageThumbPath = './image/thumbnail/'
 export const imageThumbFormat = 'webp'
+export const imageLoadDelay = 300
 
 export const masonryPreload = 3
 export const masonryMinColumns = 2

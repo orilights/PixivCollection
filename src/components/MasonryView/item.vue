@@ -66,7 +66,7 @@
     >
       <img
         class="w-full cursor-pointer"
-        :src="`${imageThumbPath}${imageData.id}_p${imageData.part}.${imageThumbFormat}`"
+        :src="imageLoad ? `${imageThumbPath}${imageData.id}_p${imageData.part}.${imageThumbFormat}` : ''"
         @load="imageLoaded = true"
         @click="$emit('openImage', imageIndex)"
       >
@@ -115,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-import { imageThumbFormat, imageThumbPath } from '@/config'
+import { imageLoadDelay, imageThumbFormat, imageThumbPath } from '@/config'
 
 defineProps<{
   imageData: Image
@@ -130,7 +130,22 @@ defineProps<{
 
 defineEmits(['openImage', 'openPixiv', 'openPixivUser', 'filterAuthor'])
 
+let timer: NodeJS.Timeout | null = null
+
+const imageLoad = ref(false)
 const imageLoaded = ref(false)
+
+onMounted(() => {
+  timer = setTimeout(() => {
+    imageLoad.value = true
+    timer = null
+  }, imageLoadDelay)
+})
+
+onUnmounted(() => {
+  if (timer)
+    clearTimeout(timer)
+})
 </script>
 
 <style scoped>
