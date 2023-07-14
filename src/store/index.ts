@@ -6,11 +6,6 @@ export const useStore = defineStore('main', {
     showSidebar: false,
     showNav: true,
 
-    imageViewerShow: false,
-    imageViewerInfo: <Image>{},
-    imageViewerPrev: () => {},
-    imageViewerNext: () => {},
-
     images: <Image[]>[],
 
     urlParams: useUrlSearchParams(),
@@ -19,6 +14,12 @@ export const useStore = defineStore('main', {
     preferColorScheme: 'auto' as 'auto' | 'light' | 'dark',
     browserColorScheme: usePreferredColorScheme(),
 
+    imageViewer: {
+      show: false,
+      info: <Image>{},
+      prev: () => {},
+      next: () => {},
+    },
     masonryConfig: {
       col: -1,
       gap: 20,
@@ -179,13 +180,13 @@ export const useStore = defineStore('main', {
   },
   actions: {
     openImageViewer(image: Image, prev: () => void, next: () => void): void {
-      this.imageViewerShow = true
-      this.imageViewerInfo = image
-      this.imageViewerPrev = prev
-      this.imageViewerNext = next
+      this.imageViewer.show = true
+      this.imageViewer.info = image
+      this.imageViewer.prev = prev
+      this.imageViewer.next = next
     },
     closeImageViewer(): void {
-      this.imageViewerShow = false
+      this.imageViewer.show = false
     },
     updateSeatchValue(value: string): void {
       this.filterConfig.search.value = value
@@ -237,6 +238,28 @@ export const useStore = defineStore('main', {
         }
       }
       this.filterConfig.search.enable = !this.filterConfig.search.enable
+    },
+    filterAuthor(idx: number): void {
+      const authorId = this.imagesFiltered[idx].author.id
+      if (this.filterConfig.author.enable && this.filterConfig.author.id === authorId) {
+        this.filterConfig.author.enable = false
+        this.filterConfig.author.id = -1
+        return
+      }
+      this.filterConfig.author.id = authorId
+      this.filterConfig.author.enable = true
+    },
+    viewImage(idx: number): void {
+      if (idx < 0 || idx >= this.imagesFiltered.length)
+        return
+      this.openImageViewer(
+        this.imagesFiltered[idx],
+        () => {
+          this.viewImage(idx - 1)
+        },
+        () => {
+          this.viewImage(idx + 1)
+        })
     },
   },
 })

@@ -23,10 +23,10 @@
         height: `${item.height + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
-      @open-image="openImageViewer"
       @open-pixiv="openPixiv"
       @open-pixiv-user="openPixivUser"
-      @filter-author="filterAuthor"
+      @view-image="store.viewImage"
+      @filter-author="store.filterAuthor"
     />
   </div>
 </template>
@@ -62,7 +62,7 @@ const imagesPlaced = computed(() => {
 
   const colsTop = new Array(col.value).fill(masonryConfig.value.gap)
   const result = imagesFiltered.value.map((image, idx) => {
-    const colPlace = getColPlace(colsTop)
+    const colPlace = getColToPlace(colsTop)
     const item = {
       image,
       place: colPlace,
@@ -92,7 +92,7 @@ const imagesRenderList = computed(() => {
   })
 })
 
-function getColPlace(colsTop: number[]) {
+function getColToPlace(colsTop: number[]) {
   return colsTop.indexOf(Math.min(...colsTop))
 }
 
@@ -100,35 +100,11 @@ function getImageHeight(size: [number, number]) {
   return size[1] * (imageWidth.value / size[0])
 }
 
-function openImageViewer(idx: number) {
-  if (idx < 0 || idx >= imagesFiltered.value.length)
-    return
-  store.openImageViewer(
-    imagesFiltered.value[idx],
-    () => {
-      openImageViewer(idx - 1)
-    },
-    () => {
-      openImageViewer(idx + 1)
-    })
-}
-
 function openPixiv(idx: number) {
-  window.open(pixivArtworkLink + imagesFiltered.value[idx].id, '_blank')
+  window.open(pixivArtworkLink.replace('{id}', imagesFiltered.value[idx].id.toString()), '_blank')
 }
 
 function openPixivUser(idx: number) {
-  window.open(pixivUserLink + imagesFiltered.value[idx].author.id, '_blank')
-}
-
-function filterAuthor(idx: number) {
-  const authorId = imagesFiltered.value[idx].author.id
-  if (store.filterConfig.author.enable && store.filterConfig.author.id === authorId) {
-    store.filterConfig.author.enable = false
-    store.filterConfig.author.id = -1
-    return
-  }
-  store.filterConfig.author.id = authorId
-  store.filterConfig.author.enable = true
+  window.open(pixivUserLink.replace('{id}', imagesFiltered.value[idx].author.id.toString()), '_blank')
 }
 </script>

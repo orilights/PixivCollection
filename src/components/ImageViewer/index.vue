@@ -1,21 +1,21 @@
 <template>
   <Transition name="fade">
     <div
-      v-show="imageViewerShow"
+      v-show="imageViewer.show"
       class="fixed top-0 left-0 w-full h-screen bg-black/30"
 
       @wheel.prevent="handleWheelScroll"
     >
       <div class="absolute z-50 top-2 left-2 flex flex-col gap-2">
         <button
-          class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
+          class="bg-black/40 hover:bg-gray-900/40 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
           title="复位图片"
           @click="restoreImage"
         >
           <IconTablet class="mx-auto w-7 h-7" />
         </button>
         <button
-          class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
+          class="bg-black/40 hover:bg-gray-900/40 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
           title="下载原图"
           @click="downloadImage"
         >
@@ -29,23 +29,23 @@
         </div>
       </div>
       <button
-        class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white absolute top-2 right-2 text-center w-[60px] h-[60px] rounded-full transition-colors z-50"
+        class="bg-black/40 hover:bg-gray-900/40 text-white absolute top-2 right-2 text-center w-[60px] h-[60px] rounded-full transition-colors z-50"
         title="关闭图片浏览器"
         @click="store.closeImageViewer()"
       >
         <IconClose class="mx-auto w-7 h-7" />
       </button>
       <button
-        class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white absolute left-2 top-[calc(50%-40px)] w-[60px] h-[60px] rounded-full transition-colors z-50"
+        class="bg-black/40 hover:bg-gray-900/40 text-white absolute left-2 top-[calc(50%-40px)] w-[60px] h-[60px] rounded-full transition-colors z-50"
         title="上一张"
-        @click="store.imageViewerPrev()"
+        @click="store.imageViewer.prev()"
       >
         <IconLeft class="w-6 h-6 mx-auto stroke-2 -translate-x-0.5" />
       </button>
       <button
-        class="bg-black/40 hover:bg-black/30 dark:hover:bg-white/10 text-white absolute right-2 top-[calc(50%-40px)] w-[60px] h-[60px] rounded-full transition-colors z-50"
+        class="bg-black/40 hover:bg-gray-900/40 text-white absolute right-2 top-[calc(50%-40px)] w-[60px] h-[60px] rounded-full transition-colors z-50"
         title="下一张"
-        @click="store.imageViewerNext()"
+        @click="store.imageViewer.next()"
       >
         <IconRight class="w-6 h-6 mx-auto stroke-2 translate-x-0.5" />
       </button>
@@ -75,7 +75,8 @@ import { useStore } from '@/store'
 import { imageLargeFormat, imageLargePath, imagePath } from '@/config'
 
 const store = useStore()
-const { imageViewerShow, imageViewerInfo } = toRefs(store)
+const { imageViewer } = toRefs(store)
+const { show: imageViewerShow, info: imageViewerInfo } = toRefs(imageViewer.value)
 
 const imageRatio = ref(1)
 const imagePos = ref({ x: 0, y: 0 })
@@ -128,17 +129,17 @@ watch(imageViewerInfo, (val) => {
 })
 
 function restoreImage() {
-  if (imageViewerInfo.value.size[0] <= 2000 && imageViewerInfo.value.size[1] <= 2000) {
-    imageSize.width = imageViewerInfo.value.size[0]
-    imageSize.height = imageViewerInfo.value.size[1]
+  if (imageViewer.value.info.size[0] <= 2000 && imageViewer.value.info.size[1] <= 2000) {
+    imageSize.width = imageViewer.value.info.size[0]
+    imageSize.height = imageViewer.value.info.size[1]
   }
   else {
-    if (imageViewerInfo.value.size[0] > imageViewerInfo.value.size[1]) {
+    if (imageViewer.value.info.size[0] > imageViewer.value.info.size[1]) {
       imageSize.width = 2000
-      imageSize.height = Math.round(imageViewerInfo.value.size[1] * 2000 / imageViewerInfo.value.size[0])
+      imageSize.height = Math.round(imageViewer.value.info.size[1] * 2000 / imageViewer.value.info.size[0])
     }
     else {
-      imageSize.width = Math.round(imageViewerInfo.value.size[0] * 2000 / imageViewerInfo.value.size[1])
+      imageSize.width = Math.round(imageViewer.value.info.size[0] * 2000 / imageViewer.value.info.size[1])
       imageSize.height = 2000
     }
   }
@@ -256,8 +257,8 @@ function handleZoom(newRatio: number, centerPostiion: { x: number; y: number }, 
 
 function downloadImage() {
   const link = document.createElement('a')
-  link.href = `${imagePath}${imageViewerInfo.value.id}_p${imageViewerInfo.value.part}.${imageViewerInfo.value.ext}`
-  link.download = `${imageViewerInfo.value.id}_p${imageViewerInfo.value.part}.${imageViewerInfo.value.ext}`
+  link.href = `${imagePath}${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
+  link.download = `${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
   link.click()
 }
 </script>

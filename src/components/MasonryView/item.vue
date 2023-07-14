@@ -8,7 +8,7 @@
     <div
       v-if="!infoAtBottom"
       class="absolute w-full h-full px-2 pt-10 text-sm text-white transition-all opacity-0 cursor-pointer bg-black/50 group-hover:opacity-100"
-      @click="$emit('openImage', imageIndex)"
+      @click="$emit('viewImage', imageIndex)"
     >
       <div class="absolute top-1.5 right-1.5 text-right text-xs">
         {{ `${imageData.id} p${imageData.part}` }} <br>{{ `${imageData.size[0]}×${imageData.size[1]} sl${imageData.sanity_level}` }}
@@ -68,7 +68,7 @@
         class="w-full cursor-pointer"
         :src="imageLoad ? `${imageThumbPath}${imageData.id}_p${imageData.part}.${imageThumbFormat}` : ''"
         @load="imageLoaded = true"
-        @click="$emit('openImage', imageIndex)"
+        @click="$emit('viewImage', imageIndex)"
       >
     </div>
 
@@ -128,7 +128,7 @@ defineProps<{
   tagTranslation: boolean
 }>()
 
-defineEmits(['openImage', 'openPixiv', 'openPixivUser', 'filterAuthor'])
+defineEmits(['openPixiv', 'openPixivUser', 'viewImage', 'filterAuthor'])
 
 let timer: NodeJS.Timeout | null = null
 

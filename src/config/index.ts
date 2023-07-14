@@ -1,6 +1,6 @@
 export const githubLink = 'https://github.com/orilights/PixivCollection'
-export const pixivArtworkLink = 'https://www.pixiv.net/artworks/'
-export const pixivUserLink = 'https://www.pixiv.net/users/'
+export const pixivArtworkLink = 'https://www.pixiv.net/artworks/{id}'
+export const pixivUserLink = 'https://www.pixiv.net/users/{id}'
 
 export const imagePath = './image/original/'
 export const imageLargePath = './image/large/'
@@ -13,8 +13,8 @@ export const masonryPreload = 3
 export const masonryMinColumns = 2
 export const masonryMaxColumns = 10
 export const virtualListRenderRange = {
-  up: 0.1,
-  down: 0.5,
+  up: 0.5,
+  down: 1,
 }
 
 export const shapes: { [shape: string]: string } = {
