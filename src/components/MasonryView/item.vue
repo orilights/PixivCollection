@@ -16,13 +16,13 @@
       <p class="flex whitespace-nowrap">
         标题：<span
           class="overflow-hidden transition-colors hover:text-blue-500 overflow-ellipsis"
-          @click.stop="$emit('openPixiv', imageIndex)"
+          @click.stop="openPixiv(imageData.id)"
         >{{ imageData.title }}</span>
       </p>
       <p class="flex items-center whitespace-nowrap">
         作者：<span
           class="overflow-hidden transition-colors hover:text-blue-500 overflow-ellipsis"
-          @click.stop="$emit('openPixivUser', imageIndex)"
+          @click.stop="openPixivUser(imageData.author.id)"
         >{{ imageData.author.name }}</span>
         <IconFunnelSolid
           class="inline-block w-3 h-3 ml-1 transition-colors hover:text-blue-500"
@@ -79,14 +79,14 @@
       >
         <p
           class="overflow-hidden font-bold transition-colors cursor-pointer hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
-          @click="$emit('openPixiv', imageIndex)"
+          @click="openPixiv(imageData.id)"
         >
           {{ imageData.title }}
         </p>
         <p class="flex items-center cursor-pointer">
           <span
             class="overflow-hidden text-sm transition-colors hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
-            @click="$emit('openPixivUser', imageIndex)"
+            @click="openPixivUser(imageData.author.id)"
           >{{ imageData.author.name }}</span>
           <IconFunnelSolid
             class="inline-block w-3 h-3 ml-1 transition-colors hover:text-blue-500"
@@ -116,6 +116,7 @@
 
 <script setup lang="ts">
 import { imageLoadDelay, imageThumbFormat, imageThumbPath } from '@/config'
+import { openPixiv, openPixivUser } from '@/utils'
 
 defineProps<{
   imageData: Image
@@ -128,7 +129,7 @@ defineProps<{
   tagTranslation: boolean
 }>()
 
-defineEmits(['openPixiv', 'openPixivUser', 'viewImage', 'filterAuthor'])
+defineEmits(['viewImage', 'filterAuthor'])
 
 let timer: NodeJS.Timeout | null = null
 
@@ -147,15 +148,3 @@ onUnmounted(() => {
     clearTimeout(timer)
 })
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

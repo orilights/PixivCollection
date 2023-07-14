@@ -23,8 +23,6 @@
         height: `${item.height + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
-      @open-pixiv="openPixiv"
-      @open-pixiv-user="openPixivUser"
       @view-image="store.viewImage"
       @filter-author="store.filterAuthor"
     />
@@ -33,13 +31,12 @@
 
 <script setup lang="ts">
 import { useElementBounding, useElementSize, useThrottle } from '@vueuse/core'
-import { imageInfoAreaHeight, masonryMinColumns, pixivArtworkLink, pixivUserLink, virtualListRenderRange } from '@/config'
+import { imageInfoAreaHeight, masonryMinColumns, virtualListRenderRange } from '@/config'
 import { useStore } from '@/store'
 
 const store = useStore()
 const { filterConfig, imagesFiltered, masonryConfig } = toRefs(store)
 const container = ref()
-
 const containerWidth = useThrottle(useElementSize(container).width, 300, true)
 const containerTop = useThrottle(useElementBounding(container).top, 30, true)
 
@@ -98,13 +95,5 @@ function getColToPlace(colsTop: number[]) {
 
 function getImageHeight(size: [number, number]) {
   return size[1] * (imageWidth.value / size[0])
-}
-
-function openPixiv(idx: number) {
-  window.open(pixivArtworkLink.replace('{id}', imagesFiltered.value[idx].id.toString()), '_blank')
-}
-
-function openPixivUser(idx: number) {
-  window.open(pixivUserLink.replace('{id}', imagesFiltered.value[idx].author.id.toString()), '_blank')
 }
 </script>

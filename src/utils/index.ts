@@ -1,3 +1,5 @@
+import { pixivArtworkLink, pixivUserLink } from '@/config'
+
 export class Setting {
   static set(settingKey: string, value: any) {
     localStorage.setItem(`setting-${settingKey}`, String(value))
@@ -19,4 +21,12 @@ export class Setting {
     if (settingType === 'bool')
       return value === 'true'
   }
+}
+
+export function openPixiv(pid: number) {
+  window.open(pixivArtworkLink.replace('{id}', pid.toString()), '_blank')
+}
+
+export function openPixivUser(uid: number) {
+  window.open(pixivUserLink.replace('{id}', uid.toString()), '_blank')
 }

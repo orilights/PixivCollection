@@ -16,7 +16,8 @@ export const useStore = defineStore('main', {
 
     imageViewer: {
       show: false,
-      info: <Image>{},
+      showInfo: true,
+      info: null as Image | null,
       prev: () => {},
       next: () => {},
     },

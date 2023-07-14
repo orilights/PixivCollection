@@ -16,6 +16,7 @@ declare module '@vue/runtime-core' {
     IconExpand: typeof import('./src/components/Icon/expand.vue')['default']
     IconFunnelSolid: typeof import('./src/components/Icon/funnelSolid.vue')['default']
     IconGithub: typeof import('./src/components/Icon/github.vue')['default']
+    IconInfo: typeof import('./src/components/Icon/info.vue')['default']
     IconLeft: typeof import('./src/components/Icon/left.vue')['default']
     IconLoading: typeof import('./src/components/Icon/loading.vue')['default']
     IconMenu: typeof import('./src/components/Icon/menu.vue')['default']

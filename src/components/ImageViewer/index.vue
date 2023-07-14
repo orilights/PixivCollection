@@ -6,27 +6,71 @@
 
       @wheel.prevent="handleWheelScroll"
     >
-      <div class="absolute z-50 top-2 left-2 flex flex-col gap-2">
-        <button
-          class="bg-black/40 hover:bg-gray-900/40 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
-          title="复位图片"
-          @click="restoreImage"
-        >
-          <IconTablet class="mx-auto w-7 h-7" />
-        </button>
-        <button
-          class="bg-black/40 hover:bg-gray-900/40 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
-          title="下载原图"
-          @click="downloadImage"
-        >
-          <IconDownload class="mx-auto w-7 h-7" />
-        </button>
-        <div
-          v-if="loadingImage"
-          class="bg-black/40 text-white w-[60px] h-[60px] rounded-full transition-colors flex items-center justify-center"
-        >
-          <img src="@/assets/loading.svg" class="w-7 h-7">
+      <div class="absolute z-50 top-2 left-2 flex gap-2">
+        <div class="flex flex-col gap-2">
+          <button
+            class="bg-black/40 hover:bg-gray-900/40 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
+            title="复位图片"
+            @click="restoreImage"
+          >
+            <IconTablet class="mx-auto w-7 h-7" />
+          </button>
+          <button
+            class="bg-black/40 hover:bg-gray-900/40 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
+            title="显示图片信息"
+            @click="imageViewer.showInfo = !imageViewer.showInfo"
+          >
+            <IconInfo class="mx-auto w-7 h-7" />
+          </button>
+          <button
+            class="bg-black/40 hover:bg-gray-900/40 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
+            title="下载原图"
+            @click="downloadImage"
+          >
+            <IconDownload class="mx-auto w-7 h-7" />
+          </button>
+          <div
+            v-if="loadingImage"
+            class="bg-black/40 text-white w-[60px] h-[60px] rounded-full transition-colors flex items-center justify-center"
+          >
+            <img src="@/assets/loading.svg" class="w-7 h-7">
+          </div>
         </div>
+        <Transition name="popup">
+          <div
+            v-if="imageViewer.info && imageViewer.showInfo"
+            class="bg-black/60 text-white fixed w-full sm:w-[300px] h-fit sm:relative left-0 bottom-0 rounded-t-[30px] sm:rounded-b-[30px] p-4 pb-10"
+          >
+            <p
+              class="overflow-hidden font-bold transition-colors cursor-pointer hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
+              @click="openPixiv(imageViewer.info.id)"
+            >
+              {{ imageViewer.info.title }}
+            </p>
+            <p
+              class="overflow-hidden text-sm transition-colors hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
+              @click="openPixivUser(imageViewer.info.author.id)"
+            >
+              {{ imageViewer.info.author.name }}
+            </p>
+            <p class="mt-2">
+              <span
+                v-for="tag, idx in imageViewer.info.tags"
+                v-show="!tag.name.includes('users入り') || filterConfig.tag.includeBookmark" :key="idx"
+                class="px-1 mx-0.5 my-0.5 float-left bg-black/10 rounded-sm text-xs"
+                :class="tag.name === 'R-18' ? '!bg-red-500/60' : ''"
+              >
+                {{ masonryConfig.showTagTranslation ? tag.translated_name || tag.name : tag.name }}
+              </span>
+            </p>
+            <p class="absolute bottom-4 left-4 text-xs text-gray-300">
+              {{ imageViewer.info.id }}
+              {{ `p${imageViewer.info.part}` }}
+              {{ `${imageViewer.info.size[0]}×${imageViewer.info.size[1]}` }}
+              {{ `sl${imageViewer.info.sanity_level}` }}
+            </p>
+          </div>
+        </Transition>
       </div>
       <button
         class="bg-black/40 hover:bg-gray-900/40 text-white absolute top-2 right-2 text-center w-[60px] h-[60px] rounded-full transition-colors z-50"
@@ -73,9 +117,10 @@
 import { useMouse } from '@vueuse/core'
 import { useStore } from '@/store'
 import { imageLargeFormat, imageLargePath, imagePath } from '@/config'
+import { openPixiv, openPixivUser } from '@/utils'
 
 const store = useStore()
-const { imageViewer } = toRefs(store)
+const { imageViewer, filterConfig, masonryConfig } = toRefs(store)
 const { show: imageViewerShow, info: imageViewerInfo } = toRefs(imageViewer.value)
 
 const imageRatio = ref(1)
@@ -107,6 +152,8 @@ watch(imageViewerShow, (val) => {
 })
 
 watch(imageViewerInfo, (val) => {
+  if (!val)
+    return
   if (imageLoader)
     imageLoader.remove()
   imageSrc.value = ''
@@ -129,6 +176,8 @@ watch(imageViewerInfo, (val) => {
 })
 
 function restoreImage() {
+  if (!imageViewer.value.info)
+    return
   if (imageViewer.value.info.size[0] <= 2000 && imageViewer.value.info.size[1] <= 2000) {
     imageSize.width = imageViewer.value.info.size[0]
     imageSize.height = imageViewer.value.info.size[1]
@@ -256,21 +305,11 @@ function handleZoom(newRatio: number, centerPostiion: { x: number; y: number }, 
 }
 
 function downloadImage() {
+  if (!imageViewer.value.info)
+    return
   const link = document.createElement('a')
   link.href = `${imagePath}${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
   link.download = `${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
   link.click()
 }
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity .3s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
