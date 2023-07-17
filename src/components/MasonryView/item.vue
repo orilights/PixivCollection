@@ -48,6 +48,7 @@
       {{ imageIndex + 1 }}
     </div>
     <div
+      class="relative"
       :style="{
         height: `${imageHeight}px`,
       }"

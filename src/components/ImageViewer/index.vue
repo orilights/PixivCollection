@@ -39,7 +39,7 @@
         <Transition name="popup">
           <div
             v-if="imageViewer.info && imageViewer.showInfo"
-            class="bg-black/60 text-white fixed w-full sm:w-[300px] h-fit sm:relative left-0 bottom-0 rounded-t-[30px] sm:rounded-b-[30px] p-4 pb-10"
+            class="bg-black/40 text-white fixed w-full sm:w-[300px] h-fit sm:relative left-0 bottom-0 rounded-t-[30px] sm:rounded-b-[30px] p-4 pb-10 backdrop-blur-sm"
           >
             <p
               class="overflow-hidden font-bold transition-colors cursor-pointer hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
@@ -48,7 +48,7 @@
               {{ imageViewer.info.title }}
             </p>
             <p
-              class="overflow-hidden text-sm transition-colors hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
+              class="overflow-hidden text-sm transition-colors cursor-pointer hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
               @click="openPixivUser(imageViewer.info.author.id)"
             >
               {{ imageViewer.info.author.name }}
@@ -57,7 +57,7 @@
               <span
                 v-for="tag, idx in imageViewer.info.tags"
                 v-show="!tag.name.includes('users入り') || filterConfig.tag.includeBookmark" :key="idx"
-                class="px-1 mx-0.5 my-0.5 float-left bg-black/10 rounded-sm text-xs"
+                class="px-1 mx-0.5 my-0.5 float-left bg-black/30 rounded-sm text-xs"
                 :class="tag.name === 'R-18' ? '!bg-red-500/60' : ''"
               >
                 {{ masonryConfig.showTagTranslation ? tag.translated_name || tag.name : tag.name }}
