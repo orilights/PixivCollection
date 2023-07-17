@@ -67,7 +67,7 @@
       <img
         class="w-full cursor-pointer"
         :src="imageLoad ? `${imageThumbPath}${imageData.id}_p${imageData.part}.${imageThumbFormat}` : ''"
-        @load="imageLoaded = true"
+        @load="handleImageLoaded"
         @click="$emit('viewImage', imageIndex)"
       >
     </div>
@@ -116,9 +116,10 @@
 
 <script setup lang="ts">
 import { imageLoadDelay, imageThumbFormat, imageThumbPath } from '@/config'
+import { useStore } from '@/store'
 import { openPixiv, openPixivUser } from '@/utils'
 
-defineProps<{
+const props = defineProps<{
   imageData: Image
   imageIndex: number
   imageHeight: number
@@ -133,10 +134,15 @@ defineEmits(['viewImage', 'filterAuthor'])
 
 let timer: NodeJS.Timeout | null = null
 
+const store = useStore()
 const imageLoad = ref(false)
 const imageLoaded = ref(false)
 
 onMounted(() => {
+  if (store.imagesLoaded.includes(`${props.imageData.id * 100 + props.imageData.part}`)) {
+    imageLoad.value = true
+    return
+  }
   timer = setTimeout(() => {
     imageLoad.value = true
     timer = null
@@ -147,4 +153,10 @@ onUnmounted(() => {
   if (timer)
     clearTimeout(timer)
 })
+
+function handleImageLoaded() {
+  imageLoaded.value = true
+  if (!store.imagesLoaded.includes(`${props.imageData.id * 100 + props.imageData.part}`))
+    store.imagesLoaded.push(`${props.imageData.id * 100 + props.imageData.part}`)
+}
 </script>

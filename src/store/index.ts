@@ -7,6 +7,7 @@ export const useStore = defineStore('main', {
     showNav: true,
 
     images: <Image[]>[],
+    imagesLoaded: [] as string[],
 
     urlParams: useUrlSearchParams(),
     fullscreen: useFullscreen(document.documentElement),

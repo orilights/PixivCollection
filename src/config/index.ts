@@ -13,8 +13,8 @@ export const masonryPreload = 3
 export const masonryMinColumns = 2
 export const masonryMaxColumns = 10
 export const virtualListRenderRange = {
-  up: 0.5,
-  down: 1,
+  up: 0.2,
+  down: 0.5,
 }
 
 export const shapes: { [shape: string]: string } = {
