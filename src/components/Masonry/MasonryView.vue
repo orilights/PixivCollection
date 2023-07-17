@@ -8,7 +8,7 @@
       height: `${containerHeight}px`,
     }"
   >
-    <MasonryViewItem
+    <MasonryItem
       v-for="item in imagesRenderList" :key="`${item.image.id}_${item.image.part}`"
       :image-data="item.image"
       :image-index="item.index"
@@ -20,7 +20,7 @@
       :shadow="masonryConfig.gap > 2"
       :style="{
         width: `${imageWidth}px`,
-        height: `${item.height + (masonryConfig.infoAtBottom ? imageInfoAreaHeight : 0)}px`,
+        height: `${item.height + (masonryConfig.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
       @view-image="store.viewImage"
@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { useElementBounding, useElementSize, useThrottle } from '@vueuse/core'
-import { imageInfoAreaHeight, masonryMinColumns, virtualListRenderRange } from '@/config'
+import { MASONRY_INFO_AREA_HEIGHT, MASONRY_MAX_COLUMNS, MASONRY_RENDER_RANGE } from '@/config'
 import { useStore } from '@/store'
 
 const store = useStore()
@@ -48,7 +48,7 @@ const col = computed(() => {
   const cWidth = containerWidth.value + masonryConfig.value.gap * 2
   if (cWidth >= masonryConfig.value.imageMinWidth * 2)
     return Math.floor(cWidth / masonryConfig.value.imageMinWidth)
-  return masonryMinColumns
+  return MASONRY_MAX_COLUMNS
 })
 
 const imageWidth = computed(() => (containerWidth.value - (col.value + 1) * masonryConfig.value.gap) / col.value)
@@ -68,7 +68,7 @@ const imagesPlaced = computed(() => {
       left: (imageWidth.value + masonryConfig.value.gap) * colPlace + masonryConfig.value.gap,
       height: getImageHeight(image.size),
     }
-    colsTop[colPlace] += item.height + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? imageInfoAreaHeight : 0)
+    colsTop[colPlace] += item.height + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)
     return Object.freeze(item)
   })
   containerHeight.value = Math.max(...colsTop)
@@ -80,12 +80,12 @@ const imagesRenderList = computed(() => {
   if (!masonryConfig.value.virtualListEnable)
     return imagesPlaced.value
 
-  const renderRange = virtualListRenderRange
+  const renderRange = MASONRY_RENDER_RANGE
   const renderRangeTop = -containerTop.value - renderRange.up * window.innerHeight
   const renderRangeBottom = -containerTop.value + window.innerHeight + renderRange.down * window.innerHeight
 
   return imagesPlaced.value.filter((item) => {
-    const itemHeight = item.height + (masonryConfig.value.infoAtBottom ? imageInfoAreaHeight : 0)
+    const itemHeight = item.height + (masonryConfig.value.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)
     return (item.top + itemHeight > renderRangeTop && item.top < renderRangeBottom)
   })
 })

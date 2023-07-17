@@ -79,7 +79,7 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
 import { useStore } from '@/store'
-import { githubLink } from '@/config'
+import { LINK_GITHUB, NAVBAR_HIDE_DISTANCE } from '@/config'
 
 const store = useStore()
 const { preferColorScheme, showSidebar, showNav, imageViewer, isFullscreen, filterConfig } = toRefs(store)
@@ -97,7 +97,7 @@ onMounted(() => {
   }
   window.addEventListener('scroll', () => {
     const newY = document.documentElement.scrollTop
-    if (newY > oldY && newY > 200)
+    if (newY > oldY && newY > NAVBAR_HIDE_DISTANCE)
       showNav.value = false
     else if (newY < oldY)
       showNav.value = true
@@ -110,7 +110,7 @@ function navToTop() {
 }
 
 function openGithub() {
-  window.open(githubLink, '_blank')
+  window.open(LINK_GITHUB, '_blank')
 }
 
 function handleSearchInput(e: Event) {

@@ -38,7 +38,7 @@
             <option value="-1">
               自动
             </option>
-            <option v-for="i in masonryMaxColumns" :key="i" :value="i">
+            <option v-for="i in MASONRY_MIN_COLUMNS" :key="i" :value="i">
               {{ i }}
             </option>
           </select>
@@ -47,7 +47,7 @@
             v-model.number="masonryConfig.gap"
             class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
           >
-            <option v-for="i in imageGaps" :key="i" :value="i">
+            <option v-for="i in MASONRY_IMAGE_GAP_LIST" :key="i" :value="i">
               {{ `${i}px` }}
             </option>
           </select>
@@ -61,7 +61,7 @@
             v-model.number="masonryConfig.imageMinWidth"
             class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
           >
-            <option v-for="i in imageSizes" :key="i" :value="i">
+            <option v-for="i in MASONRY_IMAGE_SIZE_LIST" :key="i" :value="i">
               {{ i }}px
             </option>
           </select>
@@ -167,14 +167,14 @@
         形状
         <br>
         <button
-          v-for="shape in Object.keys(shapes)" :key="shape"
+          v-for="shape in Object.keys(FILTER_SHAPES)" :key="shape"
           class="bg-green-300/20 rounded-sm m-0.5 px-0.5 text-sm"
           :class="{
             '!bg-gray-400': shape === filterConfig.shape.value,
           }"
           @click="handleClickShape(shape)"
         >
-          {{ shapes[shape] }}
+          {{ FILTER_SHAPES[shape] }}
         </button>
       </SidebarBlock>
       <SidebarBlock>
@@ -214,9 +214,9 @@
       </SidebarBlock>
       <SidebarBlock>
         作者
-        <ButtonCommon v-if="authors.length > 20" @click="showAuthor = !showAuthor">
+        <CButton v-if="authors.length > 20" @click="showAuthor = !showAuthor">
           {{ showAuthor ? '收起' : '展开' }}
-        </ButtonCommon>
+        </CButton>
         <div
           :class="{
             mask: !showAuthor && authors.length > 20,
@@ -236,9 +236,9 @@
       </SidebarBlock>
       <SidebarBlock>
         标签
-        <ButtonCommon v-if="tags.length > 10" @click="showTags = !showTags">
+        <CButton v-if="tags.length > 10" @click="showTags = !showTags">
           {{ showTags ? '收起' : '展开' }}
-        </ButtonCommon>
+        </CButton>
         <div
           :class="{
             mask: !showTags && tags.length > 10,
@@ -262,12 +262,12 @@
           启用虚拟列表<Switch v-model="masonryConfig.virtualListEnable" class="ml-3" />
         </div>
         <div class="mt-1">
-          <ButtonCommon @click="clearLocalSettings">
+          <CButton @click="clearLocalSettings">
             还原默认设置
-          </ButtonCommon>
-          <ButtonCommon @click="loadDataFromFile">
+          </CButton>
+          <CButton @click="loadDataFromFile">
             从文件加载元数据
-          </ButtonCommon>
+          </CButton>
         </div>
       </SidebarBlock>
     </div>
@@ -275,7 +275,7 @@
 </template>
 
 <script setup lang="ts">
-import { githubLink, imageGaps, imageSizes, masonryMaxColumns, shapes } from '@/config'
+import { FILTER_SHAPES, LINK_GITHUB, MASONRY_IMAGE_GAP_LIST, MASONRY_IMAGE_SIZE_LIST, MASONRY_MIN_COLUMNS } from '@/config'
 import { useStore } from '@/store'
 
 const store = useStore()
@@ -407,7 +407,7 @@ function handleClickShape(shape: string) {
 }
 
 function openGithub() {
-  window.open(githubLink, '_blank')
+  window.open(LINK_GITHUB, '_blank')
 }
 
 function loadDataFromFile() {

@@ -26,7 +26,6 @@ export default defineConfig({
     }),
     Components({
       dts: true,
-      directoryAsNamespace: true,
     }),
   ],
 })

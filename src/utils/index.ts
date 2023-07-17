@@ -1,4 +1,4 @@
-import { pixivArtworkLink, pixivUserLink } from '@/config'
+import { LINK_PIXIV_ARTWORK, LINK_PIXIV_USER } from '@/config'
 
 export class Setting {
   static set(settingKey: string, value: any) {
@@ -24,9 +24,9 @@ export class Setting {
 }
 
 export function openPixiv(pid: number) {
-  window.open(pixivArtworkLink.replace('{id}', pid.toString()), '_blank')
+  window.open(LINK_PIXIV_ARTWORK.replace('{id}', pid.toString()), '_blank')
 }
 
 export function openPixivUser(uid: number) {
-  window.open(pixivUserLink.replace('{id}', uid.toString()), '_blank')
+  window.open(LINK_PIXIV_USER.replace('{id}', uid.toString()), '_blank')
 }

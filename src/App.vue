@@ -6,21 +6,20 @@
   >
     <div class="dark:bg-[#1a1a1a] dark:text-white transition-colors min-h-screen">
       <Sidebar />
-      <div
-        v-show="showSidebar"
-        class="fixed top-0 left-0 z-20 hidden w-screen h-screen bg-black/40 sm:block"
-        @click="showSidebar = false"
-      />
+      <SidebarMask />
       <Navbar />
-      <div v-show="!imagesFiltered.length" class="px-6 py-4 mx-auto mt-4 text-lg w-fit bg-black/20 rounded-xl">
-        <IconLoading v-if="loading" class="w-[60px] mx-auto pb-2" :dark="colorScheme !== 'dark'" />
-        <div class="text-center">
-          {{ loading ? '数据加载中' : '无数据' }}
-        </div>
-        <div v-if="loading" class="text-center">
-          {{ byteConv(receivedLength) }} <span v-if="contentLength"> / {{ byteConv(contentLength) }}</span>
-        </div>
-      </div>
+      <Tip v-show="!imagesFiltered.length">
+        <template v-if="loading">
+          <IconLoading class="w-[60px] mx-auto pb-2" :dark="colorScheme === 'light'" />
+          <div class="text-center">
+            数据加载中<br>
+            {{ byteConv(receivedLength) }} <span v-if="contentLength"> / {{ byteConv(contentLength) }}</span>
+          </div>
+        </template>
+        <template v-else>
+          无数据
+        </template>
+      </Tip>
       <MasonryView />
       <ImageViewer />
     </div>
@@ -29,6 +28,7 @@
 
 <script setup lang="ts">
 import { Setting } from './utils'
+import { DATA_FILE } from './config'
 import { useStore } from '@/store'
 import { byteConv } from '@/utils/file'
 
@@ -37,7 +37,6 @@ const store = useStore()
 const {
   preferColorScheme,
   colorScheme,
-  showSidebar,
   imagesFiltered,
   masonryConfig,
   filterConfig,
@@ -65,7 +64,7 @@ onMounted(async () => {
   settingLoaded.value = true
 
   try {
-    const response = await fetch('./images.json')
+    const response = await fetch(DATA_FILE)
     const reader = (response.body as ReadableStream<Uint8Array>).getReader()
     contentLength.value = +(response.headers.get('Content-Length') || 0)
     const chunks = []

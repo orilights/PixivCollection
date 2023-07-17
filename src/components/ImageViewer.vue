@@ -2,7 +2,7 @@
   <Transition name="fade">
     <div
       v-show="imageViewer.show"
-      class="fixed top-0 left-0 w-full h-screen bg-black/30"
+      class="fixed top-0 left-0 w-full h-screen bg-black/30 backdrop-blur-sm"
 
       @wheel.prevent="handleWheelScroll"
     >
@@ -116,7 +116,7 @@
 <script setup lang="ts">
 import { useMouse } from '@vueuse/core'
 import { useStore } from '@/store'
-import { imageLargeFormat, imageLargePath, imagePath } from '@/config'
+import { IMAGE_FORMAT_LARGE, IMAGE_PATH_LARGE, IMAGE_PATH_ORIGINAL } from '@/config'
 import { openPixiv, openPixivUser } from '@/utils'
 
 const store = useStore()
@@ -166,7 +166,7 @@ watch(imageViewerInfo, (val) => {
     if (`${val.id}_${val.part}` === loadingImageId.value)
       loadingImage.value = false
   })
-  imageLoader.src = `${imageLargePath}${val.id}_p${val.part}.${imageLargeFormat}`
+  imageLoader.src = `${IMAGE_PATH_LARGE}${val.id}_p${val.part}.${IMAGE_FORMAT_LARGE}`
 
   nextTick(() => {
     imageSrc.value = imageLoader.src
@@ -308,7 +308,7 @@ function downloadImage() {
   if (!imageViewer.value.info)
     return
   const link = document.createElement('a')
-  link.href = `${imagePath}${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
+  link.href = `${IMAGE_PATH_ORIGINAL}${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
   link.download = `${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
   link.click()
 }

@@ -1,23 +1,27 @@
-export const githubLink = 'https://github.com/orilights/PixivCollection'
-export const pixivArtworkLink = 'https://www.pixiv.net/artworks/{id}'
-export const pixivUserLink = 'https://www.pixiv.net/users/{id}'
+export const LINK_GITHUB = 'https://github.com/orilights/PixivCollection'
+export const LINK_PIXIV_ARTWORK = 'https://www.pixiv.net/artworks/{id}'
+export const LINK_PIXIV_USER = 'https://www.pixiv.net/users/{id}'
 
-export const imagePath = './image/original/'
-export const imageLargePath = './image/large/'
-export const imageLargeFormat = 'webp'
-export const imageThumbPath = './image/thumbnail/'
-export const imageThumbFormat = 'webp'
-export const imageLoadDelay = 300
+export const DATA_FILE = './images.json'
 
-export const masonryPreload = 3
-export const masonryMinColumns = 2
-export const masonryMaxColumns = 10
-export const virtualListRenderRange = {
-  up: 0,
+export const IMAGE_PATH_ORIGINAL = './image/original/'
+export const IMAGE_PATH_LARGE = './image/large/'
+export const IMAGE_PATH_THUMBNAIL = './image/thumbnail/'
+export const IMAGE_FORMAT_LARGE = 'webp'
+export const IMAGE_FORMAT_THUMBNAIL = 'webp'
+
+export const MASONRY_MAX_COLUMNS = 2
+export const MASONRY_MIN_COLUMNS = 10
+export const MASONRY_RENDER_RANGE = {
+  up: 0.2,
   down: 0.5,
 }
+export const MASONRY_LOAD_DELAY = 300
+export const MASONRY_INFO_AREA_HEIGHT = 120
+export const MASONRY_IMAGE_GAP_LIST = [0, 10, 20, 30]
+export const MASONRY_IMAGE_SIZE_LIST = [200, 240, 280, 320, 360, 400]
 
-export const shapes: { [shape: string]: string } = {
+export const FILTER_SHAPES: { [shape: string]: string } = {
   'horizontal': '横向',
   'vertical': '竖向',
   'square': '方形',
@@ -29,6 +33,4 @@ export const shapes: { [shape: string]: string } = {
   'ratio-9:21': '9:21',
 }
 
-export const imageInfoAreaHeight = 120
-export const imageGaps = [0, 10, 20, 30]
-export const imageSizes = [200, 240, 280, 320, 360, 400]
+export const NAVBAR_HIDE_DISTANCE = 200
