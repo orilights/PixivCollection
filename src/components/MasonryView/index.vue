@@ -20,7 +20,7 @@
       :shadow="masonryConfig.gap > 2"
       :style="{
         width: `${imageWidth}px`,
-        height: `${item.height + (masonryConfig.infoAtBottom ? 120 : 0)}px`,
+        height: `${item.height + (masonryConfig.infoAtBottom ? imageInfoAreaHeight : 0)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
       @view-image="store.viewImage"
@@ -85,7 +85,8 @@ const imagesRenderList = computed(() => {
   const renderRangeBottom = -containerTop.value + window.innerHeight + renderRange.down * window.innerHeight
 
   return imagesPlaced.value.filter((item) => {
-    return (item.top + item.height > renderRangeTop && item.top < renderRangeBottom)
+    const itemHeight = item.height + (masonryConfig.value.infoAtBottom ? imageInfoAreaHeight : 0)
+    return (item.top + itemHeight > renderRangeTop && item.top < renderRangeBottom)
   })
 })
 

@@ -40,19 +40,7 @@
         </span>
       </p>
     </div>
-    <Transition name="fade">
-      <div
-        v-show="!imageLoaded"
-        class="absolute flex items-center justify-center w-full"
-        :class="{
-          'h-full': !infoAtBottom,
-          'h-[calc(100%-120px)]': infoAtBottom,
-        }"
-        :style="{
-          backgroundColor: imageData.dominant_color,
-        }"
-      />
-    </Transition>
+
     <div
       v-if="showNo"
       class="absolute top-0 bg-black/60 text-white px-2 rounded-br-[12px]"
@@ -64,6 +52,15 @@
         height: `${imageHeight}px`,
       }"
     >
+      <Transition name="fade">
+        <div
+          v-show="!imageLoaded"
+          class="absolute w-full h-full"
+          :style="{
+            backgroundColor: imageData.dominant_color,
+          }"
+        />
+      </Transition>
       <img
         class="w-full cursor-pointer"
         :src="imageLoad ? `${imageThumbPath}${imageData.id}_p${imageData.part}.${imageThumbFormat}` : ''"
