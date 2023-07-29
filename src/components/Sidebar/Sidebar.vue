@@ -38,7 +38,7 @@
             <option value="-1">
               自动
             </option>
-            <option v-for="i in MASONRY_MIN_COLUMNS" :key="i" :value="i">
+            <option v-for="i in MASONRY_MAX_COLUMNS" :key="i" :value="i">
               {{ i }}
             </option>
           </select>
@@ -275,7 +275,7 @@
 </template>
 
 <script setup lang="ts">
-import { FILTER_SHAPES, LINK_GITHUB, MASONRY_IMAGE_GAP_LIST, MASONRY_IMAGE_SIZE_LIST, MASONRY_MIN_COLUMNS } from '@/config'
+import { FILTER_SHAPES, LINK_GITHUB, MASONRY_IMAGE_GAP_LIST, MASONRY_IMAGE_SIZE_LIST, MASONRY_MAX_COLUMNS } from '@/config'
 import { useStore } from '@/store'
 
 const store = useStore()

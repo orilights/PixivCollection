@@ -10,8 +10,8 @@ export const IMAGE_PATH_THUMBNAIL = './image/thumbnail/'
 export const IMAGE_FORMAT_LARGE = 'webp'
 export const IMAGE_FORMAT_THUMBNAIL = 'webp'
 
-export const MASONRY_MAX_COLUMNS = 2
-export const MASONRY_MIN_COLUMNS = 10
+export const MASONRY_MIN_COLUMNS = 2
+export const MASONRY_MAX_COLUMNS = 10
 export const MASONRY_RENDER_RANGE = {
   up: 0.2,
   down: 0.5,

@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { useElementBounding, useElementSize, useThrottle } from '@vueuse/core'
-import { MASONRY_INFO_AREA_HEIGHT, MASONRY_MAX_COLUMNS, MASONRY_RENDER_RANGE } from '@/config'
+import { MASONRY_INFO_AREA_HEIGHT, MASONRY_MIN_COLUMNS, MASONRY_RENDER_RANGE } from '@/config'
 import { useStore } from '@/store'
 
 const store = useStore()
@@ -48,7 +48,7 @@ const col = computed(() => {
   const cWidth = containerWidth.value + masonryConfig.value.gap * 2
   if (cWidth >= masonryConfig.value.imageMinWidth * 2)
     return Math.floor(cWidth / masonryConfig.value.imageMinWidth)
-  return MASONRY_MAX_COLUMNS
+  return MASONRY_MIN_COLUMNS
 })
 
 const imageWidth = computed(() => (containerWidth.value - (col.value + 1) * masonryConfig.value.gap) / col.value)
