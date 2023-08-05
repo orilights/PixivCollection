@@ -5,9 +5,9 @@ export const LINK_PIXIV_USER = 'https://www.pixiv.net/users/{id}'
 export const DATA_FILE = './images.json'
 
 export const IMAGE_PATH_ORIGINAL = './image/original/'
-export const IMAGE_PATH_LARGE = './image/large/'
+export const IMAGE_PATH_PREVIEW = './image/preview/'
 export const IMAGE_PATH_THUMBNAIL = './image/thumbnail/'
-export const IMAGE_FORMAT_LARGE = 'webp'
+export const IMAGE_FORMAT_PREVIEW = 'webp'
 export const IMAGE_FORMAT_THUMBNAIL = 'webp'
 
 export const MASONRY_MIN_COLUMNS = 2

@@ -116,7 +116,7 @@
 <script setup lang="ts">
 import { useMouse } from '@vueuse/core'
 import { useStore } from '@/store'
-import { IMAGE_FORMAT_LARGE, IMAGE_PATH_LARGE, IMAGE_PATH_ORIGINAL } from '@/config'
+import { IMAGE_FORMAT_PREVIEW, IMAGE_PATH_PREVIEW, IMAGE_PATH_ORIGINAL } from '@/config'
 import { openPixiv, openPixivUser } from '@/utils'
 
 const store = useStore()
@@ -166,7 +166,7 @@ watch(imageViewerInfo, (val) => {
     if (`${val.id}_${val.part}` === loadingImageId.value)
       loadingImage.value = false
   })
-  imageLoader.src = `${IMAGE_PATH_LARGE}${val.id}_p${val.part}.${IMAGE_FORMAT_LARGE}`
+  imageLoader.src = `${IMAGE_PATH_PREVIEW}${val.id}_p${val.part}.${IMAGE_FORMAT_PREVIEW}`
 
   nextTick(() => {
     imageSrc.value = imageLoader.src
