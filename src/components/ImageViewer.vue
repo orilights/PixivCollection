@@ -116,7 +116,7 @@
 <script setup lang="ts">
 import { useMouse } from '@vueuse/core'
 import { useStore } from '@/store'
-import { IMAGE_FORMAT_PREVIEW, IMAGE_PATH_PREVIEW, IMAGE_PATH_ORIGINAL } from '@/config'
+import { IMAGE_FORMAT_PREVIEW, IMAGE_PATH_ORIGINAL, IMAGE_PATH_PREVIEW } from '@/config'
 import { openPixiv, openPixivUser } from '@/utils'
 
 const store = useStore()
@@ -163,8 +163,10 @@ watch(imageViewerInfo, (val) => {
 
   imageLoader = new Image()
   imageLoader.addEventListener('load', () => {
-    if (`${val.id}_${val.part}` === loadingImageId.value)
+    if (`${val.id}_${val.part}` === loadingImageId.value) {
       loadingImage.value = false
+      preloadNearbyImage(imageViewer.value.index)
+    }
   })
   imageLoader.src = `${IMAGE_PATH_PREVIEW}${val.id}_p${val.part}.${IMAGE_FORMAT_PREVIEW}`
 
@@ -174,6 +176,19 @@ watch(imageViewerInfo, (val) => {
 
   restoreImage()
 })
+
+function preloadNearbyImage(index: number) {
+  if (index - 1 >= 0) {
+    const imageUrl = `${IMAGE_PATH_PREVIEW}${store.imagesFiltered[index - 1].id}_p${store.imagesFiltered[index - 1].part}.${IMAGE_FORMAT_PREVIEW}`
+    const imageLoader = new Image()
+    imageLoader.src = imageUrl
+  }
+  if (index + 1 < store.imagesFiltered.length) {
+    const imageUrl = `${IMAGE_PATH_PREVIEW}${store.imagesFiltered[index + 1].id}_p${store.imagesFiltered[index + 1].part}.${IMAGE_FORMAT_PREVIEW}`
+    const imageLoader = new Image()
+    imageLoader.src = imageUrl
+  }
+}
 
 function restoreImage() {
   if (!imageViewer.value.info)

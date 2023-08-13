@@ -21,6 +21,7 @@ export const useStore = defineStore('main', {
       info: null as Image | null,
       prev: () => {},
       next: () => {},
+      index: -1,
     },
     masonryConfig: {
       col: -1,
@@ -181,11 +182,12 @@ export const useStore = defineStore('main', {
     },
   },
   actions: {
-    openImageViewer(image: Image, prev: () => void, next: () => void): void {
+    openImageViewer(image: Image, prev: () => void, next: () => void, index: number): void {
       this.imageViewer.show = true
       this.imageViewer.info = image
       this.imageViewer.prev = prev
       this.imageViewer.next = next
+      this.imageViewer.index = index
     },
     closeImageViewer(): void {
       this.imageViewer.show = false
@@ -261,7 +263,9 @@ export const useStore = defineStore('main', {
         },
         () => {
           this.viewImage(idx + 1)
-        })
+        },
+        idx,
+      )
     },
   },
 })
