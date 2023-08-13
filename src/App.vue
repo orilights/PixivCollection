@@ -27,10 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import { Setting } from './utils'
+import { Setting, SettingType } from './utils/setting'
 import { DATA_FILE } from './config'
 import { useStore } from '@/store'
 import { byteConv } from '@/utils/file'
+
+const setting = new Setting('PXCT')
 
 const store = useStore()
 
@@ -42,26 +44,14 @@ const {
   filterConfig,
 } = toRefs(store)
 
-const settingLoaded = ref(false)
 const loading = ref(true)
 const receivedLength = ref(0)
 const contentLength = ref(0)
 
-watchEffect(() => {
-  if (!settingLoaded.value)
-    return
-
-  Setting.set('preferColorScheme', preferColorScheme.value)
-  Setting.set('masonryConfig', JSON.stringify(masonryConfig.value))
-  Setting.set('restrictConfig', JSON.stringify(filterConfig.value.restrict))
-})
-
 onMounted(async () => {
-  preferColorScheme.value = Setting.get('preferColorScheme', 'str', 'auto')
-  masonryConfig.value = Setting.get('masonryConfig', 'json', masonryConfig.value)
-  filterConfig.value.restrict = Setting.get('restrictConfig', 'json', filterConfig.value.restrict)
-
-  settingLoaded.value = true
+  setting.register('preferColorScheme', preferColorScheme)
+  setting.register('masonryConfig', masonryConfig, SettingType.Json)
+  setting.register('restrictConfig', toRef(filterConfig.value, 'restrict'), SettingType.Json)
 
   try {
     const response = await fetch(DATA_FILE)
