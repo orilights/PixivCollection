@@ -2,7 +2,7 @@
   <Transition name="fade">
     <div
       v-show="imageViewer.show"
-      class="fixed top-0 left-0 w-full h-screen bg-black/30 backdrop-blur-sm"
+      class="fixed top-0 left-0 w-full h-screen bg-black/50 backdrop-blur-lg"
 
       @wheel.prevent="handleWheelScroll"
     >
@@ -39,7 +39,7 @@
         <Transition name="popup">
           <div
             v-if="imageViewer.info && imageViewer.showInfo"
-            class="bg-black/40 text-white fixed w-full sm:w-[300px] h-fit sm:relative left-0 bottom-0 rounded-t-[30px] sm:rounded-b-[30px] p-4 pb-10 backdrop-blur-sm"
+            class="bg-black/40 text-white fixed w-full sm:w-[300px] h-fit sm:relative left-0 bottom-0 rounded-t-[30px] sm:rounded-b-[30px] p-4 pb-10 backdrop-blur-md"
           >
             <p
               class="overflow-hidden font-bold transition-colors cursor-pointer hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
