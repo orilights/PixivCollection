@@ -8,6 +8,16 @@
   opacity: 0;
 }
 
+.fade-slow-enter-active,
+.fade-slow-leave-active {
+  transition: opacity 0.6s cubic-bezier(0.5, 1, 0.89, 1);
+}
+
+.fade-slow-enter-from,
+.fade-slow-leave-to {
+  opacity: 0;
+}
+
 .popup-enter-active,
 .popup-leave-active {
   transition: all .3s;

@@ -11,7 +11,7 @@
         height: `${imageHeight}px`,
       }"
     >
-      <Transition name="fade">
+      <Transition name="fade-slow">
         <div
           v-show="!imageLoaded"
           class="absolute w-full h-full"
