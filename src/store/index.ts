@@ -36,7 +36,6 @@ export const useStore = defineStore('main', {
     filterConfig: {
       search: {
         enable: false,
-        indexed: false,
         value: '',
       },
       year: {
@@ -223,8 +222,8 @@ export const useStore = defineStore('main', {
         this.updateSeatchValue('')
       }
       else {
-        if (!this.filterConfig.search.indexed) {
-          this.images.forEach((image) => {
+        this.images.forEach((image) => {
+          if (image.searchStr === undefined) {
             image.searchStr = (
               image.id
               + image.title
@@ -237,9 +236,8 @@ export const useStore = defineStore('main', {
                     : tag.name,
                 ).join()
             ).toLowerCase()
-          })
-          this.filterConfig.search.indexed = true
-        }
+          }
+        })
       }
       this.filterConfig.search.enable = !this.filterConfig.search.enable
     },
