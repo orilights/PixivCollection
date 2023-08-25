@@ -13,7 +13,7 @@
           <IconLoading class="w-[60px] mx-auto pb-2" :dark="colorScheme === 'light'" />
           <div class="text-center">
             数据加载中<br>
-            {{ byteConv(receivedLength) }} <span v-if="contentLength"> / {{ byteConv(contentLength) }}</span>
+            {{ formatBytes(receivedLength) }} <span v-if="contentLength"> / {{ formatBytes(contentLength) }}</span>
           </div>
         </template>
         <template v-else>
@@ -30,7 +30,7 @@
 import { Setting, SettingType } from './utils/setting'
 import { DATA_FILE } from './config'
 import { useStore } from '@/store'
-import { byteConv } from '@/utils/file'
+import { formatBytes } from '@/utils'
 
 const setting = new Setting('PXCT')
 

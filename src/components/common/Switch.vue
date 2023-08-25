@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 defineProps<{
-  modelValue: Boolean
+  modelValue: boolean
 }>()
 defineEmits(['update:modelValue'])
 </script>

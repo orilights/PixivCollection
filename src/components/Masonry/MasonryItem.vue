@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { MASONRY_LOAD_DELAY, IMAGE_FORMAT_THUMBNAIL, IMAGE_PATH_THUMBNAIL } from '@/config'
+import { IMAGE_FORMAT_THUMBNAIL, IMAGE_PATH_THUMBNAIL, MASONRY_LOAD_DELAY } from '@/config'
 import { useStore } from '@/store'
 import { openPixiv, openPixivUser } from '@/utils'
 

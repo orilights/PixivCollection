@@ -57,7 +57,7 @@ const imagesPlaced = computed(() => {
   if (!containerWidth.value)
     return []
 
-  const colsTop = new Array(col.value).fill(masonryConfig.value.gap)
+  const colsTop = Array.from<number>({ length: col.value }).fill(masonryConfig.value.gap)
   const result = imagesFiltered.value.map((image, idx) => {
     const colPlace = getColToPlace(colsTop)
     const item = {
