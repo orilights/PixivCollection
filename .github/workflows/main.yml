@@ -18,10 +18,10 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16.x
-        cache: 'yarn'
+        cache: 'pnpm'
     
     - name: Build
-      run: yarn && yarn build
+      run: pnpm i && pnpm build
         
     - name: Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4
