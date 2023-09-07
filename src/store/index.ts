@@ -1,4 +1,4 @@
-import { useFullscreen, usePreferredColorScheme, useUrlSearchParams } from '@vueuse/core'
+import { useFullscreen, usePreferredColorScheme } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
 export const useStore = defineStore('main', {
@@ -9,7 +9,6 @@ export const useStore = defineStore('main', {
     images: <Image[]>[],
     imagesLoaded: [] as string[],
 
-    urlParams: useUrlSearchParams(),
     fullscreen: useFullscreen(document.documentElement),
 
     preferColorScheme: 'auto' as 'auto' | 'light' | 'dark',
@@ -193,10 +192,6 @@ export const useStore = defineStore('main', {
     },
     updateSeatchValue(value: string): void {
       this.filterConfig.search.value = value
-      if (value.trim() === '')
-        this.urlParams.search = undefined
-      else
-        this.urlParams.search = value
     },
     toggleColorScheme(): void {
       switch (this.preferColorScheme) {

@@ -91,10 +91,6 @@ const updateSearchStr = useDebounceFn((value) => {
 let oldY = 0
 
 onMounted(() => {
-  if (store.urlParams.search) {
-    store.updateSeatchValue(store.urlParams.search as string)
-    store.toggleSearch()
-  }
   window.addEventListener('scroll', () => {
     const newY = document.documentElement.scrollTop
     if (newY > oldY && newY > NAVBAR_HIDE_DISTANCE)
