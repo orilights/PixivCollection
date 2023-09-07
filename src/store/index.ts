@@ -245,6 +245,9 @@ export const useStore = defineStore('main', {
       }
       this.filterConfig.author.id = authorId
       this.filterConfig.author.enable = true
+
+      if (this.filterConfig.search.enable)
+        this.toggleSearch()
     },
     viewImage(idx: number): void {
       if (idx < 0 || idx >= this.imagesFiltered.length)
