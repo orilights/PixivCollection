@@ -27,12 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import { Setting, SettingType } from './utils/setting'
+import { SettingType, Settings } from '@orilight/vue-settings'
 import { DATA_FILE } from './config'
 import { useStore } from '@/store'
 import { formatBytes } from '@/utils'
 
-const setting = new Setting('PXCT')
+const setting = new Settings('PXCT')
 
 const store = useStore()
 
