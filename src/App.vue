@@ -32,8 +32,6 @@ import { DATA_FILE } from './config'
 import { useStore } from '@/store'
 import { formatBytes } from '@/utils'
 
-const setting = new Settings('PXCT')
-
 const store = useStore()
 
 const {
@@ -49,9 +47,9 @@ const receivedLength = ref(0)
 const contentLength = ref(0)
 
 onMounted(async () => {
-  setting.register('preferColorScheme', preferColorScheme)
-  setting.register('masonryConfig', masonryConfig, SettingType.Json)
-  setting.register('restrictConfig', toRef(filterConfig.value, 'restrict'), SettingType.Json)
+  store.settings.register('preferColorScheme', preferColorScheme)
+  store.settings.register('masonryConfig', masonryConfig, SettingType.Json)
+  store.settings.register('restrictConfig', toRef(filterConfig.value, 'restrict'), SettingType.Json)
 
   try {
     const response = await fetch(DATA_FILE)

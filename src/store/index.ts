@@ -1,3 +1,4 @@
+import { Settings } from '@orilight/vue-settings'
 import { useFullscreen, usePreferredColorScheme } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
@@ -13,6 +14,8 @@ export const useStore = defineStore('main', {
 
     preferColorScheme: 'auto' as 'auto' | 'light' | 'dark',
     browserColorScheme: usePreferredColorScheme(),
+
+    settings: new Settings('PXCT'),
 
     imageViewer: {
       show: false,

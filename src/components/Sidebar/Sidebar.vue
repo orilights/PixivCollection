@@ -429,7 +429,7 @@ function loadDataFromFile() {
 }
 
 function clearLocalSettings() {
-  localStorage.clear()
+  store.settings.clear()
   location.reload()
 }
 </script>
