@@ -16,6 +16,8 @@ declare global {
     sanity_level: number
     x_restrict: number
     dominant_color: string
+    bookmark: number
+    view: number
     searchStr?: string
   }
   interface Tag {

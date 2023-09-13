@@ -33,4 +33,6 @@ export const FILTER_SHAPES: { [shape: string]: string } = {
   'ratio-9:21': '9:21',
 }
 
+export const FILTER_BOOKMARKS = [100000, 50000, 20000, 10000, 5000, 1000]
+
 export const NAVBAR_HIDE_DISTANCE = 200

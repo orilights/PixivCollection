@@ -113,6 +113,13 @@
         >
           {{ `标签：${filterConfig.tag.name}` }}
         </button>
+        <button
+          v-if="filterConfig.bookmark.enable"
+          class="bg-orange-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          @click="handleClickBookmark(filterConfig.bookmark.min)"
+        >
+          {{ `收藏数：${filterConfig.bookmark.min}` }}
+        </button>
       </SidebarBlock>
       <SidebarBlock>
         最高健全度:
@@ -256,6 +263,29 @@
           </button>
         </div>
       </SidebarBlock>
+      <SidebarBlock>
+        收藏数
+        <br>
+        <button
+          v-for="bookmark in FILTER_BOOKMARKS" :key="bookmark"
+          class="bg-orange-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          :class="{
+            '!bg-gray-400': bookmark === filterConfig.bookmark.min,
+          }"
+          @click="handleClickBookmark(bookmark)"
+        >
+          {{ bookmark }}
+        </button>
+        <button
+          class="bg-orange-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          :class="{
+            '!bg-gray-400': -1 === filterConfig.bookmark.min,
+          }"
+          @click="handleClickBookmark(-1)"
+        >
+          未知
+        </button>
+      </SidebarBlock>
       <SidebarHead>高级选项</SidebarHead>
       <SidebarBlock>
         <div class="flex items-center1">
@@ -275,7 +305,7 @@
 </template>
 
 <script setup lang="ts">
-import { FILTER_SHAPES, LINK_GITHUB, MASONRY_IMAGE_GAP_LIST, MASONRY_IMAGE_SIZE_LIST, MASONRY_MAX_COLUMNS } from '@/config'
+import { FILTER_BOOKMARKS, FILTER_SHAPES, LINK_GITHUB, MASONRY_IMAGE_GAP_LIST, MASONRY_IMAGE_SIZE_LIST, MASONRY_MAX_COLUMNS } from '@/config'
 import { useStore } from '@/store'
 
 const store = useStore()
@@ -403,6 +433,17 @@ function handleClickShape(shape: string) {
   else {
     filterConfig.value.shape.value = shape
     filterConfig.value.shape.enable = true
+  }
+}
+
+function handleClickBookmark(bookmark: number) {
+  if (filterConfig.value.bookmark.enable && filterConfig.value.bookmark.min === bookmark) {
+    filterConfig.value.bookmark.enable = false
+    filterConfig.value.bookmark.min = 0
+  }
+  else {
+    filterConfig.value.bookmark.min = bookmark
+    filterConfig.value.bookmark.enable = true
   }
 }
 

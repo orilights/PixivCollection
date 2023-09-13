@@ -83,3 +83,9 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style>
+body {
+  overflow-y: scroll;
+}
+</style>

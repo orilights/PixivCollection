@@ -63,6 +63,10 @@ export const useStore = defineStore('main', {
         width: { max: null, min: null },
         height: { max: null, min: null },
       },
+      bookmark: {
+        enable: false,
+        min: 0,
+      },
       restrict: {
         maxSanityLevel: 2,
         r18: 'hidden' as 'hidden' | 'show' | 'only',
@@ -103,6 +107,14 @@ export const useStore = defineStore('main', {
               return false
           }
           return true
+        }
+        if (this.filterConfig.bookmark.enable) {
+          if (this.filterConfig.bookmark.min === -1) {
+            if (image.bookmark !== -1)
+              return false
+          }
+          if (image.bookmark < this.filterConfig.bookmark.min)
+            return false
         }
         // 过滤_年份
         if (this.filterConfig.year.enable) {
