@@ -63,6 +63,7 @@
           {{ `p${imageData.part}` }}
           {{ `${imageData.size[0]}×${imageData.size[1]}` }}
           {{ `sl${imageData.sanity_level}` }}
+          {{ imageData.bookmark }}
         </p>
       </div>
     </Transition>
@@ -78,7 +79,7 @@
       @click="$emit('viewImage', imageIndex)"
     >
       <div class="absolute top-1.5 right-1.5 text-right text-xs">
-        {{ `${imageData.id} p${imageData.part}` }} <br>{{ `${imageData.size[0]}×${imageData.size[1]} sl${imageData.sanity_level}` }}
+        {{ `${imageData.id} p${imageData.part} ${imageData.bookmark}` }} <br>{{ `${imageData.size[0]}×${imageData.size[1]} sl${imageData.sanity_level}` }}
       </div>
       <p class="flex whitespace-nowrap">
         标题：<span
