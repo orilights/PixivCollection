@@ -122,7 +122,7 @@
         </button>
       </SidebarBlock>
       <SidebarBlock>
-        最高健全度:
+        最高不健全度:
         <select
           v-model.number="filterConfig.restrict.maxSanityLevel"
           class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
@@ -357,7 +357,7 @@ watchEffect(() => {
         return false
     }
 
-    // 过滤健全度
+    // 过滤不健全度
     if (image.sanity_level > filterConfig.value.restrict.maxSanityLevel)
       return
 

@@ -87,7 +87,7 @@ export const useStore = defineStore('main', {
     },
     imageFilter() {
       return (image: Image) => {
-        // 过滤_健全度
+        // 过滤_不健全度
         if (this.filterConfig.restrict.r18 === 'hidden') {
           if (image.x_restrict >= 1)
             return false
