@@ -135,6 +135,7 @@
         <select
           v-model="filterConfig.restrict.r18"
           class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
+          @change="handleChangeR18"
         >
           <option value="hidden">
             隐藏
@@ -445,6 +446,12 @@ function handleClickBookmark(bookmark: number) {
     filterConfig.value.bookmark.min = bookmark
     filterConfig.value.bookmark.enable = true
   }
+}
+
+function handleChangeR18(event: Event) {
+  const target = event.target as HTMLSelectElement
+  if (target.value === 'show' || target.value === 'only')
+    filterConfig.value.restrict.maxSanityLevel = 6
 }
 
 function openGithub() {
