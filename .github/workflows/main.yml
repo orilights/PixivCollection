@@ -35,4 +35,4 @@ jobs:
         local_path: './dist/*'
         remote_path: ${{ secrets.REMOTE_PATH }}
         sftp_only: true
-        password: ${{ secrets.FTP_PASSWORD }}
+        ssh_private_key: ${{ secrets.PRIVATE_KEY }}
