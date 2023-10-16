@@ -33,7 +33,7 @@
             v-if="loadingImage"
             class="bg-black/40 text-white w-[60px] h-[60px] rounded-full transition-colors flex items-center justify-center"
           >
-            <img src="@/assets/loading.svg" class="w-7 h-7">
+            <IconLoading class="w-7 h-7" :dark="false"/>
           </div>
         </div>
         <Transition name="popup">
