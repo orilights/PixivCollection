@@ -221,17 +221,26 @@
         </div>
       </SidebarBlock>
       <SidebarBlock>
-        作者
-        <CButton v-if="authors.length > 20" @click="showAuthor = !showAuthor">
-          {{ showAuthor ? '收起' : '展开' }}
-        </CButton>
+        <div>
+          作者
+          <TextBox v-model.trim="searchAuthor" placeholder="搜索作者" />
+          <CButton v-if="authors.length > 20 && searchAuthor === ''" @click="showFullAuthor = !showFullAuthor">
+            {{ showFullAuthor ? '收起' : '展开' }}
+          </CButton>
+          <CButton v-if="searchAuthor !== ''" @click="searchAuthor = ''">
+            清除
+          </CButton>
+        </div>
         <div
           :class="{
-            mask: !showAuthor && authors.length > 20,
+            mask: !showFullAuthor && authors.length > 20 && searchAuthor === '',
           }"
         >
+          <div v-if="searchAuthor !== '' && filteredAuthors.length === 0" class="text-center text-gray-400">
+            未搜索到结果
+          </div>
           <button
-            v-for="author in showAuthor ? authors : authors.slice(0, 20)" :key="author.id"
+            v-for="author in filteredAuthors" :key="author.id"
             class="bg-blue-500/20 rounded-sm m-0.5 px-0.5 text-sm"
             :class="{
               '!bg-gray-400': author.id === filterConfig.author.id,
@@ -243,17 +252,26 @@
         </div>
       </SidebarBlock>
       <SidebarBlock>
-        标签
-        <CButton v-if="tags.length > 10" @click="showTags = !showTags">
-          {{ showTags ? '收起' : '展开' }}
-        </CButton>
+        <div>
+          标签
+          <TextBox v-model.trim="searchTag" placeholder="搜索标签" />
+          <CButton v-if="tags.length > 10 && searchTag === ''" @click="showFullTags = !showFullTags">
+            {{ showFullTags ? '收起' : '展开' }}
+          </CButton>
+          <CButton v-if="searchTag !== ''" @click="searchTag = ''">
+            清除
+          </CButton>
+        </div>
         <div
           :class="{
-            mask: !showTags && tags.length > 10,
+            mask: !showFullTags && tags.length > 10 && searchTag === '',
           }"
         >
+          <div v-if="searchAuthor !== '' && filteredAuthors.length === 0" class="text-center text-gray-400">
+            未搜索到结果
+          </div>
           <button
-            v-for="tag in showTags ? tags : tags.slice(0, 10)" :key="tag.name"
+            v-for="tag in filteredTags" :key="tag.name"
             class="bg-black/20 rounded-sm m-0.5 px-0.5 text-sm"
             :class="{
               '!bg-gray-400': tag.name === filterConfig.tag.name,
@@ -319,12 +337,42 @@ const {
   isFullscreen,
 } = toRefs(store)
 
-const showAuthor = ref(false)
-const showTags = ref(false)
-
 const years = ref([] as number[])
 const authors = ref([] as AuthorData[])
 const tags = ref([] as TagData[])
+const showFullAuthor = ref(false)
+const showFullTags = ref(false)
+const searchAuthor = ref('')
+const searchTag = ref('')
+
+const filteredAuthors = computed(() => {
+  if (searchAuthor.value !== '') {
+    const searchStr = searchAuthor.value.toLowerCase()
+    return authors.value.filter((author) => {
+      return `${author.name}_${author.account}_${author.id}`.toLowerCase().includes(searchStr)
+    })
+  }
+  else {
+    if (showFullAuthor.value)
+      return authors.value
+    else
+      return authors.value.slice(0, 20)
+  }
+})
+const filteredTags = computed(() => {
+  if (searchTag.value !== '') {
+    const searchStr = searchTag.value.toLowerCase()
+    return tags.value.filter((tag) => {
+      return `${tag.name}_${tag.translated_name}`.toLowerCase().includes(searchStr)
+    })
+  }
+  else {
+    if (showFullTags.value)
+      return tags.value
+    else
+      return tags.value.slice(0, 10)
+  }
+})
 
 watchEffect(() => {
   const _years: number[] = []

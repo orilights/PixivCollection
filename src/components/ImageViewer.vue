@@ -33,7 +33,7 @@
             v-if="loadingImage"
             class="bg-black/40 text-white w-[60px] h-[60px] rounded-full transition-colors flex items-center justify-center"
           >
-            <IconLoading class="w-7 h-7" :dark="false"/>
+            <IconLoading class="w-7 h-7" :dark="false" />
           </div>
         </div>
         <Transition name="popup">
@@ -68,6 +68,7 @@
               {{ `p${imageViewer.info.part}` }}
               {{ `${imageViewer.info.size[0]}×${imageViewer.info.size[1]}` }}
               {{ `sl${imageViewer.info.sanity_level}` }}
+              {{ `${imageViewer.info.bookmark}` }}
             </p>
           </div>
         </Transition>
