@@ -311,11 +311,14 @@
           启用虚拟列表<Switch v-model="masonryConfig.virtualListEnable" class="ml-3" />
         </div>
         <div class="mt-1">
-          <CButton @click="clearLocalSettings">
+          <CButton class="mb-1" @click="clearLocalSettings">
             还原默认设置
           </CButton>
-          <CButton @click="loadDataFromFile">
+          <CButton class="mb-1" @click="loadDataFromFile">
             从文件加载元数据
+          </CButton>
+          <CButton class="mb-1" @click="exportFilteredData">
+            导出当前筛选结果
           </CButton>
         </div>
       </SidebarBlock>
@@ -326,6 +329,7 @@
 <script setup lang="ts">
 import { FILTER_BOOKMARKS, FILTER_SHAPES, LINK_GITHUB, MASONRY_IMAGE_GAP_LIST, MASONRY_IMAGE_SIZE_LIST, MASONRY_MAX_COLUMNS } from '@/config'
 import { useStore } from '@/store'
+import { exportFile } from '@/utils'
 
 const store = useStore()
 const {
@@ -527,6 +531,10 @@ function loadDataFromFile() {
 function clearLocalSettings() {
   store.settings.clear()
   location.reload()
+}
+
+function exportFilteredData() {
+  exportFile(JSON.stringify(store.imagesFiltered))
 }
 </script>
 

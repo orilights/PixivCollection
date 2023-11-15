@@ -16,3 +16,13 @@ export function openPixiv(pid: number) {
 export function openPixivUser(uid: number) {
   window.open(LINK_PIXIV_USER.replace('{id}', uid.toString()), '_blank')
 }
+
+export function exportFile(data: string, filename = 'export-{ts}.json') {
+  const blob = new Blob([data], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename.replace('{ts}', Date.now().toString())
+  a.click()
+  URL.revokeObjectURL(url)
+}
