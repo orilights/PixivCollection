@@ -13,11 +13,12 @@
       :image-data="item.image"
       :image-index="item.index"
       :image-height="item.height"
-      :show-no="masonryConfig.showImageNo"
+      :info-at-bottom="masonryConfig.infoAtBottom"
       :tag-include-bookmark="filterConfig.tag.includeBookmark"
       :tag-translation="masonryConfig.showTagTranslation"
-      :info-at-bottom="masonryConfig.infoAtBottom"
-      :shadow="masonryConfig.gap > 2"
+      :show-no="masonryConfig.showImageNo"
+      :shadow="masonryConfig.showShadow"
+      :border="masonryConfig.gap > 2"
       :style="{
         width: `${imageWidth}px`,
         height: `${item.height + (masonryConfig.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)}px`,

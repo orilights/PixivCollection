@@ -2,7 +2,8 @@
   <div
     class="absolute bg-gray-100 overflow-hidden transition-all duration-300 group dark:bg-[#242424]"
     :class="{
-      'rounded-[12px] shadow-[0_3px_10px_1px_rgba(0,0,0,0.20)]': shadow,
+      'rounded-[12px] border dark:border-[#505050] ': border,
+      'shadow-[0_3px_10px_1px_rgba(0,0,0,0.20)]': shadow && border,
     }"
   >
     <div
@@ -75,12 +76,9 @@
     </div>
     <div
       v-if="!infoAtBottom"
-      class="absolute top-0 w-full h-full px-2 pt-10 text-sm text-white transition-all opacity-0 cursor-pointer bg-black/50 group-hover:opacity-100"
+      class="absolute top-0 w-full h-full px-2 pt-2 text-sm text-white transition-all opacity-0 cursor-pointer bg-black/50 group-hover:opacity-100"
       @click="$emit('viewImage', imageIndex)"
     >
-      <div class="absolute top-1.5 right-1.5 text-right text-xs">
-        {{ `${imageData.id} p${imageData.part} ${imageData.bookmark}` }} <br>{{ `${imageData.size[0]}×${imageData.size[1]} sl${imageData.sanity_level}` }}
-      </div>
       <p class="flex whitespace-nowrap">
         标题：<span
           class="overflow-hidden transition-colors hover:text-blue-500 overflow-ellipsis"
@@ -108,6 +106,9 @@
           {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
         </span>
       </p>
+      <p class="text-xs mt-1">
+        {{ `${imageData.id} p${imageData.part} ${imageData.bookmark} ${imageData.size[0]}×${imageData.size[1]} sl${imageData.sanity_level}` }}
+      </p>
     </div>
   </div>
 </template>
@@ -121,11 +122,12 @@ const props = defineProps<{
   imageData: Image
   imageIndex: number
   imageHeight: number
-  shadow: boolean
-  showNo: boolean
   infoAtBottom: boolean
   tagIncludeBookmark: boolean
   tagTranslation: boolean
+  showNo: boolean
+  shadow: boolean
+  border: boolean
 }>()
 
 defineEmits(['viewImage', 'filterAuthor'])
