@@ -48,8 +48,12 @@ const contentLength = ref(0)
 
 onMounted(async () => {
   store.settings.register('preferColorScheme', preferColorScheme)
-  store.settings.register('masonryConfig', masonryConfig, SettingType.Json)
-  store.settings.register('restrictConfig', toRef(filterConfig.value, 'restrict'), SettingType.Json)
+  store.settings.register('masonryConfig', masonryConfig, SettingType.Json, {
+    deepMerge: true,
+  })
+  store.settings.register('restrictConfig', toRef(filterConfig.value, 'restrict'), SettingType.Json, {
+    deepMerge: true,
+  })
 
   try {
     const response = await fetch(DATA_FILE)
