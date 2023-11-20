@@ -4,13 +4,13 @@
       dark: colorScheme === 'dark',
     }"
   >
-    <div class="dark:bg-[#1a1a1a] dark:text-white transition-colors min-h-screen">
+    <div class="min-h-screen transition-colors dark:bg-[#1a1a1a] dark:text-white">
       <Sidebar />
       <SidebarMask />
       <Navbar />
       <Tip v-show="!imagesFiltered.length">
         <template v-if="loading">
-          <IconLoading class="w-[60px] mx-auto pb-2" :dark="colorScheme === 'light'" />
+          <IconLoading class="mx-auto w-[60px] pb-2" :dark="colorScheme === 'light'" />
           <div class="text-center">
             数据加载中<br>
             {{ formatBytes(receivedLength) }} <span v-if="contentLength"> / {{ formatBytes(contentLength) }}</span>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { SettingType, Settings } from '@orilight/vue-settings'
+import { SettingType } from '@orilight/vue-settings'
 import { DATA_FILE } from './config'
 import { useStore } from '@/store'
 import { formatBytes } from '@/utils'

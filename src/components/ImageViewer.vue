@@ -2,53 +2,53 @@
   <Transition name="fade">
     <div
       v-show="imageViewer.show"
-      class="fixed top-0 left-0 w-full h-screen bg-black/50 backdrop-blur-lg"
+      class="fixed left-0 top-0 h-screen w-full bg-black/50 backdrop-blur-lg"
 
       @wheel.prevent="handleWheelScroll"
     >
-      <div class="absolute z-50 top-2 left-2 flex gap-2">
+      <div class="absolute left-2 top-2 z-50 flex gap-2">
         <div class="flex flex-col gap-2">
           <button
-            class="bg-black/40 hover:bg-gray-900/40 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
+            class="h-[60px] w-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
             title="复位图片"
             @click="restoreImage"
           >
-            <IconTablet class="mx-auto w-7 h-7" />
+            <IconTablet class="mx-auto h-7 w-7" />
           </button>
           <button
-            class="bg-black/40 hover:bg-gray-900/40 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
+            class="h-[60px] w-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
             title="显示图片信息"
             @click="imageViewer.showInfo = !imageViewer.showInfo"
           >
-            <IconInfo class="mx-auto w-7 h-7" />
+            <IconInfo class="mx-auto h-7 w-7" />
           </button>
           <button
-            class="bg-black/40 hover:bg-gray-900/40 text-white text-center w-[60px] h-[60px] rounded-full transition-colors"
+            class="h-[60px] w-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
             title="下载原图"
             @click="downloadImage"
           >
-            <IconDownload class="mx-auto w-7 h-7" />
+            <IconDownload class="mx-auto h-7 w-7" />
           </button>
           <div
             v-if="loadingImage"
-            class="bg-black/40 text-white w-[60px] h-[60px] rounded-full transition-colors flex items-center justify-center"
+            class="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-black/40 text-white transition-colors"
           >
-            <IconLoading class="w-7 h-7" :dark="false" />
+            <IconLoading class="h-7 w-7" :dark="false" />
           </div>
         </div>
         <Transition name="popup">
           <div
             v-if="imageViewer.info && imageViewer.showInfo"
-            class="bg-black/40 text-white fixed w-full sm:w-[300px] h-fit sm:relative left-0 bottom-0 rounded-t-[30px] sm:rounded-b-[30px] p-4 pb-10 backdrop-blur-md"
+            class="fixed bottom-0 left-0 h-fit w-full rounded-t-[30px] bg-black/40 p-4 pb-10 text-white backdrop-blur-md sm:relative sm:w-[300px] sm:rounded-b-[30px]"
           >
             <p
-              class="overflow-hidden font-bold transition-colors cursor-pointer hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
+              class="cursor-pointer truncate font-bold transition-colors hover:text-blue-500"
               @click="openPixiv(imageViewer.info.id)"
             >
               {{ imageViewer.info.title }}
             </p>
             <p
-              class="overflow-hidden text-sm transition-colors cursor-pointer hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
+              class="cursor-pointer truncate text-sm transition-colors hover:text-blue-500"
               @click="openPixivUser(imageViewer.info.author.id)"
             >
               {{ imageViewer.info.author.name }}
@@ -57,7 +57,7 @@
               <span
                 v-for="tag, idx in imageViewer.info.tags"
                 v-show="!tag.name.includes('users入り') || filterConfig.tag.includeBookmark" :key="idx"
-                class="px-1 mx-0.5 my-0.5 float-left bg-black/30 rounded-sm text-xs"
+                class="float-left m-0.5 rounded-sm bg-black/30 px-1 text-xs"
                 :class="tag.name === 'R-18' ? '!bg-red-500/60' : ''"
               >
                 {{ masonryConfig.showTagTranslation ? tag.translated_name || tag.name : tag.name }}
@@ -74,30 +74,30 @@
         </Transition>
       </div>
       <button
-        class="bg-black/40 hover:bg-gray-900/40 text-white absolute top-2 right-2 text-center w-[60px] h-[60px] rounded-full transition-colors z-50"
+        class="absolute right-2 top-2 z-50 h-[60px] w-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
         title="关闭图片浏览器"
         @click="store.closeImageViewer()"
       >
-        <IconClose class="mx-auto w-7 h-7" />
+        <IconClose class="mx-auto h-7 w-7" />
       </button>
       <button
-        class="bg-black/40 hover:bg-gray-900/40 text-white absolute left-2 top-[calc(50%-40px)] w-[60px] h-[60px] rounded-full transition-colors z-50"
+        class="absolute left-2 top-[calc(50%-40px)] z-50 h-[60px] w-[60px] rounded-full bg-black/40 text-white transition-colors hover:bg-gray-900/40"
         title="上一张"
         @click="store.imageViewer.prev()"
       >
-        <IconLeft class="w-6 h-6 mx-auto stroke-2 -translate-x-0.5" />
+        <IconLeft class="mx-auto h-6 w-6 -translate-x-0.5 stroke-2" />
       </button>
       <button
-        class="bg-black/40 hover:bg-gray-900/40 text-white absolute right-2 top-[calc(50%-40px)] w-[60px] h-[60px] rounded-full transition-colors z-50"
+        class="absolute right-2 top-[calc(50%-40px)] z-50 h-[60px] w-[60px] rounded-full bg-black/40 text-white transition-colors hover:bg-gray-900/40"
         title="下一张"
         @click="store.imageViewer.next()"
       >
-        <IconRight class="w-6 h-6 mx-auto stroke-2 translate-x-0.5" />
+        <IconRight class="mx-auto h-6 w-6 translate-x-0.5 stroke-2" />
       </button>
       <div class="relative">
         <img
           :src="imageSrc"
-          class="absolute select-none max-w-none cursor-grab active:cursor-grabbing touch-none"
+          class="absolute max-w-none cursor-grab touch-none select-none active:cursor-grabbing"
           :class="{
             '': !imageGragging,
           }"
@@ -301,7 +301,7 @@ function handleWheelScroll(e: WheelEvent) {
   handleZoom(newRatio, { x: mouseRef.x.value, y: mouseRef.y.value })
 }
 
-function handleZoom(newRatio: number, centerPostiion: { x: number; y: number }, touch = false) {
+function handleZoom(newRatio: number, centerPostiion: { x: number, y: number }, touch = false) {
   const windowWidth = window.innerWidth
   const windowHeight = window.innerHeight
   const deltaX = centerPostiion.x - (imagePos.value.x - ((windowWidth - imageSize.width) / 2) + windowWidth / 2)

@@ -1,33 +1,33 @@
 <template>
   <div class="h-[60px]">
     <div
-      class="fixed top-0 left-0 w-full h-[60px] z-10 bg-white dark:bg-[#202020] transition-[transform,background] shadow-md"
+      class="fixed left-0 top-0 z-10 h-[60px] w-full bg-white shadow-md transition-[transform,background] dark:bg-[#202020]"
       :class="{
         'translate-y-[-70px]': (!showNav || imageViewer.show) && !showSidebar,
       }"
     >
       <div
-        class="absolute top-0 left-0 flex"
+        class="absolute left-0 top-0 flex"
         :class="{
           'w-full': filterConfig.search.enable,
         }"
       >
         <button
-          class="w-[60px] h-[60px] hover:bg-gray-400/20"
+          class="h-[60px] w-[60px] hover:bg-gray-400/20"
           @click="showSidebar = !showSidebar"
         >
-          <IconMenu class="w-7 h-7 mx-auto" />
+          <IconMenu class="mx-auto h-7 w-7" />
         </button>
         <button
-          class="w-[60px] h-[60px] hover:bg-gray-400/20 hidden sm:block"
+          class="hidden h-[60px] w-[60px] hover:bg-gray-400/20 sm:block"
           @click="store.toggleSearch"
         >
-          <IconSearch v-if="!filterConfig.search.enable" class="w-6 h-6 mx-auto" />
-          <IconClose v-else class="w-6 h-6 mx-auto" />
+          <IconSearch v-if="!filterConfig.search.enable" class="mx-auto h-6 w-6" />
+          <IconClose v-else class="mx-auto h-6 w-6" />
         </button>
-        <div v-show="filterConfig.search.enable" class="flex-1 mr-[60px] sm:mr-0">
+        <div v-show="filterConfig.search.enable" class="mr-[60px] flex-1 sm:mr-0">
           <input
-            class="w-full h-[60px] outline-none px-4 box-border border-x border-gray-400/50 bg-transparent"
+            class="box-border h-[60px] w-full border-x border-gray-400/50 bg-transparent px-4 outline-none"
             type="text"
             placeholder="图片id/图片标题/作者id/作者昵称/标签"
             :value="filterConfig.search.value"
@@ -36,40 +36,40 @@
         </div>
       </div>
       <button
-        class="w-[60px] h-[60px] hover:bg-gray-400/20 absolute right-0 block sm:hidden"
+        class="absolute right-0 block h-[60px] w-[60px] hover:bg-gray-400/20 sm:hidden"
         @click="store.toggleSearch"
       >
-        <IconSearch v-if="!filterConfig.search.enable" class="w-6 h-6 mx-auto" />
-        <IconClose v-else class="w-6 h-6 mx-auto" />
+        <IconSearch v-if="!filterConfig.search.enable" class="mx-auto h-6 w-6" />
+        <IconClose v-else class="mx-auto h-6 w-6" />
       </button>
       <div
         v-show="!filterConfig.search.enable"
-        class="text-lg h-[60px] leading-[60px] select-none text-center mx-[60px]"
+        class="mx-[60px] h-[60px] select-none text-center text-lg leading-[60px]"
         @dblclick="navToTop"
       >
-        OriLightの<span class="text-[#0398fa] px-1">Pixiv</span>收藏夹
+        OriLightの<span class="px-1 text-[#0398fa]">Pixiv</span>收藏夹
       </div>
-      <div class="absolute top-0 right-0 hidden lg:flex">
+      <div class="absolute right-0 top-0 hidden lg:flex">
         <button
-          class="w-[60px] h-[60px] hover:bg-gray-400/20"
+          class="h-[60px] w-[60px] hover:bg-gray-400/20"
           @click="openGithub"
         >
-          <IconGithub class="w-6 h-6 mx-auto" />
+          <IconGithub class="mx-auto h-6 w-6" />
         </button>
         <button
-          class="w-[60px] h-[60px] hover:bg-gray-400/20"
+          class="h-[60px] w-[60px] hover:bg-gray-400/20"
           @click="store.toggleColorScheme"
         >
-          <IconSun v-if="preferColorScheme === 'light'" class="w-6 h-6 mx-auto" />
-          <IconMoon v-if="preferColorScheme === 'dark'" class="w-5 h-5 mx-auto" />
-          <IconAuto v-if="preferColorScheme === 'auto'" class="w-5 h-5 mx-auto" />
+          <IconSun v-if="preferColorScheme === 'light'" class="mx-auto h-6 w-6" />
+          <IconMoon v-if="preferColorScheme === 'dark'" class="mx-auto h-5 w-5" />
+          <IconAuto v-if="preferColorScheme === 'auto'" class="mx-auto h-5 w-5" />
         </button>
         <button
-          class="w-[60px] h-[60px] hover:bg-gray-400/20"
+          class="h-[60px] w-[60px] hover:bg-gray-400/20"
           @click="store.toggleFullscreen"
         >
-          <IconShrink v-if="isFullscreen" class="w-5 h-5 mx-auto" />
-          <IconExpand v-else class="w-5 h-5 mx-auto" />
+          <IconShrink v-if="isFullscreen" class="mx-auto h-5 w-5" />
+          <IconExpand v-else class="mx-auto h-5 w-5" />
         </button>
       </div>
     </div>

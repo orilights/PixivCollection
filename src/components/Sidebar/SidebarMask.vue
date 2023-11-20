@@ -1,7 +1,7 @@
 <template>
   <div
     v-show="showSidebar"
-    class="fixed top-0 left-0 z-20 hidden w-screen h-screen bg-black/40 sm:block"
+    class="fixed left-0 top-0 z-20 hidden h-screen w-screen bg-black/40 sm:block"
     @click="showSidebar = false"
   />
 </template>

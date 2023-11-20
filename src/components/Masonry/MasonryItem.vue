@@ -1,6 +1,6 @@
 <template>
   <div
-    class="absolute bg-gray-100 overflow-hidden transition-all duration-300 group dark:bg-[#242424]"
+    class="group absolute overflow-hidden bg-gray-100 transition-all duration-300 dark:bg-[#242424]"
     :class="{
       'rounded-[12px] border dark:border-[#505050] ': border,
       'shadow-[0_3px_10px_1px_rgba(0,0,0,0.20)]': shadow && border,
@@ -15,7 +15,7 @@
       <Transition name="fade-slow">
         <div
           v-show="!imageLoaded"
-          class="absolute w-full h-full"
+          class="absolute h-full w-full"
           :style="{
             backgroundColor: imageData.dominant_color,
           }"
@@ -34,32 +34,32 @@
         class="w-full px-2 py-1"
       >
         <p
-          class="overflow-hidden font-bold transition-colors cursor-pointer hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
+          class="cursor-pointer truncate font-bold transition-colors hover:text-blue-500"
           @click="openPixiv(imageData.id)"
         >
           {{ imageData.title }}
         </p>
-        <p class="flex items-center cursor-pointer">
+        <p class="flex cursor-pointer items-center">
           <span
-            class="overflow-hidden text-sm transition-colors hover:text-blue-500 whitespace-nowrap overflow-ellipsis"
+            class="truncate text-sm transition-colors hover:text-blue-500"
             @click="openPixivUser(imageData.author.id)"
           >{{ imageData.author.name }}</span>
           <IconFunnelSolid
-            class="inline-block w-3 h-3 ml-1 transition-colors hover:text-blue-500"
+            class="ml-1 inline-block h-3 w-3 transition-colors hover:text-blue-500"
             @click="$emit('filterAuthor', imageIndex)"
           />
         </p>
-        <p class="overflow-y-auto h-[50px] mx-[-4px]">
+        <p class="mx-[-4px] h-[50px] overflow-y-auto">
           <span
             v-for="tag, idx in imageData.tags"
             v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
-            class="px-1 mx-0.5 my-0.5 float-left bg-black/10 rounded-sm text-xs"
+            class="float-left m-0.5 rounded-sm bg-black/10 px-1 text-xs"
             :class="tag.name === 'R-18' ? '!bg-red-500/60' : ''"
           >
             {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
           </span>
         </p>
-        <p class="text-xs text-left text-gray-500 flex items-center mt-0.5 whitespace-nowrap">
+        <p class="mt-0.5 flex items-center whitespace-nowrap text-left text-xs text-gray-500">
           {{ imageData.id }}
           {{ `p${imageData.part}` }}
           {{ `${imageData.size[0]}×${imageData.size[1]}` }}
@@ -70,28 +70,28 @@
     </Transition>
     <div
       v-if="showNo"
-      class="absolute top-0 bg-black/60 text-white px-2 rounded-br-[12px]"
+      class="absolute top-0 rounded-br-[12px] bg-black/60 px-2 text-white"
     >
       {{ imageIndex + 1 }}
     </div>
     <div
       v-if="!infoAtBottom"
-      class="absolute top-0 w-full h-full px-2 pt-2 text-sm text-white transition-all opacity-0 cursor-pointer bg-black/50 group-hover:opacity-100"
+      class="absolute top-0 h-full w-full cursor-pointer bg-black/50 px-2 pt-2 text-sm text-white opacity-0 transition-all group-hover:opacity-100"
       @click="$emit('viewImage', imageIndex)"
     >
       <p class="flex whitespace-nowrap">
         标题：<span
-          class="overflow-hidden transition-colors hover:text-blue-500 overflow-ellipsis"
+          class="overflow-hidden text-ellipsis transition-colors hover:text-blue-500"
           @click.stop="openPixiv(imageData.id)"
         >{{ imageData.title }}</span>
       </p>
       <p class="flex items-center whitespace-nowrap">
         作者：<span
-          class="overflow-hidden transition-colors hover:text-blue-500 overflow-ellipsis"
+          class="overflow-hidden text-ellipsis transition-colors hover:text-blue-500"
           @click.stop="openPixivUser(imageData.author.id)"
         >{{ imageData.author.name }}</span>
         <IconFunnelSolid
-          class="inline-block w-3 h-3 ml-1 transition-colors hover:text-blue-500"
+          class="ml-1 inline-block h-3 w-3 transition-colors hover:text-blue-500"
           @click.stop="$emit('filterAuthor', imageIndex)"
         />
       </p>
@@ -100,13 +100,13 @@
           v-for="tag, idx in imageData.tags"
           v-show="!tag.name.includes('users入り') || tagIncludeBookmark"
           :key="idx"
-          class="px-1 mx-1 my-0.5 inline-block bg-black/30 rounded-sm text-xs"
+          class="mx-1 my-0.5 inline-block rounded-sm bg-black/30 px-1 text-xs"
           :class="tag.name === 'R-18' ? 'bg-red-500/80' : ''"
         >
           {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
         </span>
       </p>
-      <p class="text-xs mt-1">
+      <p class="mt-1 text-xs">
         {{ `${imageData.id} p${imageData.part} ${imageData.bookmark} ${imageData.size[0]}×${imageData.size[1]} sl${imageData.sanity_level}` }}
       </p>
     </div>

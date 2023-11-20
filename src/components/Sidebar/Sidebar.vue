@@ -2,29 +2,29 @@
   <Transition name="popup-l">
     <div
       v-show="showSidebar"
-      class="fixed w-full lg:block top-[60px] sm:top-0 left-0 h-[calc(100vh-60px)] sm:h-screen sm:w-[400px] bg-white overflow-x-hidden overflow-y-auto px-2 py-3 transition-all dark:bg-[#242424] duration-500 z-30"
+      class="fixed left-0 top-[60px] z-30 h-[calc(100vh-60px)] w-full overflow-y-auto overflow-x-hidden bg-white px-2 py-3 transition-all duration-500 dark:bg-[#242424] sm:top-0 sm:h-screen sm:w-[400px] lg:block"
     >
-      <div class="flex justify-between mx-10 mb-2 lg:hidden">
+      <div class="mx-10 mb-2 flex justify-between lg:hidden">
         <button
-          class="w-[60px] h-[60px]"
+          class="h-[60px] w-[60px]"
           @click="openGithub"
         >
-          <IconGithub class="w-6 h-6 mx-auto" />
+          <IconGithub class="mx-auto h-6 w-6" />
         </button>
         <button
-          class="w-[60px] h-[60px] "
+          class="h-[60px] w-[60px] "
           @click="store.toggleColorScheme"
         >
-          <IconSun v-if="preferColorScheme === 'light'" class="w-6 h-6 mx-auto" />
-          <IconMoon v-if="preferColorScheme === 'dark'" class="w-5 h-5 mx-auto" />
-          <IconAuto v-if="preferColorScheme === 'auto'" class="w-5 h-5 mx-auto" />
+          <IconSun v-if="preferColorScheme === 'light'" class="mx-auto h-6 w-6" />
+          <IconMoon v-if="preferColorScheme === 'dark'" class="mx-auto h-5 w-5" />
+          <IconAuto v-if="preferColorScheme === 'auto'" class="mx-auto h-5 w-5" />
         </button>
         <button
-          class="w-[60px] h-[60px]"
+          class="h-[60px] w-[60px]"
           @click="store.toggleFullscreen"
         >
-          <IconShrink v-if="isFullscreen" class="w-5 h-5 mx-auto" />
-          <IconExpand v-else class="w-5 h-5 mx-auto" />
+          <IconShrink v-if="isFullscreen" class="mx-auto h-5 w-5" />
+          <IconExpand v-else class="mx-auto h-5 w-5" />
         </button>
       </div>
       <SidebarHead>浏览设置</SidebarHead>
@@ -33,7 +33,7 @@
           列数:
           <select
             v-model.number="masonryConfig.col"
-            class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
+            class="mx-1 rounded-md border px-1 py-0.5 transition-colors hover:border-blue-500 dark:border-white/20 dark:bg-[#1a1a1a] dark:hover:border-blue-500"
           >
             <option value="-1">
               自动
@@ -45,21 +45,21 @@
           间隙:
           <select
             v-model.number="masonryConfig.gap"
-            class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
+            class="mx-1 rounded-md border px-1 py-0.5 transition-colors hover:border-blue-500 dark:border-white/20 dark:bg-[#1a1a1a] dark:hover:border-blue-500"
           >
             <option v-for="i in MASONRY_IMAGE_GAP_LIST" :key="i" :value="i">
               {{ `${i}px` }}
             </option>
           </select>
         </div>
-        <div class="flex items-center mt-1">
+        <div class="mt-1 flex items-center">
           图片铺满屏幕<Switch v-model="masonryConfig.containerFullWidth" class="ml-3" />
         </div>
         <div v-if="masonryConfig.col === -1" class="mt-1">
           图片最小宽度:
           <select
             v-model.number="masonryConfig.imageMinWidth"
-            class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
+            class="mx-1 rounded-md border px-1 py-0.5 transition-colors hover:border-blue-500 dark:border-white/20 dark:bg-[#1a1a1a] dark:hover:border-blue-500"
           >
             <option v-for="i in MASONRY_IMAGE_SIZE_LIST" :key="i" :value="i">
               {{ i }}px
@@ -84,35 +84,35 @@
         <br>
         <button
           v-if="filterConfig.year.enable"
-          class="bg-yellow-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          class="m-0.5 rounded-sm bg-yellow-300/20 px-0.5 text-sm"
           @click="handleClickYear(filterConfig.year.value)"
         >
           {{ `年份：${filterConfig.year.value}` }}
         </button>
         <button
           v-if="filterConfig.shape.enable"
-          class="bg-green-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          class="m-0.5 rounded-sm bg-green-300/20 px-0.5 text-sm"
           @click="handleClickShape(filterConfig.shape.value)"
         >
           {{ `方向：${filterConfig.shape.value}` }}
         </button>
         <button
           v-if="filterConfig.author.enable"
-          class="bg-blue-500/20 rounded-sm m-0.5 px-0.5 text-sm"
+          class="m-0.5 rounded-sm bg-blue-500/20 px-0.5 text-sm"
           @click="handleClickAuthor(filterConfig.author.id)"
         >
           {{ `作者：${filterConfig.author.id}` }}
         </button>
         <button
           v-if="filterConfig.tag.enable"
-          class="bg-black/20 rounded-sm m-0.5 px-0.5 text-sm"
+          class="m-0.5 rounded-sm bg-black/20 px-0.5 text-sm"
           @click="handleClickTag(filterConfig.tag.name)"
         >
           {{ `标签：${filterConfig.tag.name}` }}
         </button>
         <button
           v-if="filterConfig.bookmark.enable"
-          class="bg-orange-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          class="m-0.5 rounded-sm bg-orange-300/20 px-0.5 text-sm"
           @click="handleClickBookmark(filterConfig.bookmark.min)"
         >
           {{ `收藏数：${filterConfig.bookmark.min}` }}
@@ -122,7 +122,7 @@
         最高不健全度:
         <select
           v-model.number="filterConfig.restrict.maxSanityLevel"
-          class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
+          class="mx-1 rounded-md border px-1 py-0.5 transition-colors hover:border-blue-500 dark:border-white/20 dark:bg-[#1a1a1a] dark:hover:border-blue-500"
         >
           <option v-for="i in [2, 4, 6]" :key="i" :value="i">
             {{ i }}
@@ -131,7 +131,7 @@
         R18:
         <select
           v-model="filterConfig.restrict.r18"
-          class="border px-1 py-0.5 mx-1 rounded-md hover:border-blue-500 transition-colors dark:border-white/20 dark:hover:border-blue-500 dark:bg-[#1a1a1a]"
+          class="mx-1 rounded-md border px-1 py-0.5 transition-colors hover:border-blue-500 dark:border-white/20 dark:bg-[#1a1a1a] dark:hover:border-blue-500"
           @change="handleChangeR18"
         >
           <option value="hidden">
@@ -150,7 +150,7 @@
         <br>
         <button
           v-for="year in years" :key="year"
-          class="bg-yellow-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          class="m-0.5 rounded-sm bg-yellow-300/20 px-0.5 text-sm"
           :class="{
             '!bg-gray-400': year === filterConfig.year.value,
           }"
@@ -159,7 +159,7 @@
           {{ year }}
         </button>
         <button
-          class="bg-yellow-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          class="m-0.5 rounded-sm bg-yellow-300/20 px-0.5 text-sm"
           :class="{
             '!bg-gray-400': 1 === filterConfig.year.value,
           }"
@@ -173,7 +173,7 @@
         <br>
         <button
           v-for="shape in Object.keys(FILTER_SHAPES)" :key="shape"
-          class="bg-green-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          class="m-0.5 rounded-sm bg-green-300/20 px-0.5 text-sm"
           :class="{
             '!bg-gray-400': shape === filterConfig.shape.value,
           }"
@@ -187,7 +187,7 @@
           尺寸<Switch v-model="filterConfig.size.enable" class="ml-3" />
         </div>
         <div v-if="filterConfig.size.enable">
-          <div class="flex my-1">
+          <div class="my-1 flex">
             <div>
               宽度 最小：<TextBox
                 v-model.number="filterConfig.size.width.min" type="number" min="0" max="10000"
@@ -201,7 +201,7 @@
               />
             </div>
           </div>
-          <div class="flex my-1">
+          <div class="my-1 flex">
             <div>
               高度 最小：<TextBox
                 v-model.number="filterConfig.size.height.min" type="number" min="0" max="10000"
@@ -238,7 +238,7 @@
           </div>
           <button
             v-for="author in filteredAuthors" :key="author.id"
-            class="bg-blue-500/20 rounded-sm m-0.5 px-0.5 text-sm"
+            class="m-0.5 rounded-sm bg-blue-500/20 px-0.5 text-sm"
             :class="{
               '!bg-gray-400': author.id === filterConfig.author.id,
             }"
@@ -269,7 +269,7 @@
           </div>
           <button
             v-for="tag in filteredTags" :key="tag.name"
-            class="bg-black/20 rounded-sm m-0.5 px-0.5 text-sm"
+            class="m-0.5 rounded-sm bg-black/20 px-0.5 text-sm"
             :class="{
               '!bg-gray-400': tag.name === filterConfig.tag.name,
             }"
@@ -284,7 +284,7 @@
         <br>
         <button
           v-for="bookmark in FILTER_BOOKMARKS" :key="bookmark"
-          class="bg-orange-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          class="m-0.5 rounded-sm bg-orange-300/20 px-0.5 text-sm"
           :class="{
             '!bg-gray-400': bookmark === filterConfig.bookmark.min,
           }"
@@ -293,7 +293,7 @@
           {{ bookmark }}
         </button>
         <button
-          class="bg-orange-300/20 rounded-sm m-0.5 px-0.5 text-sm"
+          class="m-0.5 rounded-sm bg-orange-300/20 px-0.5 text-sm"
           :class="{
             '!bg-gray-400': -1 === filterConfig.bookmark.min,
           }"

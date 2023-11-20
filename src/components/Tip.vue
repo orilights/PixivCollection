@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-4 mx-auto mt-4 text-lg w-fit bg-black/20 rounded-xl">
+  <div class="mx-auto mt-4 w-fit rounded-xl bg-black/20 px-6 py-4 text-lg">
     <slot />
   </div>
 </template>
