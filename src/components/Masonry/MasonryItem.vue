@@ -35,7 +35,7 @@
       >
         <p
           class="cursor-pointer truncate font-bold transition-colors hover:text-blue-500"
-          @click="openPixiv(imageData.id)"
+          @click="openPixivIllust(imageData.id)"
         >
           {{ imageData.title }}
         </p>
@@ -53,7 +53,7 @@
           <span
             v-for="tag, idx in imageData.tags"
             v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
-            class="float-left m-0.5 rounded-sm bg-black/10 px-1 text-xs"
+            class="float-left m-0.5 rounded-sm bg-black/10 px-1 text-xs dark:bg-gray-200/10"
             :class="tag.name === 'R-18' ? '!bg-red-500/60' : ''"
           >
             {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
@@ -76,17 +76,19 @@
     </div>
     <div
       v-if="!infoAtBottom"
-      class="absolute top-0 h-full w-full cursor-pointer bg-black/50 px-2 pt-2 text-sm text-white opacity-0 transition-all group-hover:opacity-100"
+      class="absolute top-0 h-full w-full cursor-pointer bg-black/50 px-2 pt-2 text-sm text-white opacity-0 transition-all duration-300 group-hover:opacity-100"
       @click="$emit('viewImage', imageIndex)"
     >
-      <p class="flex whitespace-nowrap">
-        标题：<span
+      <p class="flex items-center whitespace-nowrap">
+        <IconTitle class="mr-1 inline-block h-4 w-4" />
+        <span
           class="overflow-hidden text-ellipsis transition-colors hover:text-blue-500"
-          @click.stop="openPixiv(imageData.id)"
+          @click.stop="openPixivIllust(imageData.id)"
         >{{ imageData.title }}</span>
       </p>
       <p class="flex items-center whitespace-nowrap">
-        作者：<span
+        <IconUser class="mr-1 inline-block h-4 w-4" />
+        <span
           class="overflow-hidden text-ellipsis transition-colors hover:text-blue-500"
           @click.stop="openPixivUser(imageData.author.id)"
         >{{ imageData.author.name }}</span>
@@ -96,11 +98,12 @@
         />
       </p>
       <p>
-        标签：<span
+        <IconTag class="mr-1 inline-block h-4 w-4" />
+        <span
           v-for="tag, idx in imageData.tags"
           v-show="!tag.name.includes('users入り') || tagIncludeBookmark"
           :key="idx"
-          class="mx-1 my-0.5 inline-block rounded-sm bg-black/30 px-1 text-xs"
+          class="my-0.5 mr-1 inline-block rounded-sm bg-black/30 px-1 text-xs"
           :class="tag.name === 'R-18' ? 'bg-red-500/80' : ''"
         >
           {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
@@ -116,7 +119,7 @@
 <script setup lang="ts">
 import { IMAGE_FORMAT_THUMBNAIL, IMAGE_PATH_THUMBNAIL, MASONRY_LOAD_DELAY } from '@/config'
 import { useStore } from '@/store'
-import { openPixiv, openPixivUser } from '@/utils'
+import { openPixivIllust, openPixivUser } from '@/utils'
 
 const props = defineProps<{
   imageData: Image

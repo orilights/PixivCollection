@@ -1,7 +1,7 @@
 <template>
   <div class="h-[60px]">
     <div
-      class="fixed left-0 top-0 z-10 h-[60px] w-full bg-white shadow-md transition-[transform,background] dark:bg-[#202020]"
+      class="fixed left-0 top-0 z-10 h-[60px] w-full border-b bg-white transition-all dark:border-white/20 dark:bg-[#242424]"
       :class="{
         'translate-y-[-70px]': (!showNav || imageViewer.show) && !showSidebar,
       }"
@@ -47,7 +47,7 @@
         class="mx-[60px] h-[60px] select-none text-center text-lg leading-[60px]"
         @dblclick="navToTop"
       >
-        OriLightの<span class="px-1 text-[#0398fa]">Pixiv</span>收藏夹
+        <span class="text-[#0398fa]">Pixiv</span>Collection
       </div>
       <div class="absolute right-0 top-0 hidden lg:flex">
         <button

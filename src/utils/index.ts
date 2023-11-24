@@ -9,7 +9,7 @@ export function formatBytes(bytes: number) {
   return `${(bytes / k ** i).toFixed(2)} ${sizes[i]}`
 }
 
-export function openPixiv(pid: number) {
+export function openPixivIllust(pid: number) {
   window.open(LINK_PIXIV_ARTWORK.replace('{id}', pid.toString()), '_blank')
 }
 

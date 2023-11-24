@@ -34,7 +34,7 @@ export const useStore = defineStore('main', {
       showTagTranslation: true,
       virtualListEnable: true,
       showImageNo: false,
-      showShadow: true,
+      showShadow: false,
     },
     filterConfig: {
       search: {

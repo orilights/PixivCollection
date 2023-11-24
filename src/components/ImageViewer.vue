@@ -43,7 +43,7 @@
           >
             <p
               class="cursor-pointer truncate font-bold transition-colors hover:text-blue-500"
-              @click="openPixiv(imageViewer.info.id)"
+              @click="openPixivIllust(imageViewer.info.id)"
             >
               {{ imageViewer.info.title }}
             </p>
@@ -118,7 +118,7 @@
 import { useMouse } from '@vueuse/core'
 import { useStore } from '@/store'
 import { IMAGE_FORMAT_PREVIEW, IMAGE_PATH_ORIGINAL, IMAGE_PATH_PREVIEW } from '@/config'
-import { openPixiv, openPixivUser } from '@/utils'
+import { openPixivIllust, openPixivUser } from '@/utils'
 
 const store = useStore()
 const { imageViewer, filterConfig, masonryConfig } = toRefs(store)
@@ -324,8 +324,8 @@ function downloadImage() {
   if (!imageViewer.value.info)
     return
   const link = document.createElement('a')
+  link.target = '_blank'
   link.href = `${IMAGE_PATH_ORIGINAL}${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
-  link.download = `${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
   link.click()
 }
 </script>
