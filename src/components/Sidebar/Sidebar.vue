@@ -344,9 +344,9 @@ const {
   isFullscreen,
 } = toRefs(store)
 
-const years = ref([] as number[])
-const authors = ref([] as AuthorData[])
-const tags = ref([] as TagData[])
+const years = ref<number[]>([])
+const authors = ref<AuthorData[]>([])
+const tags = ref<TagData[]>([])
 const showFullAuthor = ref(false)
 const showFullTags = ref(false)
 const searchAuthor = ref('')

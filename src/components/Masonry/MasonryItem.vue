@@ -2,8 +2,8 @@
   <div
     class="group absolute overflow-hidden bg-gray-100 transition-all duration-300 dark:bg-[#242424]"
     :class="{
-      'rounded-[12px] border dark:border-[#505050] ': border,
-      'shadow-[0_3px_10px_1px_rgba(0,0,0,0.20)]': shadow && border,
+      'rounded-[12px] border dark:border-[#505050] ': config.border,
+      'shadow-[0_3px_10px_1px_rgba(0,0,0,0.20)]': config.shadow && config.border,
     }"
   >
     <div
@@ -30,7 +30,7 @@
     </div>
     <Transition name="fade">
       <div
-        v-if="infoAtBottom"
+        v-if="config.infoAtBottom"
         class="w-full px-2 py-1"
       >
         <p
@@ -52,11 +52,11 @@
         <p class="mx-[-4px] h-[50px] overflow-y-auto">
           <span
             v-for="tag, idx in imageData.tags"
-            v-show="!tag.name.includes('users入り') || tagIncludeBookmark" :key="idx"
+            v-show="!tag.name.includes('users入り') || config.tagIncludeBookmark" :key="idx"
             class="float-left m-0.5 rounded-sm bg-black/10 px-1 text-xs dark:bg-gray-200/10"
             :class="tag.name === 'R-18' ? '!bg-red-500/60' : ''"
           >
-            {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
+            {{ config.tagTranslation ? tag.translated_name || tag.name : tag.name }}
           </span>
         </p>
         <p class="mt-0.5 flex items-center whitespace-nowrap text-left text-xs text-gray-500">
@@ -69,13 +69,13 @@
       </div>
     </Transition>
     <div
-      v-if="showNo"
+      v-if="config.showNo"
       class="absolute top-0 rounded-br-[12px] bg-black/60 px-2 text-white"
     >
       {{ imageIndex + 1 }}
     </div>
     <div
-      v-if="!infoAtBottom"
+      v-if="!config.infoAtBottom"
       class="absolute top-0 h-full w-full cursor-pointer bg-black/50 px-2 pt-2 text-sm text-white opacity-0 transition-all duration-300 group-hover:opacity-100"
       @click="$emit('viewImage', imageIndex)"
     >
@@ -101,12 +101,12 @@
         <IconTag class="mr-1 inline-block h-4 w-4" />
         <span
           v-for="tag, idx in imageData.tags"
-          v-show="!tag.name.includes('users入り') || tagIncludeBookmark"
+          v-show="!tag.name.includes('users入り') || config.tagIncludeBookmark"
           :key="idx"
           class="my-0.5 mr-1 inline-block rounded-sm bg-black/30 px-1 text-xs"
           :class="tag.name === 'R-18' ? 'bg-red-500/80' : ''"
         >
-          {{ tagTranslation ? tag.translated_name || tag.name : tag.name }}
+          {{ config.tagTranslation ? tag.translated_name || tag.name : tag.name }}
         </span>
       </p>
       <p class="mt-1 text-xs">
@@ -125,12 +125,14 @@ const props = defineProps<{
   imageData: Image
   imageIndex: number
   imageHeight: number
-  infoAtBottom: boolean
-  tagIncludeBookmark: boolean
-  tagTranslation: boolean
-  showNo: boolean
-  shadow: boolean
-  border: boolean
+  config: {
+    infoAtBottom: boolean
+    tagIncludeBookmark: boolean
+    tagTranslation: boolean
+    showNo: boolean
+    shadow: boolean
+    border: boolean
+  }
 }>()
 
 defineEmits(['viewImage', 'filterAuthor'])
@@ -141,8 +143,10 @@ const store = useStore()
 const imageLoad = ref(false)
 const imageLoaded = ref(false)
 
+const imageIdxStr = `${props.imageData.id * 100 + props.imageData.part}`
+
 onMounted(() => {
-  if (store.imagesLoaded.includes(`${props.imageData.id * 100 + props.imageData.part}`)) {
+  if (store.imagesLoaded.has(imageIdxStr)) {
     imageLoad.value = true
     return
   }
@@ -159,7 +163,6 @@ onUnmounted(() => {
 
 function handleImageLoaded() {
   imageLoaded.value = true
-  if (!store.imagesLoaded.includes(`${props.imageData.id * 100 + props.imageData.part}`))
-    store.imagesLoaded.push(`${props.imageData.id * 100 + props.imageData.part}`)
+  store.imagesLoaded.add(imageIdxStr)
 }
 </script>

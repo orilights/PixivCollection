@@ -13,17 +13,12 @@
       :image-data="item.image"
       :image-index="item.index"
       :image-height="item.height"
-      :info-at-bottom="masonryConfig.infoAtBottom"
-      :tag-include-bookmark="filterConfig.tag.includeBookmark"
-      :tag-translation="masonryConfig.showTagTranslation"
-      :show-no="masonryConfig.showImageNo"
-      :shadow="masonryConfig.showShadow"
-      :border="masonryConfig.gap > 2"
       :style="{
         width: `${imageWidth}px`,
         height: `${item.height + (masonryConfig.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
+      :config="itemConfig"
       @view-image="store.viewImage"
       @filter-author="store.filterAuthor"
     />
@@ -90,6 +85,15 @@ const imagesRenderList = computed(() => {
     return (item.top + itemHeight > renderRangeTop && item.top < renderRangeBottom)
   })
 })
+
+const itemConfig = computed(() => ({
+  infoAtBottom: masonryConfig.value.infoAtBottom,
+  tagIncludeBookmark: filterConfig.value.tag.includeBookmark,
+  tagTranslation: masonryConfig.value.showTagTranslation,
+  showNo: masonryConfig.value.showImageNo,
+  shadow: masonryConfig.value.showShadow,
+  border: masonryConfig.value.gap > 2,
+}))
 
 function getColToPlace(colsTop: number[]) {
   return colsTop.indexOf(Math.min(...colsTop))
