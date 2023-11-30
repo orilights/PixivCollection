@@ -13,6 +13,7 @@
       :image-data="item.image"
       :image-index="item.index"
       :image-height="item.height"
+      :image-count="item.count"
       :style="{
         width: `${imageWidth}px`,
         height: `${item.height + (masonryConfig.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)}px`,
@@ -54,19 +55,41 @@ const imagesPlaced = computed(() => {
     return []
 
   const colsTop = Array.from<number>({ length: col.value }).fill(masonryConfig.value.gap)
-  const result = imagesFiltered.value.map((image, idx) => {
+
+  const result = []
+  for (let i = 0; i < imagesFiltered.value.length; i++) {
     const colPlace = getColToPlace(colsTop)
+    const index = i
+    if (masonryConfig.value.mergeSameIdImage) {
+      while (i < imagesFiltered.value.length - 1 && imagesFiltered.value[i].id === imagesFiltered.value[i + 1].id)
+        i++
+    }
+
     const item = {
-      image,
+      image: imagesFiltered.value[index],
       place: colPlace,
-      index: idx,
+      index,
       top: colsTop[colPlace],
       left: (imageWidth.value + masonryConfig.value.gap) * colPlace + masonryConfig.value.gap,
-      height: getImageHeight(image.size),
+      height: getImageHeight(imagesFiltered.value[index].size),
+      count: i - index + 1,
     }
     colsTop[colPlace] += item.height + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)
-    return Object.freeze(item)
-  })
+    result.push(Object.freeze(item))
+  }
+  // const result = imagesFiltered.value.map((image, idx) => {
+  //   const colPlace = getColToPlace(colsTop)
+  //   const item = {
+  //     image,
+  //     place: colPlace,
+  //     index: idx,
+  //     top: colsTop[colPlace],
+  //     left: (imageWidth.value + masonryConfig.value.gap) * colPlace + masonryConfig.value.gap,
+  //     height: getImageHeight(image.size),
+  //   }
+  //   colsTop[colPlace] += item.height + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)
+  //   return Object.freeze(item)
+  // })
   containerHeight.value = Math.max(...colsTop)
 
   return result
@@ -90,7 +113,6 @@ const itemConfig = computed(() => ({
   infoAtBottom: masonryConfig.value.infoAtBottom,
   tagIncludeBookmark: filterConfig.value.tag.includeBookmark,
   tagTranslation: masonryConfig.value.showTagTranslation,
-  showNo: masonryConfig.value.showImageNo,
   shadow: masonryConfig.value.showShadow,
   border: masonryConfig.value.gap > 2,
 }))

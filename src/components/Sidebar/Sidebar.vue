@@ -69,6 +69,9 @@
       </SidebarBlock>
       <SidebarBlock>
         <div class="flex items-center">
+          合并显示多P图片<Switch v-model="masonryConfig.mergeSameIdImage" class="ml-3" />
+        </div>
+        <div class="flex items-center">
           图片信息外置<Switch v-model="masonryConfig.infoAtBottom" class="ml-3" />
         </div>
         <div class="flex items-center">
@@ -306,9 +309,6 @@
       <SidebarBlock>
         <div class="flex items-center">
           启用虚拟列表<Switch v-model="masonryConfig.virtualListEnable" class="ml-3" />
-        </div>
-        <div class="flex items-center">
-          显示图片序号<Switch v-model="masonryConfig.showImageNo" class="ml-3" />
         </div>
         <div class="flex items-center">
           显示卡片阴影<Switch v-model="masonryConfig.showShadow" class="ml-3" />

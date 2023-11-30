@@ -69,10 +69,10 @@
       </div>
     </Transition>
     <div
-      v-if="config.showNo"
+      v-if="imageCount > 1"
       class="absolute top-0 rounded-br-[12px] bg-black/60 px-2 text-white"
     >
-      {{ imageIndex + 1 }}
+      {{ imageCount }}
     </div>
     <div
       v-if="!config.infoAtBottom"
@@ -125,11 +125,11 @@ const props = defineProps<{
   imageData: Image
   imageIndex: number
   imageHeight: number
+  imageCount: number
   config: {
     infoAtBottom: boolean
     tagIncludeBookmark: boolean
     tagTranslation: boolean
-    showNo: boolean
     shadow: boolean
     border: boolean
   }

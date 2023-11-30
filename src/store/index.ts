@@ -30,10 +30,10 @@ export const useStore = defineStore('main', {
       gap: 20,
       imageMinWidth: 240,
       containerFullWidth: true,
+      mergeSameIdImage: true,
       infoAtBottom: false,
       showTagTranslation: true,
       virtualListEnable: true,
-      showImageNo: false,
       showShadow: false,
     },
     filterConfig: {
