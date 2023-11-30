@@ -1,6 +1,6 @@
 <h1 align="center">Pixiv Collection</h1>
 
-![preview](docs/preview.jpg)
+![preview](docs/screenshot.jpg)
 
 [预览：OriLightの Pixiv 收藏夹](https://pixiv.orilight.top/)
 
