@@ -70,8 +70,9 @@
     </Transition>
     <div
       v-if="imageCount > 1"
-      class="absolute top-0 rounded-br-[12px] bg-black/60 px-2 text-white"
+      class="absolute right-1 top-1 flex items-center rounded-full bg-black/50 px-2 py-0.5 text-sm text-white"
     >
+      <IconStack class="mr-1 h-3 w-3" />
       {{ imageCount }}
     </div>
     <div

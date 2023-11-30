@@ -59,37 +59,24 @@ const imagesPlaced = computed(() => {
   const result = []
   for (let i = 0; i < imagesFiltered.value.length; i++) {
     const colPlace = getColToPlace(colsTop)
-    const index = i
+    const imageIndex = i
     if (masonryConfig.value.mergeSameIdImage) {
       while (i < imagesFiltered.value.length - 1 && imagesFiltered.value[i].id === imagesFiltered.value[i + 1].id)
         i++
     }
 
     const item = {
-      image: imagesFiltered.value[index],
+      image: imagesFiltered.value[imageIndex],
       place: colPlace,
-      index,
+      index: imageIndex,
       top: colsTop[colPlace],
       left: (imageWidth.value + masonryConfig.value.gap) * colPlace + masonryConfig.value.gap,
-      height: getImageHeight(imagesFiltered.value[index].size),
-      count: i - index + 1,
+      height: getImageHeight(imagesFiltered.value[imageIndex].size),
+      count: i - imageIndex + 1,
     }
     colsTop[colPlace] += item.height + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)
     result.push(Object.freeze(item))
   }
-  // const result = imagesFiltered.value.map((image, idx) => {
-  //   const colPlace = getColToPlace(colsTop)
-  //   const item = {
-  //     image,
-  //     place: colPlace,
-  //     index: idx,
-  //     top: colsTop[colPlace],
-  //     left: (imageWidth.value + masonryConfig.value.gap) * colPlace + masonryConfig.value.gap,
-  //     height: getImageHeight(image.size),
-  //   }
-  //   colsTop[colPlace] += item.height + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)
-  //   return Object.freeze(item)
-  // })
   containerHeight.value = Math.max(...colsTop)
 
   return result
