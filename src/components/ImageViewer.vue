@@ -115,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMouse } from '@vueuse/core'
+import { useMouse, useWindowSize } from '@vueuse/core'
 import { useStore } from '@/store'
 import { IMAGE_FORMAT_PREVIEW, IMAGE_PATH_ORIGINAL, IMAGE_PATH_PREVIEW } from '@/config'
 import { openPixivIllust, openPixivUser } from '@/utils'
@@ -131,6 +131,7 @@ const imageSrc = ref('')
 const mouseRef = useMouse({ type: 'client' })
 const loadingImage = ref(false)
 const loadingImageId = ref('')
+const windowSize = reactive(useWindowSize())
 
 const touchStartPosition = { x: 0, y: 0 }
 const touchCenterPosition = { x: 0, y: 0 }
@@ -176,6 +177,14 @@ watch(imageViewerInfo, (val) => {
   })
 
   restoreImage()
+})
+
+watch(windowSize, () => {
+  if (!imageViewer.value.show)
+    return
+  nextTick(() => {
+    restoreImage()
+  })
 })
 
 function preloadNearbyImage(index: number) {
