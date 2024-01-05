@@ -2,7 +2,7 @@
   <Transition name="popup-l">
     <div
       v-show="showSidebar"
-      class="fixed left-0 top-[60px] z-30 h-[calc(100vh-60px)] w-full overflow-y-auto overflow-x-hidden bg-white px-2 py-3 transition-all duration-500 dark:bg-[#242424] sm:top-0 sm:h-screen sm:w-[400px] lg:block"
+      class="fixed left-0 top-[60px] z-30 h-[calc(100vh-60px)] w-full overflow-y-auto overflow-x-hidden bg-white px-2 py-3 transition-all duration-500 sm:top-0 sm:h-screen sm:w-[400px] lg:block dark:bg-[#242424]"
     >
       <div class="mx-10 mb-2 flex justify-between lg:hidden">
         <button
