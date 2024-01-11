@@ -69,7 +69,7 @@
       </SidebarBlock>
       <SidebarBlock>
         <div class="flex items-center">
-          合并显示多P图片<Switch v-model="masonryConfig.mergeSameIdImage" class="ml-3" />
+          合并显示多P<Switch v-model="masonryConfig.mergeSameIdImage" class="ml-3" />
         </div>
         <div class="flex items-center">
           图片信息外置<Switch v-model="masonryConfig.infoAtBottom" class="ml-3" />
@@ -79,6 +79,24 @@
         </div>
         <div class="flex items-center">
           使用标签翻译<Switch v-model="masonryConfig.showTagTranslation" class="ml-3" />
+        </div>
+        <div class="mt-1">
+          图片排序:
+          <select
+            v-model="masonryConfig.imageSortBy"
+            class="mx-1 rounded-md border px-1 py-0.5 transition-colors hover:border-blue-500 dark:border-white/20 dark:bg-[#1a1a1a] dark:hover:border-blue-500"
+            @change="store.sortImages"
+          >
+            <option value="id_desc">
+              ID 降序
+            </option>
+            <option value="id_asc">
+              ID 升序
+            </option>
+            <option value="bookmark_desc">
+              收藏数降序
+            </option>
+          </select>
         </div>
       </SidebarBlock>
       <SidebarHead>图片筛选</SidebarHead>
@@ -437,7 +455,7 @@ watchEffect(() => {
         _tags[tag.name] = { ...tag, count: 1 }
     })
   })
-  years.value = _years
+  years.value = _years.sort((a, b) => b - a)
   tags.value = Object.keys(_tags)
     .map(tagName => _tags[tagName])
     .filter(tag => !tag.name.includes('users入り') || filterConfig.value.tag.includeBookmark)

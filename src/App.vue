@@ -78,6 +78,7 @@ onMounted(async () => {
     const result = new TextDecoder('utf-8').decode(chunksAll)
 
     store.images = JSON.parse(result)
+    store.sortImages()
   }
   catch (e) {
     console.error(e)
