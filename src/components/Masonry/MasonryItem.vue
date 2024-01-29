@@ -60,7 +60,7 @@
           </span>
         </p>
         <p class="mt-0.5 flex items-center whitespace-nowrap text-left text-xs text-gray-500">
-          {{ imageData.id }}
+          <span :title="formatTime(imageData.created_at)">{{ imageData.id }}</span>
           {{ `p${imageData.part}` }}
           {{ `${imageData.size[0]}×${imageData.size[1]}` }}
           {{ `sl${imageData.sanity_level}` }}
@@ -111,7 +111,8 @@
         </span>
       </p>
       <p class="mt-1 text-xs">
-        {{ `${imageData.id} p${imageData.part} ${imageData.bookmark} ${imageData.size[0]}×${imageData.size[1]} sl${imageData.sanity_level}` }}
+        <span :title="formatTime(imageData.created_at)">{{ imageData.id }}</span>
+        {{ `p${imageData.part} ${imageData.bookmark} ${imageData.size[0]}×${imageData.size[1]} sl${imageData.sanity_level}` }}
       </p>
     </div>
   </div>
@@ -120,7 +121,7 @@
 <script setup lang="ts">
 import { IMAGE_FORMAT_THUMBNAIL, IMAGE_PATH_THUMBNAIL, MASONRY_LOAD_DELAY } from '@/config'
 import { useStore } from '@/store'
-import { openPixivIllust, openPixivUser } from '@/utils'
+import { formatTime, openPixivIllust, openPixivUser } from '@/utils'
 
 const props = defineProps<{
   imageData: Image

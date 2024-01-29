@@ -9,6 +9,14 @@ export function formatBytes(bytes: number) {
   return `${(bytes / k ** i).toFixed(2)} ${sizes[i]}`
 }
 
+export function formatTime(time: string) {
+  if (time === '0000-00-00T00:00:00+09:00')
+    return '未知'
+
+  const date = new Date(time)
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+}
+
 export function openPixivIllust(pid: number) {
   window.open(LINK_PIXIV_ARTWORK.replace('{id}', pid.toString()), '_blank')
 }

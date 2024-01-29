@@ -64,7 +64,7 @@
               </span>
             </p>
             <p class="absolute bottom-4 left-4 text-xs text-gray-300">
-              {{ imageViewer.info.id }}
+              <span :title="formatTime(imageViewer.info.created_at)">{{ imageViewer.info.id }}</span>
               {{ `p${imageViewer.info.part}` }}
               {{ `${imageViewer.info.size[0]}×${imageViewer.info.size[1]}` }}
               {{ `sl${imageViewer.info.sanity_level}` }}
@@ -118,7 +118,7 @@
 import { useMouse, useWindowSize } from '@vueuse/core'
 import { useStore } from '@/store'
 import { IMAGE_FORMAT_PREVIEW, IMAGE_PATH_ORIGINAL, IMAGE_PATH_PREVIEW } from '@/config'
-import { openPixivIllust, openPixivUser } from '@/utils'
+import { formatTime, openPixivIllust, openPixivUser } from '@/utils'
 
 const store = useStore()
 const { imageViewer, filterConfig, masonryConfig } = toRefs(store)
