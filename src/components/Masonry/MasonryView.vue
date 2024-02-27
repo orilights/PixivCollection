@@ -16,12 +16,11 @@
       :image-count="item.count"
       :style="{
         width: `${imageWidth}px`,
-        height: `${item.height + (masonryConfig.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)}px`,
+        height: `${item.height + itemExtraHeight}px`,
         transform: `translate(${item.left}px, ${item.top}px)`,
       }"
       :config="itemConfig"
       @view-image="store.viewImage"
-      @filter-author="store.filterAuthor"
     />
   </div>
 </template>
@@ -42,13 +41,17 @@ const containerHeight = ref<number>(0)
 const col = computed(() => {
   if (masonryConfig.value.col > 0)
     return masonryConfig.value.col
+
   const cWidth = containerWidth.value + masonryConfig.value.gap * 2
   if (cWidth >= masonryConfig.value.imageMinWidth * 2)
     return Math.floor(cWidth / masonryConfig.value.imageMinWidth)
+
   return MASONRY_MIN_COLUMNS
 })
 
 const imageWidth = computed(() => (containerWidth.value - (col.value + 1) * masonryConfig.value.gap) / col.value)
+
+const itemExtraHeight = computed(() => masonryConfig.value.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)
 
 const imagesPlaced = computed(() => {
   if (!containerWidth.value)
@@ -61,8 +64,10 @@ const imagesPlaced = computed(() => {
     const colPlace = getColToPlace(colsTop)
     const imageIndex = i
     if (masonryConfig.value.mergeSameIdImage) {
-      while (i < imagesFiltered.value.length - 1 && imagesFiltered.value[i].id === imagesFiltered.value[i + 1].id)
-        i++
+      while (
+        i < imagesFiltered.value.length - 1
+        && imagesFiltered.value[i].id === imagesFiltered.value[i + 1].id
+      ) i++
     }
 
     const item = {
@@ -74,11 +79,11 @@ const imagesPlaced = computed(() => {
       height: getImageHeight(imagesFiltered.value[imageIndex].size),
       count: i - imageIndex + 1,
     }
-    colsTop[colPlace] += item.height + masonryConfig.value.gap + (masonryConfig.value.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)
+    colsTop[colPlace] += item.height + masonryConfig.value.gap + itemExtraHeight.value
     result.push(Object.freeze(item))
   }
   containerHeight.value = Math.max(...colsTop)
-
+  store.debug.enable && store.debug.masonryRefreshCount++
   return result
 })
 
@@ -90,10 +95,20 @@ const imagesRenderList = computed(() => {
   const renderRangeTop = -containerTop.value - renderRange.up * window.innerHeight
   const renderRangeBottom = -containerTop.value + window.innerHeight + renderRange.down * window.innerHeight
 
-  return imagesPlaced.value.filter((item) => {
-    const itemHeight = item.height + (masonryConfig.value.infoAtBottom ? MASONRY_INFO_AREA_HEIGHT : 0)
-    return (item.top + itemHeight > renderRangeTop && item.top < renderRangeBottom)
+  const res = imagesPlaced.value.filter((item) => {
+    const itemHeight = item.height + itemExtraHeight.value
+    return item.top + itemHeight > renderRangeTop && item.top < renderRangeBottom
   })
+  if (store.debug.enable) {
+    store.debug.masonryContainerHeight = containerHeight.value
+    store.debug.masonryContainerTop = containerTop.value
+    store.debug.masonryItemRenderLength = res.length
+    store.debug.masonryItemRenderTop = renderRangeTop
+    store.debug.masonryItemRenderBottom = renderRangeBottom
+    store.debug.screenWidth = window.innerWidth
+    store.debug.screenHeight = window.innerHeight
+  }
+  return res
 })
 
 const itemConfig = computed(() => ({

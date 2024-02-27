@@ -74,6 +74,17 @@ export const useStore = defineStore('main', {
         r18: 'hidden' as 'hidden' | 'show' | 'only',
       },
     },
+    debug: {
+      enable: false,
+      masonryContainerHeight: 0,
+      masonryContainerTop: 0,
+      masonryItemRenderLength: 0,
+      masonryItemRenderTop: 0,
+      masonryItemRenderBottom: 0,
+      masonryRefreshCount: 0,
+      screenWidth: 0,
+      screenHeight: 0,
+    },
   }),
   getters: {
     isFullscreen(): boolean {
@@ -146,7 +157,9 @@ export const useStore = defineStore('main', {
         // 过滤_形状
         if (this.filterConfig.shape.enable) {
           if (this.filterConfig.shape.value.startsWith('ratio-')) {
-            const _ratioStr = this.filterConfig.shape.value.substring(6).split(':').map(str => Number(str))
+            const _ratioStr = this.filterConfig.shape.value.substring(6)
+              .split(':')
+              .map(str => Number(str))
             const ratio = _ratioStr[0] / _ratioStr[1]
             if (image.size[0] / image.size[1] >= ratio / 0.9 || image.size[0] / image.size[1] <= ratio * 0.9)
               return false
@@ -253,8 +266,7 @@ export const useStore = defineStore('main', {
       }
       this.filterConfig.search.enable = !this.filterConfig.search.enable
     },
-    filterAuthor(idx: number): void {
-      const authorId = this.imagesFiltered[idx].author.id
+    filterAuthor(authorId: number): void {
       if (this.filterConfig.author.enable && this.filterConfig.author.id === authorId) {
         this.filterConfig.author.enable = false
         this.filterConfig.author.id = -1

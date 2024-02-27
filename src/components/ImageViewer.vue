@@ -66,9 +66,9 @@
             <p class="absolute bottom-4 left-4 text-xs text-gray-300">
               <span :title="formatTime(imageViewer.info.created_at)">{{ imageViewer.info.id }}</span>
               {{ `p${imageViewer.info.part}` }}
+              {{ `${imageViewer.info.bookmark}` }}
               {{ `${imageViewer.info.size[0]}×${imageViewer.info.size[1]}` }}
               {{ `sl${imageViewer.info.sanity_level}` }}
-              {{ `${imageViewer.info.bookmark}` }}
             </p>
           </div>
         </Transition>

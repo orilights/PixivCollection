@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     CButton: typeof import('./src/components/common/CButton.vue')['default']
+    DebugInfo: typeof import('./src/components/DebugInfo.vue')['default']
     IconAuto: typeof import('./src/components/icon/IconAuto.vue')['default']
     IconClose: typeof import('./src/components/icon/IconClose.vue')['default']
     IconDownload: typeof import('./src/components/icon/IconDownload.vue')['default']
@@ -29,6 +30,7 @@ declare module 'vue' {
     IconTag: typeof import('./src/components/icon/IconTag.vue')['default']
     IconTitle: typeof import('./src/components/icon/IconTitle.vue')['default']
     IconUser: typeof import('./src/components/icon/IconUser.vue')['default']
+    ImageInfo: typeof import('./src/components/ImageInfo.vue')['default']
     ImageViewer: typeof import('./src/components/ImageViewer.vue')['default']
     MasonryItem: typeof import('./src/components/masonry/MasonryItem.vue')['default']
     MasonryView: typeof import('./src/components/masonry/MasonryView.vue')['default']

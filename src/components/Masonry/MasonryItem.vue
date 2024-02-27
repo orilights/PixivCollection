@@ -25,48 +25,17 @@
         class="w-full cursor-pointer"
         :src="imageLoad ? `${IMAGE_PATH_THUMBNAIL}${imageData.id}_p${imageData.part}.${IMAGE_FORMAT_THUMBNAIL}` : ''"
         @load="handleImageLoaded"
-        @click="$emit('viewImage', imageIndex)"
+        @click="useStore().viewImage(imageIndex)"
       >
     </div>
     <Transition name="fade">
-      <div
+      <ImageInfo
         v-if="config.infoAtBottom"
-        class="w-full px-2 py-1"
-      >
-        <p
-          class="cursor-pointer truncate font-bold transition-colors hover:text-blue-500"
-          @click="openPixivIllust(imageData.id)"
-        >
-          {{ imageData.title }}
-        </p>
-        <p class="flex cursor-pointer items-center">
-          <span
-            class="truncate text-sm transition-colors hover:text-blue-500"
-            @click="openPixivUser(imageData.author.id)"
-          >{{ imageData.author.name }}</span>
-          <IconFunnelSolid
-            class="ml-1 inline-block h-3 w-3 transition-colors hover:text-blue-500"
-            @click="$emit('filterAuthor', imageIndex)"
-          />
-        </p>
-        <p class="mx-[-4px] h-[50px] overflow-y-auto">
-          <span
-            v-for="tag, idx in imageData.tags"
-            v-show="!tag.name.includes('users入り') || config.tagIncludeBookmark" :key="idx"
-            class="float-left m-0.5 rounded-sm bg-black/10 px-1 text-xs dark:bg-gray-200/10"
-            :class="tag.name === 'R-18' ? '!bg-red-500/60' : ''"
-          >
-            {{ config.tagTranslation ? tag.translated_name || tag.name : tag.name }}
-          </span>
-        </p>
-        <p class="mt-0.5 flex items-center whitespace-nowrap text-left text-xs text-gray-500">
-          <span :title="formatTime(imageData.created_at)">{{ imageData.id }}</span>
-          {{ `p${imageData.part}` }}
-          {{ `${imageData.size[0]}×${imageData.size[1]}` }}
-          {{ `sl${imageData.sanity_level}` }}
-          {{ imageData.bookmark }}
-        </p>
-      </div>
+        :image-data="imageData"
+        :image-index="imageIndex"
+        :config="config"
+        mode="bottom"
+      />
     </Transition>
     <div
       v-if="imageCount > 1"
@@ -75,80 +44,39 @@
       <IconStack class="mr-1 h-3 w-3" />
       {{ imageCount }}
     </div>
-    <div
+    <ImageInfo
       v-if="!config.infoAtBottom"
-      class="absolute top-0 h-full w-full cursor-pointer bg-black/50 px-2 pt-2 text-sm text-white opacity-0 transition-all duration-300 group-hover:opacity-100"
-      @click="$emit('viewImage', imageIndex)"
-    >
-      <p class="flex items-center whitespace-nowrap">
-        <IconTitle class="mr-1 inline-block h-4 w-4" />
-        <span
-          class="overflow-hidden text-ellipsis transition-colors hover:text-blue-500"
-          @click.stop="openPixivIllust(imageData.id)"
-        >{{ imageData.title }}</span>
-      </p>
-      <p class="flex items-center whitespace-nowrap">
-        <IconUser class="mr-1 inline-block h-4 w-4" />
-        <span
-          class="overflow-hidden text-ellipsis transition-colors hover:text-blue-500"
-          @click.stop="openPixivUser(imageData.author.id)"
-        >{{ imageData.author.name }}</span>
-        <IconFunnelSolid
-          class="ml-1 inline-block h-3 w-3 transition-colors hover:text-blue-500"
-          @click.stop="$emit('filterAuthor', imageIndex)"
-        />
-      </p>
-      <p>
-        <IconTag class="mr-1 inline-block h-4 w-4" />
-        <span
-          v-for="tag, idx in imageData.tags"
-          v-show="!tag.name.includes('users入り') || config.tagIncludeBookmark"
-          :key="idx"
-          class="my-0.5 mr-1 inline-block rounded-sm bg-black/30 px-1 text-xs"
-          :class="tag.name === 'R-18' ? 'bg-red-500/80' : ''"
-        >
-          {{ config.tagTranslation ? tag.translated_name || tag.name : tag.name }}
-        </span>
-      </p>
-      <p class="mt-1 text-xs">
-        <span :title="formatTime(imageData.created_at)">{{ imageData.id }}</span>
-        {{ `p${imageData.part} ${imageData.bookmark} ${imageData.size[0]}×${imageData.size[1]} sl${imageData.sanity_level}` }}
-      </p>
-    </div>
+      class="absolute top-0 h-full w-full cursor-pointer bg-black/50 opacity-0 transition-all duration-300 group-hover:opacity-100"
+      :image-data="imageData"
+      :image-index="imageIndex"
+      :config="config"
+      mode="cover"
+      @click="useStore().viewImage(imageIndex)"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { IMAGE_FORMAT_THUMBNAIL, IMAGE_PATH_THUMBNAIL, MASONRY_LOAD_DELAY } from '@/config'
 import { useStore } from '@/store'
-import { formatTime, openPixivIllust, openPixivUser } from '@/utils'
 
 const props = defineProps<{
   imageData: Image
   imageIndex: number
   imageHeight: number
   imageCount: number
-  config: {
-    infoAtBottom: boolean
-    tagIncludeBookmark: boolean
-    tagTranslation: boolean
-    shadow: boolean
-    border: boolean
-  }
+  config: MasonryItemConfig
 }>()
-
-defineEmits(['viewImage', 'filterAuthor'])
 
 let timer: NodeJS.Timeout | null = null
 
-const store = useStore()
 const imageLoad = ref(false)
 const imageLoaded = ref(false)
 
 const imageIdxStr = `${props.imageData.id * 100 + props.imageData.part}`
 
 onMounted(() => {
-  if (store.imagesLoaded.has(imageIdxStr)) {
+  if (useStore().imagesLoaded.has(imageIdxStr)) {
     imageLoad.value = true
     return
   }
@@ -165,6 +93,6 @@ onUnmounted(() => {
 
 function handleImageLoaded() {
   imageLoaded.value = true
-  store.imagesLoaded.add(imageIdxStr)
+  useStore().imagesLoaded.add(imageIdxStr)
 }
 </script>

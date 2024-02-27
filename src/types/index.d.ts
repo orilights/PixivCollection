@@ -35,4 +35,11 @@ declare global {
     account: string
     count: number
   }
+  interface MasonryItemConfig {
+    infoAtBottom: boolean
+    tagIncludeBookmark: boolean
+    tagTranslation: boolean
+    shadow: boolean
+    border: boolean
+  }
 }

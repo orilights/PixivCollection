@@ -211,13 +211,13 @@
           <div class="my-1 flex">
             <div>
               宽度 最小：<TextBox
-                v-model.number="filterConfig.size.width.min" type="number" min="0" max="10000"
+                v-model.number="filterConfig.size.width.min" type="number" min="0" max="100000"
                 placeholder="未启用"
               />
             </div>
             <div>
               最大：<TextBox
-                v-model.number="filterConfig.size.width.max" type="number" min="0" max="10000"
+                v-model.number="filterConfig.size.width.max" type="number" min="0" max="100000"
                 placeholder="未启用"
               />
             </div>
@@ -225,13 +225,13 @@
           <div class="my-1 flex">
             <div>
               高度 最小：<TextBox
-                v-model.number="filterConfig.size.height.min" type="number" min="0" max="10000"
+                v-model.number="filterConfig.size.height.min" type="number" min="0" max="100000"
                 placeholder="未启用"
               />
             </div>
             <div>
               最大：<TextBox
-                v-model.number="filterConfig.size.height.max" type="number" min="0" max="10000"
+                v-model.number="filterConfig.size.height.max" type="number" min="0" max="100000"
                 placeholder="未启用"
               />
             </div>
@@ -342,13 +342,29 @@
             导出当前筛选结果
           </CButton>
         </div>
+        <div class="text-xs">
+          图片: {{ images.length }}
+          作品: {{ illustCount }}
+          作者: {{ authorCount }}
+          标签: {{ tagCount }}
+        </div>
+        <div class="flex items-center">
+          Debug<Switch v-model="debug.enable" class="ml-3" />
+        </div>
       </SidebarBlock>
     </div>
   </Transition>
 </template>
 
 <script setup lang="ts">
-import { FILTER_BOOKMARKS, FILTER_SHAPES, LINK_GITHUB, MASONRY_IMAGE_GAP_LIST, MASONRY_IMAGE_SIZE_LIST, MASONRY_MAX_COLUMNS } from '@/config'
+import {
+  FILTER_BOOKMARKS,
+  FILTER_SHAPES,
+  LINK_GITHUB,
+  MASONRY_IMAGE_GAP_LIST,
+  MASONRY_IMAGE_SIZE_LIST,
+  MASONRY_MAX_COLUMNS,
+} from '@/config'
 import { useStore } from '@/store'
 import { exportFile } from '@/utils'
 
@@ -360,6 +376,7 @@ const {
   filterConfig,
   masonryConfig,
   isFullscreen,
+  debug,
 } = toRefs(store)
 
 const years = ref<number[]>([])
@@ -369,6 +386,10 @@ const showFullAuthor = ref(false)
 const showFullTags = ref(false)
 const searchAuthor = ref('')
 const searchTag = ref('')
+
+const illustCount = computed(() => new Set(images.value.map(i => i.id)).size)
+const authorCount = computed(() => new Set(images.value.map(i => i.author.id)).size)
+const tagCount = computed(() => new Set(images.value.flatMap(i => i.tags.map(t => t.name))).size)
 
 const filteredAuthors = computed(() => {
   if (searchAuthor.value !== '') {

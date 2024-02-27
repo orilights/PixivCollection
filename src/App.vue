@@ -13,7 +13,7 @@
           <IconLoading class="mx-auto w-[60px] pb-2" :dark="colorScheme === 'light'" />
           <div class="text-center">
             数据加载中<br>
-            {{ formatBytes(receivedLength) }} <span v-if="contentLength"> / {{ formatBytes(contentLength) }}</span>
+            {{ formatBytes(receivedLength) }}<span v-if="contentLength"> / {{ formatBytes(contentLength) }}</span>
           </div>
         </template>
         <template v-else>
@@ -22,13 +22,14 @@
       </Tip>
       <MasonryView />
       <ImageViewer />
+      <DebugInfo v-if="debug.enable" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { SettingType } from '@orilight/vue-settings'
-import { DATA_FILE } from './config'
+import { DATA_FILE } from '@/config'
 import { useStore } from '@/store'
 import { formatBytes } from '@/utils'
 
@@ -40,13 +41,14 @@ const {
   imagesFiltered,
   masonryConfig,
   filterConfig,
+  debug,
 } = toRefs(store)
 
 const loading = ref(true)
 const receivedLength = ref(0)
 const contentLength = ref(0)
 
-onMounted(async () => {
+function regSettings() {
   store.settings.register('preferColorScheme', preferColorScheme)
   store.settings.register('masonryConfig', masonryConfig, SettingType.Json, {
     deepMerge: true,
@@ -54,7 +56,9 @@ onMounted(async () => {
   store.settings.register('restrictConfig', toRef(filterConfig.value, 'restrict'), SettingType.Json, {
     deepMerge: true,
   })
+}
 
+async function fetchData() {
   try {
     const response = await fetch(DATA_FILE)
     const reader = (response.body as ReadableStream<Uint8Array>).getReader()
@@ -86,6 +90,11 @@ onMounted(async () => {
   finally {
     loading.value = false
   }
+}
+
+onMounted(() => {
+  regSettings()
+  fetchData()
 })
 </script>
 
