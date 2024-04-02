@@ -30,7 +30,7 @@
             <IconDownload class="mx-auto size-7" />
           </button>
           <div
-            v-if="loadingImage"
+            v-show="loadingImage"
             class="flex size-[60px] items-center justify-center rounded-full bg-black/40 text-white transition-colors"
           >
             <IconLoading class="size-7" :dark="false" />
@@ -193,6 +193,14 @@ watch(windowSize, () => {
   })
 })
 
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown)
+})
+
 function preloadNearbyImage(index: number) {
   if (index - 1 >= 0) {
     const imageUrl = `${IMAGE_PATH_PREVIEW}${store.imagesFiltered[index - 1].id}_p${store.imagesFiltered[index - 1].part}.${IMAGE_FORMAT_PREVIEW}`
@@ -342,5 +350,14 @@ function downloadImage() {
   link.target = '_blank'
   link.href = `${IMAGE_PATH_ORIGINAL}${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
   link.click()
+}
+
+function handleKeyDown(e: KeyboardEvent) {
+  if (!imageViewer.value.show)
+    return
+  if (e.key === 'ArrowLeft')
+    store.imageViewer.prev()
+  else if (e.key === 'ArrowRight')
+    store.imageViewer.next()
 }
 </script>
