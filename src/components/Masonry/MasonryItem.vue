@@ -15,7 +15,7 @@
       <Transition name="fade-slow">
         <div
           v-show="!imageLoaded"
-          class="absolute h-full w-full"
+          class="absolute size-full"
           :style="{
             backgroundColor: imageData.dominant_color,
           }"
@@ -41,12 +41,12 @@
       v-if="imageCount > 1"
       class="absolute right-1 top-1 flex items-center rounded-full bg-black/50 px-2 py-0.5 text-sm text-white"
     >
-      <IconStack class="mr-1 h-3 w-3" />
+      <IconStack class="mr-1 size-3" />
       {{ imageCount }}
     </div>
     <ImageInfo
       v-if="!config.infoAtBottom"
-      class="absolute top-0 h-full w-full cursor-pointer bg-black/50 opacity-0 transition-all duration-300 group-hover:opacity-100"
+      class="absolute top-0 size-full cursor-pointer bg-black/50 opacity-0 transition-all duration-300 group-hover:opacity-100"
       :image-data="imageData"
       :image-index="imageIndex"
       :config="config"
@@ -57,7 +57,11 @@
 </template>
 
 <script setup lang="ts">
-import { IMAGE_FORMAT_THUMBNAIL, IMAGE_PATH_THUMBNAIL, MASONRY_LOAD_DELAY } from '@/config'
+import {
+  IMAGE_FORMAT_THUMBNAIL,
+  IMAGE_PATH_THUMBNAIL,
+  MASONRY_LOAD_DELAY,
+} from '@/config'
 import { useStore } from '@/store'
 
 const props = defineProps<{

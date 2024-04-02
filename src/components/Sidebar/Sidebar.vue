@@ -2,29 +2,29 @@
   <Transition name="popup-l">
     <div
       v-show="showSidebar"
-      class="fixed left-0 top-[60px] z-30 h-[calc(100vh-60px)] w-full overflow-y-auto overflow-x-hidden bg-white px-2 py-3 transition-all duration-500 sm:top-0 sm:h-screen sm:w-[400px] lg:block dark:bg-[#242424]"
+      class="fixed left-0 top-[60px] z-30 h-[calc(100vh-60px)] w-full overflow-y-auto overflow-x-hidden bg-white px-2 py-3 transition-all duration-500 dark:bg-[#242424] sm:top-0 sm:h-screen sm:w-[400px] lg:block"
     >
       <div class="mx-10 mb-2 flex justify-between lg:hidden">
         <button
-          class="h-[60px] w-[60px]"
+          class="size-[60px]"
           @click="openGithub"
         >
-          <IconGithub class="mx-auto h-6 w-6" />
+          <IconGithub class="mx-auto size-6" />
         </button>
         <button
-          class="h-[60px] w-[60px] "
+          class="size-[60px] "
           @click="store.toggleColorScheme"
         >
-          <IconSun v-if="preferColorScheme === 'light'" class="mx-auto h-6 w-6" />
-          <IconMoon v-if="preferColorScheme === 'dark'" class="mx-auto h-5 w-5" />
-          <IconAuto v-if="preferColorScheme === 'auto'" class="mx-auto h-5 w-5" />
+          <IconSun v-if="preferColorScheme === 'light'" class="mx-auto size-6" />
+          <IconMoon v-if="preferColorScheme === 'dark'" class="mx-auto size-5" />
+          <IconAuto v-if="preferColorScheme === 'auto'" class="mx-auto size-5" />
         </button>
         <button
-          class="h-[60px] w-[60px]"
+          class="size-[60px]"
           @click="store.toggleFullscreen"
         >
-          <IconShrink v-if="isFullscreen" class="mx-auto h-5 w-5" />
-          <IconExpand v-else class="mx-auto h-5 w-5" />
+          <IconShrink v-if="isFullscreen" class="mx-auto size-5" />
+          <IconExpand v-else class="mx-auto size-5" />
         </button>
       </div>
       <SidebarHead>浏览设置</SidebarHead>

@@ -9,31 +9,31 @@
       <div class="absolute left-2 top-2 z-50 flex gap-2">
         <div class="flex flex-col gap-2">
           <button
-            class="h-[60px] w-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
+            class="size-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
             title="复位图片"
             @click="restoreImage"
           >
-            <IconTablet class="mx-auto h-7 w-7" />
+            <IconTablet class="mx-auto size-7" />
           </button>
           <button
-            class="h-[60px] w-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
+            class="size-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
             title="显示图片信息"
             @click="imageViewer.showInfo = !imageViewer.showInfo"
           >
-            <IconInfo class="mx-auto h-7 w-7" />
+            <IconInfo class="mx-auto size-7" />
           </button>
           <button
-            class="h-[60px] w-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
+            class="size-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
             title="下载原图"
             @click="downloadImage"
           >
-            <IconDownload class="mx-auto h-7 w-7" />
+            <IconDownload class="mx-auto size-7" />
           </button>
           <div
             v-if="loadingImage"
-            class="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-black/40 text-white transition-colors"
+            class="flex size-[60px] items-center justify-center rounded-full bg-black/40 text-white transition-colors"
           >
-            <IconLoading class="h-7 w-7" :dark="false" />
+            <IconLoading class="size-7" :dark="false" />
           </div>
         </div>
         <Transition name="popup">
@@ -74,25 +74,25 @@
         </Transition>
       </div>
       <button
-        class="absolute right-2 top-2 z-50 h-[60px] w-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
+        class="absolute right-2 top-2 z-50 size-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
         title="关闭图片浏览器"
         @click="store.closeImageViewer()"
       >
-        <IconClose class="mx-auto h-7 w-7" />
+        <IconClose class="mx-auto size-7" />
       </button>
       <button
-        class="absolute left-2 top-[calc(50%-40px)] z-50 h-[60px] w-[60px] rounded-full bg-black/40 text-white transition-colors hover:bg-gray-900/40"
+        class="absolute left-2 top-[calc(50%-40px)] z-50 size-[60px] rounded-full bg-black/40 text-white transition-colors hover:bg-gray-900/40"
         title="上一张"
         @click="store.imageViewer.prev()"
       >
-        <IconLeft class="mx-auto h-6 w-6 -translate-x-0.5 stroke-2" />
+        <IconLeft class="mx-auto size-6 -translate-x-0.5 stroke-2" />
       </button>
       <button
-        class="absolute right-2 top-[calc(50%-40px)] z-50 h-[60px] w-[60px] rounded-full bg-black/40 text-white transition-colors hover:bg-gray-900/40"
+        class="absolute right-2 top-[calc(50%-40px)] z-50 size-[60px] rounded-full bg-black/40 text-white transition-colors hover:bg-gray-900/40"
         title="下一张"
         @click="store.imageViewer.next()"
       >
-        <IconRight class="mx-auto h-6 w-6 translate-x-0.5 stroke-2" />
+        <IconRight class="mx-auto size-6 translate-x-0.5 stroke-2" />
       </button>
       <div class="relative">
         <img
@@ -117,7 +117,14 @@
 <script setup lang="ts">
 import { useMouse, useWindowSize } from '@vueuse/core'
 import { useStore } from '@/store'
-import { IMAGE_FORMAT_PREVIEW, IMAGE_PATH_ORIGINAL, IMAGE_PATH_PREVIEW } from '@/config'
+import {
+  IMAGE_FORMAT_PREVIEW,
+  IMAGE_PATH_ORIGINAL,
+  IMAGE_PATH_PREVIEW,
+  IMAGE_PREVIEW_MAX_HEIGHT,
+  IMAGE_PREVIEW_MAX_WIDTH,
+  IMAGE_VIEWER_MIN_RATIO,
+} from '@/config'
 import { formatTime, openPixivIllust, openPixivUser } from '@/utils'
 
 const store = useStore()
@@ -135,7 +142,6 @@ const windowSize = reactive(useWindowSize())
 
 const touchStartPosition = { x: 0, y: 0 }
 const touchCenterPosition = { x: 0, y: 0 }
-const minRatio = 0.3
 let startDistance = 0
 let initialRatio = 0
 let imageLoader: HTMLImageElement
@@ -203,18 +209,18 @@ function preloadNearbyImage(index: number) {
 function restoreImage() {
   if (!imageViewer.value.info)
     return
-  if (imageViewer.value.info.size[0] <= 2000 && imageViewer.value.info.size[1] <= 2000) {
+  if (imageViewer.value.info.size[0] <= IMAGE_PREVIEW_MAX_WIDTH && imageViewer.value.info.size[1] <= IMAGE_PREVIEW_MAX_HEIGHT) {
     imageSize.width = imageViewer.value.info.size[0]
     imageSize.height = imageViewer.value.info.size[1]
   }
   else {
     if (imageViewer.value.info.size[0] > imageViewer.value.info.size[1]) {
-      imageSize.width = 2000
-      imageSize.height = Math.round(imageViewer.value.info.size[1] * 2000 / imageViewer.value.info.size[0])
+      imageSize.width = IMAGE_PREVIEW_MAX_WIDTH
+      imageSize.height = Math.round(imageViewer.value.info.size[1] * IMAGE_PREVIEW_MAX_WIDTH / imageViewer.value.info.size[0])
     }
     else {
-      imageSize.width = Math.round(imageViewer.value.info.size[0] * 2000 / imageViewer.value.info.size[1])
-      imageSize.height = 2000
+      imageSize.width = Math.round(imageViewer.value.info.size[0] * IMAGE_PREVIEW_MAX_HEIGHT / imageViewer.value.info.size[1])
+      imageSize.height = IMAGE_PREVIEW_MAX_HEIGHT
     }
   }
   // 计算图片初始显示比率
@@ -286,8 +292,8 @@ function handleTouchMove(e: TouchEvent) {
     const delta = newDistance / startDistance
     startDistance = newDistance
     let newRatio = imageRatio.value * delta
-    if (newRatio < initialRatio * minRatio)
-      newRatio = initialRatio * minRatio
+    if (newRatio < initialRatio * IMAGE_VIEWER_MIN_RATIO)
+      newRatio = initialRatio * IMAGE_VIEWER_MIN_RATIO
     handleZoom(newRatio, centerPostiion, true)
   }
 }
@@ -305,8 +311,8 @@ function handleWheelScroll(e: WheelEvent) {
     newRatio = imageRatio.value - delta
   else
     newRatio = imageRatio.value - delta
-  if (newRatio < initialRatio * minRatio)
-    newRatio = initialRatio * minRatio
+  if (newRatio < initialRatio * IMAGE_VIEWER_MIN_RATIO)
+    newRatio = initialRatio * IMAGE_VIEWER_MIN_RATIO
   handleZoom(newRatio, { x: mouseRef.x.value, y: mouseRef.y.value })
 }
 

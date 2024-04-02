@@ -13,17 +13,17 @@
         }"
       >
         <button
-          class="h-[60px] w-[60px] hover:bg-gray-400/20"
+          class="size-[60px] hover:bg-gray-400/20"
           @click="showSidebar = !showSidebar"
         >
-          <IconMenu class="mx-auto h-7 w-7" />
+          <IconMenu class="mx-auto size-7" />
         </button>
         <button
-          class="hidden h-[60px] w-[60px] hover:bg-gray-400/20 sm:block"
+          class="hidden size-[60px] hover:bg-gray-400/20 sm:block"
           @click="store.toggleSearch"
         >
-          <IconSearch v-if="!filterConfig.search.enable" class="mx-auto h-6 w-6" />
-          <IconClose v-else class="mx-auto h-6 w-6" />
+          <IconSearch v-if="!filterConfig.search.enable" class="mx-auto size-6" />
+          <IconClose v-else class="mx-auto size-6" />
         </button>
         <div v-show="filterConfig.search.enable" class="mr-[60px] flex-1 sm:mr-0">
           <input
@@ -36,11 +36,11 @@
         </div>
       </div>
       <button
-        class="absolute right-0 block h-[60px] w-[60px] hover:bg-gray-400/20 sm:hidden"
+        class="absolute right-0 block size-[60px] hover:bg-gray-400/20 sm:hidden"
         @click="store.toggleSearch"
       >
-        <IconSearch v-if="!filterConfig.search.enable" class="mx-auto h-6 w-6" />
-        <IconClose v-else class="mx-auto h-6 w-6" />
+        <IconSearch v-if="!filterConfig.search.enable" class="mx-auto size-6" />
+        <IconClose v-else class="mx-auto size-6" />
       </button>
       <div
         v-show="!filterConfig.search.enable"
@@ -51,25 +51,25 @@
       </div>
       <div class="absolute right-0 top-0 hidden lg:flex">
         <button
-          class="h-[60px] w-[60px] hover:bg-gray-400/20"
+          class="size-[60px] hover:bg-gray-400/20"
           @click="openGithub"
         >
-          <IconGithub class="mx-auto h-6 w-6" />
+          <IconGithub class="mx-auto size-6" />
         </button>
         <button
-          class="h-[60px] w-[60px] hover:bg-gray-400/20"
+          class="size-[60px] hover:bg-gray-400/20"
           @click="store.toggleColorScheme"
         >
-          <IconSun v-if="preferColorScheme === 'light'" class="mx-auto h-6 w-6" />
-          <IconMoon v-if="preferColorScheme === 'dark'" class="mx-auto h-5 w-5" />
-          <IconAuto v-if="preferColorScheme === 'auto'" class="mx-auto h-5 w-5" />
+          <IconSun v-if="preferColorScheme === 'light'" class="mx-auto size-6" />
+          <IconMoon v-if="preferColorScheme === 'dark'" class="mx-auto size-5" />
+          <IconAuto v-if="preferColorScheme === 'auto'" class="mx-auto size-5" />
         </button>
         <button
-          class="h-[60px] w-[60px] hover:bg-gray-400/20"
+          class="size-[60px] hover:bg-gray-400/20"
           @click="store.toggleFullscreen"
         >
-          <IconShrink v-if="isFullscreen" class="mx-auto h-5 w-5" />
-          <IconExpand v-else class="mx-auto h-5 w-5" />
+          <IconShrink v-if="isFullscreen" class="mx-auto size-5" />
+          <IconExpand v-else class="mx-auto size-5" />
         </button>
       </div>
     </div>
@@ -82,7 +82,14 @@ import { useStore } from '@/store'
 import { LINK_GITHUB, NAVBAR_HIDE_DISTANCE } from '@/config'
 
 const store = useStore()
-const { preferColorScheme, showSidebar, showNav, imageViewer, isFullscreen, filterConfig } = toRefs(store)
+const {
+  preferColorScheme,
+  showSidebar,
+  showNav,
+  imageViewer,
+  isFullscreen,
+  filterConfig,
+} = toRefs(store)
 
 const updateSearchStr = useDebounceFn((value) => {
   store.updateSeatchValue(value)

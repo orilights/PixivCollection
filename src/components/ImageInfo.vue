@@ -7,7 +7,7 @@
     }"
   >
     <div class="flex items-center">
-      <IconTitle v-if="mode === 'cover'" class="mr-1 inline-block h-4 w-4" />
+      <IconTitle v-if="mode === 'cover'" class="mr-1 inline-block size-4" />
       <span
         class="cursor-pointer truncate transition-colors hover:text-blue-500"
         :class="{
@@ -20,13 +20,13 @@
       </span>
     </div>
     <div class="flex items-center">
-      <IconUser v-if="mode === 'cover'" class="mr-1 inline-block h-4 w-4" />
+      <IconUser v-if="mode === 'cover'" class="mr-1 inline-block size-4" />
       <span
         class="cursor-pointer truncate text-sm transition-colors hover:text-blue-500"
         @click.stop="openPixivUser(imageData.author.id)"
       >{{ imageData.author.name }}</span>
       <IconFunnelSolid
-        class="ml-1 inline-block h-3 w-3 cursor-pointer transition-colors hover:text-blue-500 "
+        class="ml-1 inline-block size-3 cursor-pointer transition-colors hover:text-blue-500 "
         @click.stop="handleFilterAuthor"
       />
     </div>
@@ -36,7 +36,7 @@
         'h-[50px] overflow-y-auto': mode === 'bottom',
       }"
     >
-      <IconTag v-if="mode === 'cover'" class="inline-block h-4 w-4" />
+      <IconTag v-if="mode === 'cover'" class="inline-block size-4" />
       <span
         v-for="tag, idx in imageData.tags"
         v-show="!tag.name.includes('users入り') || config.tagIncludeBookmark" :key="idx"

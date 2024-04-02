@@ -5,7 +5,7 @@
     @click="$emit('update:modelValue', !modelValue)"
   >
     <div
-      class="absolute left-[2px] top-[2px] h-[16px] w-[16px] rounded-full bg-white transition-transform duration-300"
+      class="absolute left-[2px] top-[2px] size-[16px] rounded-full bg-white transition-transform duration-300"
       :class="{ 'translate-x-[20px]': modelValue }"
     />
   </div>
