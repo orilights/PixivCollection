@@ -3,7 +3,6 @@
     <div
       v-show="imageViewer.show"
       class="fixed left-0 top-0 h-screen w-full bg-black/50 backdrop-blur-lg"
-
       @wheel.prevent="handleWheelScroll"
     >
       <div class="absolute left-2 top-2 z-50 flex gap-2">
@@ -23,6 +22,7 @@
             <IconInfo class="mx-auto size-7" />
           </button>
           <button
+            v-if="IMAGE_ALLOW_DOWNLOAD_ORIGINAL"
             class="size-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
             title="下载原图"
             @click="downloadImage"
@@ -118,6 +118,7 @@
 import { useMouse, useWindowSize } from '@vueuse/core'
 import { useStore } from '@/store'
 import {
+  IMAGE_ALLOW_DOWNLOAD_ORIGINAL,
   IMAGE_FORMAT_PREVIEW,
   IMAGE_PATH_ORIGINAL,
   IMAGE_PATH_PREVIEW,

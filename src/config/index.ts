@@ -12,6 +12,7 @@ export const IMAGE_FORMAT_THUMBNAIL = 'webp'
 export const IMAGE_PREVIEW_MAX_WIDTH = 2000
 export const IMAGE_PREVIEW_MAX_HEIGHT = 2000
 export const IMAGE_VIEWER_MIN_RATIO = 0.3
+export const IMAGE_ALLOW_DOWNLOAD_ORIGINAL = true
 
 export const MASONRY_MIN_COLUMNS = 2
 export const MASONRY_MAX_COLUMNS = 10
