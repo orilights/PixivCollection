@@ -17,7 +17,7 @@
           <button
             class="size-[60px] rounded-full bg-black/40 text-center text-white transition-colors hover:bg-gray-900/40"
             title="显示图片信息"
-            @click="imageViewer.showInfo = !imageViewer.showInfo"
+            @click="showInfo = !showInfo"
           >
             <IconInfo class="mx-auto size-7" />
           </button>
@@ -38,7 +38,7 @@
         </div>
         <Transition name="popup">
           <div
-            v-if="imageViewer.info && imageViewer.showInfo"
+            v-if="imageViewer.info && showInfo"
             class="fixed bottom-0 left-0 h-fit w-full rounded-t-[30px] bg-black/40 p-4 pb-10 text-white backdrop-blur-md sm:relative sm:w-[300px] sm:rounded-b-[30px]"
           >
             <p
@@ -95,8 +95,7 @@
         <IconRight class="mx-auto size-6 translate-x-0.5 stroke-2" />
       </button>
       <div class="relative">
-        <img
-          :src="imageSrc"
+        <div
           class="absolute max-w-none cursor-grab touch-none select-none active:cursor-grabbing"
           :class="{
             '': !imageGragging,
@@ -105,10 +104,15 @@
             transform: `scale(${imageRatio})`,
             left: `${imagePos.x}px`,
             top: `${imagePos.y}px`,
+            width: `${imageSize.width}px`,
+            height: `${imageSize.height}px`,
           }"
           @mousedown.prevent="handleMouseDragStart"
           @touchstart.prevent="handleTouchStart"
         >
+          <img v-show="loadingImage" class="absolute left-0 top-0 z-0 size-full" :src="thumbnailSrc">
+          <img :src="imageSrc" class="absolute left-0 top-0 z-10 size-full">
+        </div>
       </div>
     </div>
   </Transition>
@@ -120,8 +124,10 @@ import { useStore } from '@/store'
 import {
   IMAGE_ALLOW_DOWNLOAD_ORIGINAL,
   IMAGE_FORMAT_PREVIEW,
+  IMAGE_FORMAT_THUMBNAIL,
   IMAGE_PATH_ORIGINAL,
   IMAGE_PATH_PREVIEW,
+  IMAGE_PATH_THUMBNAIL,
   IMAGE_PREVIEW_MAX_HEIGHT,
   IMAGE_PREVIEW_MAX_WIDTH,
   IMAGE_VIEWER_MIN_RATIO,
@@ -135,18 +141,20 @@ const { show: imageViewerShow, info: imageViewerInfo } = toRefs(imageViewer.valu
 const imageRatio = ref(1)
 const imagePos = ref({ x: 0, y: 0 })
 const imageGragging = ref(false)
+const thumbnailSrc = ref('')
 const imageSrc = ref('')
 const mouseRef = useMouse({ type: 'client' })
 const loadingImage = ref(false)
 const loadingImageId = ref('')
 const windowSize = reactive(useWindowSize())
+const showInfo = ref(true)
+const imageSize = ref({ width: 0, height: 0 })
 
 const touchStartPosition = { x: 0, y: 0 }
 const touchCenterPosition = { x: 0, y: 0 }
 let startDistance = 0
 let initialRatio = 0
 let imageLoader: HTMLImageElement
-const imageSize = { width: 0, height: 0 }
 
 watch(imageViewerShow, (val) => {
   if (!val) {
@@ -165,6 +173,7 @@ watch(imageViewerInfo, (val) => {
     return
   if (imageLoader)
     imageLoader.remove()
+  thumbnailSrc.value = ''
   imageSrc.value = ''
 
   loadingImage.value = true
@@ -177,6 +186,7 @@ watch(imageViewerInfo, (val) => {
       preloadNearbyImage(imageViewer.value.index)
     }
   })
+  thumbnailSrc.value = `${IMAGE_PATH_THUMBNAIL}${val.id}_p${val.part}.${IMAGE_FORMAT_THUMBNAIL}`
   imageLoader.src = `${IMAGE_PATH_PREVIEW}${val.id}_p${val.part}.${IMAGE_FORMAT_PREVIEW}`
 
   nextTick(() => {
@@ -219,27 +229,27 @@ function restoreImage() {
   if (!imageViewer.value.info)
     return
   if (imageViewer.value.info.size[0] <= IMAGE_PREVIEW_MAX_WIDTH && imageViewer.value.info.size[1] <= IMAGE_PREVIEW_MAX_HEIGHT) {
-    imageSize.width = imageViewer.value.info.size[0]
-    imageSize.height = imageViewer.value.info.size[1]
+    imageSize.value.width = imageViewer.value.info.size[0]
+    imageSize.value.height = imageViewer.value.info.size[1]
   }
   else {
     if (imageViewer.value.info.size[0] > imageViewer.value.info.size[1]) {
-      imageSize.width = IMAGE_PREVIEW_MAX_WIDTH
-      imageSize.height = Math.round(imageViewer.value.info.size[1] * IMAGE_PREVIEW_MAX_WIDTH / imageViewer.value.info.size[0])
+      imageSize.value.width = IMAGE_PREVIEW_MAX_WIDTH
+      imageSize.value.height = Math.round(imageViewer.value.info.size[1] * IMAGE_PREVIEW_MAX_WIDTH / imageViewer.value.info.size[0])
     }
     else {
-      imageSize.width = Math.round(imageViewer.value.info.size[0] * IMAGE_PREVIEW_MAX_HEIGHT / imageViewer.value.info.size[1])
-      imageSize.height = IMAGE_PREVIEW_MAX_HEIGHT
+      imageSize.value.width = Math.round(imageViewer.value.info.size[0] * IMAGE_PREVIEW_MAX_HEIGHT / imageViewer.value.info.size[1])
+      imageSize.value.height = IMAGE_PREVIEW_MAX_HEIGHT
     }
   }
   // 计算图片初始显示比率
-  const ratioWidth = window.innerWidth / imageSize.width
-  const ratioHeight = window.innerHeight / imageSize.height
+  const ratioWidth = window.innerWidth / imageSize.value.width
+  const ratioHeight = window.innerHeight / imageSize.value.height
   initialRatio = Math.min(ratioWidth, ratioHeight)
   imageRatio.value = initialRatio
   // 计算图片初始显示位置
-  imagePos.value.x = (window.innerWidth - imageSize.width) / 2
-  imagePos.value.y = (window.innerHeight - imageSize.height) / 2
+  imagePos.value.x = (window.innerWidth - imageSize.value.width) / 2
+  imagePos.value.y = (window.innerHeight - imageSize.value.height) / 2
 }
 
 function handleMouseDragStart() {
@@ -328,8 +338,8 @@ function handleWheelScroll(e: WheelEvent) {
 function handleZoom(newRatio: number, centerPostiion: { x: number, y: number }, touch = false) {
   const windowWidth = window.innerWidth
   const windowHeight = window.innerHeight
-  const deltaX = centerPostiion.x - (imagePos.value.x - ((windowWidth - imageSize.width) / 2) + windowWidth / 2)
-  const deltaY = centerPostiion.y - (imagePos.value.y - ((windowHeight - imageSize.height) / 2) + windowHeight / 2)
+  const deltaX = centerPostiion.x - (imagePos.value.x - ((windowWidth - imageSize.value.width) / 2) + windowWidth / 2)
+  const deltaY = centerPostiion.y - (imagePos.value.y - ((windowHeight - imageSize.value.height) / 2) + windowHeight / 2)
   if (touch) {
     imagePos.value.x -= (newRatio / imageRatio.value - 1) * deltaX + (touchCenterPosition.x - centerPostiion.x)
     imagePos.value.y -= (newRatio / imageRatio.value - 1) * deltaY + (touchCenterPosition.y - centerPostiion.y)

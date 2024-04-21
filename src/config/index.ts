@@ -11,6 +11,8 @@ export const IMAGE_FORMAT_PREVIEW = 'webp'
 export const IMAGE_FORMAT_THUMBNAIL = 'webp'
 export const IMAGE_PREVIEW_MAX_WIDTH = 2000
 export const IMAGE_PREVIEW_MAX_HEIGHT = 2000
+export const IMAGE_THUMBNAIL_MAX_WIDTH = 500
+export const IMAGE_THUMBNAIL_MAX_HEIGHT = 1000
 export const IMAGE_VIEWER_MIN_RATIO = 0.3
 export const IMAGE_ALLOW_DOWNLOAD_ORIGINAL = true
 
