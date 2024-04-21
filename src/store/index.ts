@@ -76,14 +76,12 @@ export const useStore = defineStore('main', {
     },
     debug: {
       enable: false,
-      masonryContainerHeight: 0,
+      masonryContainerSize: [0, 0],
       masonryContainerTop: 0,
+      masonryItemWidth: 0,
       masonryItemRenderLength: 0,
-      masonryItemRenderTop: 0,
-      masonryItemRenderBottom: 0,
-      masonryRefreshCount: 0,
-      screenWidth: 0,
-      screenHeight: 0,
+      masonryItemRenderRange: [0, 0],
+      screenSize: [0, 0],
     },
   }),
   getters: {
@@ -303,6 +301,5 @@ export const useStore = defineStore('main', {
         return (a.id - b.id)
       })
     },
-
   },
 })

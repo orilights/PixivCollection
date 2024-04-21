@@ -1,8 +1,10 @@
 <template>
   <div class="fixed right-4 top-[60px] z-[999] bg-black/60 p-2 text-sm text-white">
-    <div v-for="item in Object.entries(debug)" :key="item[0]">
-      {{ item[0] }}: {{ item[1] }}
-    </div>
+    <template v-for="item in Object.entries(debug)" :key="item[0]">
+      <div v-if="item[0] !== 'enable'">
+        {{ item[0] }}: {{ item[1] }}
+      </div>
+    </template>
     <div>
       imagesLoaded: {{ imagesLoaded.size }}
     </div>

@@ -42,9 +42,10 @@ const col = computed(() => {
   if (masonryConfig.value.col > 0)
     return masonryConfig.value.col
 
-  const cWidth = containerWidth.value + masonryConfig.value.gap * 2
-  if (cWidth >= masonryConfig.value.imageMinWidth * 2)
-    return Math.floor(cWidth / masonryConfig.value.imageMinWidth)
+  const iMinWidth = masonryConfig.value.imageMinWidth + masonryConfig.value.gap
+  const cWidth = containerWidth.value - masonryConfig.value.gap
+  if (cWidth >= iMinWidth * 2)
+    return Math.floor(cWidth / iMinWidth)
 
   return MASONRY_MIN_COLUMNS
 })
@@ -83,7 +84,6 @@ const imagesPlaced = computed(() => {
     result.push(Object.freeze(item))
   }
   containerHeight.value = Math.max(...colsTop)
-  store.debug.enable && store.debug.masonryRefreshCount++
   return result
 })
 
@@ -100,13 +100,13 @@ const imagesRenderList = computed(() => {
     return item.top + itemHeight > renderRangeTop && item.top < renderRangeBottom
   })
   if (store.debug.enable) {
-    store.debug.masonryContainerHeight = containerHeight.value
-    store.debug.masonryContainerTop = containerTop.value
+    const f = (v: number) => +v.toFixed(3)
+    store.debug.masonryContainerSize = [f(containerWidth.value), f(containerHeight.value)]
+    store.debug.masonryContainerTop = f(containerTop.value)
+    store.debug.masonryItemWidth = f(imageWidth.value)
     store.debug.masonryItemRenderLength = res.length
-    store.debug.masonryItemRenderTop = renderRangeTop
-    store.debug.masonryItemRenderBottom = renderRangeBottom
-    store.debug.screenWidth = window.innerWidth
-    store.debug.screenHeight = window.innerHeight
+    store.debug.masonryItemRenderRange = [f(renderRangeTop), f(renderRangeBottom)]
+    store.debug.screenSize = [window.innerWidth, window.innerHeight]
   }
   return res
 })

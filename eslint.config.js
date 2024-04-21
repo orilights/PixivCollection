@@ -9,6 +9,7 @@ export default antfu({}, {
     'vue/block-order': ['error', {
       order: ['template', 'script', 'style'],
     }],
+    'vue/no-side-effects-in-computed-properties': 'off',
   },
 }, ...compat.config({
   extends: 'plugin:tailwindcss/recommended',
