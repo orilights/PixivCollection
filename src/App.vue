@@ -96,6 +96,10 @@ onMounted(() => {
   regSettings()
   fetchData()
 })
+
+onUnmounted(() => {
+  store.settings.unregisterAll()
+})
 </script>
 
 <style>
