@@ -186,10 +186,11 @@ watch(imageViewerInfo, (val) => {
       preloadNearbyImage(imageViewer.value.index)
     }
   })
-  thumbnailSrc.value = `${IMAGE_PATH_THUMBNAIL}${val.id}_p${val.part}.${IMAGE_FORMAT_THUMBNAIL}`
+
   imageLoader.src = `${IMAGE_PATH_PREVIEW}${val.id}_p${val.part}.${IMAGE_FORMAT_PREVIEW}`
 
   nextTick(() => {
+    thumbnailSrc.value = `${IMAGE_PATH_THUMBNAIL}${val.id}_p${val.part}.${IMAGE_FORMAT_THUMBNAIL}`
     imageSrc.value = imageLoader.src
   })
 
