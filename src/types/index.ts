@@ -1,4 +1,5 @@
-export { }
+export * from './enum'
+
 declare global {
   interface Image {
     id: number
@@ -43,3 +44,5 @@ declare global {
     border: boolean
   }
 }
+
+export {}

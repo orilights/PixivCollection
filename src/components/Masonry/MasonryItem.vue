@@ -23,7 +23,7 @@
       </Transition>
       <img
         class="w-full cursor-pointer"
-        :src="imageLoad ? `${IMAGE_PATH_THUMBNAIL}${imageData.id}_p${imageData.part}.${IMAGE_FORMAT_THUMBNAIL}` : ''"
+        :src="imageSrc"
         @load="handleImageLoaded"
         @click="useStore().viewImage(imageIndex)"
       >
@@ -58,11 +58,11 @@
 
 <script setup lang="ts">
 import {
-  IMAGE_FORMAT_THUMBNAIL,
-  IMAGE_PATH_THUMBNAIL,
   MASONRY_LOAD_DELAY,
 } from '@/config'
 import { useStore } from '@/store'
+import { ImageType } from '@/types'
+import { getImageUrl } from '@/utils'
 
 const props = defineProps<{
   imageData: Image
@@ -78,6 +78,10 @@ const imageLoad = ref(false)
 const imageLoaded = ref(false)
 
 const imageIdxStr = `${props.imageData.id * 100 + props.imageData.part}`
+
+const imageSrc = computed(() =>
+  imageLoad.value ? getImageUrl(props.imageData, ImageType.Thumbnail) : '',
+)
 
 onMounted(() => {
   if (useStore().imagesLoaded.has(imageIdxStr)) {

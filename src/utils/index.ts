@@ -1,4 +1,5 @@
-import { LINK_PIXIV_ARTWORK, LINK_PIXIV_USER } from '@/config'
+import { IMAGE_FORMAT_PREVIEW, IMAGE_FORMAT_THUMBNAIL, IMAGE_PATH_ORIGINAL, IMAGE_PATH_PREVIEW, IMAGE_PATH_THUMBNAIL, LINK_PIXIV_ARTWORK, LINK_PIXIV_USER } from '@/config'
+import { ImageType } from '@/types'
 
 export function formatBytes(bytes: number) {
   if (bytes === 0)
@@ -21,6 +22,18 @@ export function formatTime(time: string) {
   const minute = date.getMinutes().toString().padStart(2, '0')
   const second = date.getSeconds().toString().padStart(2, '0')
   return `${year}-${month}-${day} ${hour}:${minute}:${second}`
+}
+
+export function getImageUrl(image: Image, imageType: ImageType) {
+  switch (imageType) {
+    case ImageType.Original:
+      return `${IMAGE_PATH_ORIGINAL}${image.id}_p${image.part}.${image.ext}`
+    case ImageType.Preview:
+      return `${IMAGE_PATH_PREVIEW}${image.id}_p${image.part}.${IMAGE_FORMAT_PREVIEW}`
+    case ImageType.Thumbnail:
+      return `${IMAGE_PATH_THUMBNAIL}${image.id}_p${image.part}.${IMAGE_FORMAT_THUMBNAIL}`
+  }
+  return ''
 }
 
 export function openPixivIllust(pid: number) {

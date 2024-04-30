@@ -123,16 +123,12 @@ import { useMouse, useWindowSize } from '@vueuse/core'
 import { useStore } from '@/store'
 import {
   IMAGE_ALLOW_DOWNLOAD_ORIGINAL,
-  IMAGE_FORMAT_PREVIEW,
-  IMAGE_FORMAT_THUMBNAIL,
-  IMAGE_PATH_ORIGINAL,
-  IMAGE_PATH_PREVIEW,
-  IMAGE_PATH_THUMBNAIL,
   IMAGE_PREVIEW_MAX_HEIGHT,
   IMAGE_PREVIEW_MAX_WIDTH,
   IMAGE_VIEWER_MIN_RATIO,
 } from '@/config'
-import { formatTime, openPixivIllust, openPixivUser } from '@/utils'
+import { formatTime, getImageUrl, openPixivIllust, openPixivUser } from '@/utils'
+import { ImageType } from '@/types'
 
 const store = useStore()
 const { imageViewer, filterConfig, masonryConfig } = toRefs(store)
@@ -187,10 +183,10 @@ watch(imageViewerInfo, (val) => {
     }
   })
 
-  imageLoader.src = `${IMAGE_PATH_PREVIEW}${val.id}_p${val.part}.${IMAGE_FORMAT_PREVIEW}`
+  imageLoader.src = getImageUrl(val, ImageType.Preview)
 
   nextTick(() => {
-    thumbnailSrc.value = `${IMAGE_PATH_THUMBNAIL}${val.id}_p${val.part}.${IMAGE_FORMAT_THUMBNAIL}`
+    thumbnailSrc.value = getImageUrl(val, ImageType.Thumbnail)
     imageSrc.value = imageLoader.src
   })
 
@@ -215,12 +211,12 @@ onUnmounted(() => {
 
 function preloadNearbyImage(index: number) {
   if (index - 1 >= 0) {
-    const imageUrl = `${IMAGE_PATH_PREVIEW}${store.imagesFiltered[index - 1].id}_p${store.imagesFiltered[index - 1].part}.${IMAGE_FORMAT_PREVIEW}`
+    const imageUrl = getImageUrl(store.imagesFiltered[index - 1], ImageType.Preview)
     const imageLoader = new Image()
     imageLoader.src = imageUrl
   }
   if (index + 1 < store.imagesFiltered.length) {
-    const imageUrl = `${IMAGE_PATH_PREVIEW}${store.imagesFiltered[index + 1].id}_p${store.imagesFiltered[index + 1].part}.${IMAGE_FORMAT_PREVIEW}`
+    const imageUrl = getImageUrl(store.imagesFiltered[index + 1], ImageType.Preview)
     const imageLoader = new Image()
     imageLoader.src = imageUrl
   }
@@ -360,7 +356,7 @@ function downloadImage() {
     return
   const link = document.createElement('a')
   link.target = '_blank'
-  link.href = `${IMAGE_PATH_ORIGINAL}${imageViewer.value.info.id}_p${imageViewer.value.info.part}.${imageViewer.value.info.ext}`
+  link.href = getImageUrl(imageViewer.value.info, ImageType.Original)
   link.click()
 }
 

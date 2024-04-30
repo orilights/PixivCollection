@@ -2,19 +2,19 @@ export const LINK_GITHUB = 'https://github.com/orilights/PixivCollection'
 export const LINK_PIXIV_ARTWORK = 'https://www.pixiv.net/artworks/{id}'
 export const LINK_PIXIV_USER = 'https://www.pixiv.net/users/{id}'
 
-export const DATA_FILE = './images.json'
+export const DATA_FILE = import.meta.env.VITE_DATA_FILE || './images.json'
 
-export const IMAGE_PATH_ORIGINAL = './image/original/'
-export const IMAGE_PATH_PREVIEW = './image/preview/'
-export const IMAGE_PATH_THUMBNAIL = './image/thumbnail/'
-export const IMAGE_FORMAT_PREVIEW = 'webp'
-export const IMAGE_FORMAT_THUMBNAIL = 'webp'
+export const IMAGE_PATH_ORIGINAL = import.meta.env.VITE_IMAGE_PATH_ORIGINAL || './image/original/'
+export const IMAGE_PATH_PREVIEW = import.meta.env.VITE_IMAGE_PATH_PREVIEW || './image/preview/'
+export const IMAGE_PATH_THUMBNAIL = import.meta.env.VITE_IMAGE_PATH_THUMBNAIL || './image/thumbnail/'
+export const IMAGE_FORMAT_PREVIEW = import.meta.env.VITE_IMAGE_FORMAT_PREVIEW || 'webp'
+export const IMAGE_FORMAT_THUMBNAIL = import.meta.env.VITE_IMAGE_FORMAT_THUMBNAIL || 'webp'
 export const IMAGE_PREVIEW_MAX_WIDTH = 2000
 export const IMAGE_PREVIEW_MAX_HEIGHT = 2000
 export const IMAGE_THUMBNAIL_MAX_WIDTH = 500
 export const IMAGE_THUMBNAIL_MAX_HEIGHT = 1000
 export const IMAGE_VIEWER_MIN_RATIO = 0.3
-export const IMAGE_ALLOW_DOWNLOAD_ORIGINAL = true
+export const IMAGE_ALLOW_DOWNLOAD_ORIGINAL = import.meta.env.VITE_IMAGE_ALLOW_DOWNLOAD_ORIGINAL !== 'false'
 
 export const MASONRY_MIN_COLUMNS = 2
 export const MASONRY_MAX_COLUMNS = 10
@@ -22,7 +22,7 @@ export const MASONRY_RENDER_RANGE = {
   up: 0.2,
   down: 0.5,
 }
-export const MASONRY_LOAD_DELAY = 300
+export const MASONRY_LOAD_DELAY = Number(import.meta.env.VITE_MASONRY_LOAD_DELAY) || 300
 export const MASONRY_INFO_AREA_HEIGHT = 120
 export const MASONRY_IMAGE_GAP_LIST = [0, 10, 20, 30]
 export const MASONRY_IMAGE_SIZE_LIST = [200, 240, 280, 320, 360, 400]
