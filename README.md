@@ -2,7 +2,6 @@
 
 ![preview](docs/screenshot.jpg)
 
-
 ## 简介
 
 [示例站点](https://pixiv.orilight.top/)
@@ -55,3 +54,14 @@ pnpm build
 将脚本生成的预览图上传至服务器 `./image/preview` 目录
 
 将脚本生成的缩略图上传至服务器 `./image/thumbnail` 目录
+
+## 可用环境变量
+
+- `VITE_DATA_FILE`: 数据文件路径，默认为 `images.json`
+- `VITE_IMAGE_PATH_ORIGINAL`: 图片原图路径，默认为 `./image/original`
+- `VITE_IMAGE_PATH_PREVIEW`: 图片预览图路径，默认为 `./image/preview`
+- `VITE_IMAGE_PATH_THUMBNAIL`: 图片缩略图路径，默认为 `./image/thumbnail`
+- `VITE_IMAGE_FORMAT_PREVIEW`: 图片预览图格式，默认为 `webp`
+- `VITE_IMAGE_FORMAT_THUMBNAIL`: 图片缩略图格式，默认为 `webp`
+- `VITE_IMAGE_ALLOW_DOWNLOAD_ORIGINAL`: 是否允许下载原图，默认为 `true`
+- `VITE_MASONRY_LOAD_DELAY`: 瀑布流图片加载延迟，单位毫秒，默认为 `300`
