@@ -53,3 +53,7 @@ export function exportFile(data: string, filename = 'export-{ts}.json') {
   a.click()
   URL.revokeObjectURL(url)
 }
+
+export function copyToClipboard(content: string | number) {
+  navigator.clipboard.writeText(String(content))
+}

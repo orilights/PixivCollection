@@ -27,7 +27,7 @@ export const useStore = defineStore('main', {
     masonryConfig: {
       col: -1,
       gap: 20,
-      imageMinWidth: 280,
+      imageMinWidth: 240,
       containerFullWidth: true,
       mergeSameIdImage: true,
       infoAtBottom: false,

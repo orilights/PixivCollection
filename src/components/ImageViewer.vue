@@ -64,7 +64,9 @@
               </span>
             </p>
             <p class="absolute bottom-4 left-4 text-xs text-gray-300">
-              <span :title="formatTime(imageViewer.info.created_at)">{{ imageViewer.info.id }}</span>
+              <button :title="formatTime(imageViewer.info.created_at)" @click="copyToClipboard(imageViewer.info.id)">
+                {{ imageViewer.info.id }}
+              </button>
               {{ `p${imageViewer.info.part}` }}
               {{ `${imageViewer.info.bookmark}` }}
               {{ `${imageViewer.info.size[0]}×${imageViewer.info.size[1]}` }}
@@ -127,7 +129,7 @@ import {
   IMAGE_PREVIEW_MAX_WIDTH,
   IMAGE_VIEWER_MIN_RATIO,
 } from '@/config'
-import { formatTime, getImageUrl, openPixivIllust, openPixivUser } from '@/utils'
+import { copyToClipboard, formatTime, getImageUrl, openPixivIllust, openPixivUser } from '@/utils'
 import { ImageType } from '@/types'
 
 const store = useStore()

@@ -56,7 +56,9 @@
         'whitespace-nowrap text-gray-500': mode === 'bottom',
       }"
     >
-      <span :title="formatTime(imageData.created_at)">{{ imageData.id }}</span>
+      <button :title="formatTime(imageData.created_at)" @click.stop="copyToClipboard(imageData.id)">
+        {{ imageData.id }}
+      </button>
       {{ `p${imageData.part}` }}
       {{ imageData.bookmark }}
       {{ `${imageData.size[0]}×${imageData.size[1]}` }}
@@ -67,7 +69,7 @@
 
 <script setup lang="ts">
 import { useStore } from '@/store'
-import { formatTime, openPixivIllust, openPixivUser } from '@/utils'
+import { copyToClipboard, formatTime, openPixivIllust, openPixivUser } from '@/utils'
 
 const props = defineProps<{
   imageData: Image
