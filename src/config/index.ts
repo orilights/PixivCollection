@@ -4,11 +4,12 @@ export const LINK_PIXIV_USER = 'https://www.pixiv.net/users/{id}'
 
 export const DATA_FILE = import.meta.env.VITE_DATA_FILE || './images.json'
 
-export const IMAGE_PATH_ORIGINAL = import.meta.env.VITE_IMAGE_PATH_ORIGINAL || './image/original/'
-export const IMAGE_PATH_PREVIEW = import.meta.env.VITE_IMAGE_PATH_PREVIEW || './image/preview/'
-export const IMAGE_PATH_THUMBNAIL = import.meta.env.VITE_IMAGE_PATH_THUMBNAIL || './image/thumbnail/'
-export const IMAGE_FORMAT_PREVIEW = import.meta.env.VITE_IMAGE_FORMAT_PREVIEW || 'webp'
-export const IMAGE_FORMAT_THUMBNAIL = import.meta.env.VITE_IMAGE_FORMAT_THUMBNAIL || 'webp'
+export const IMAGE_PATH_ORIGINAL: string = import.meta.env.VITE_IMAGE_PATH_ORIGINAL || './image/original/'
+export const IMAGE_PATH_PREVIEW: string = import.meta.env.VITE_IMAGE_PATH_PREVIEW || './image/preview/'
+export const IMAGE_PATH_THUMBNAIL: string = import.meta.env.VITE_IMAGE_PATH_THUMBNAIL || './image/thumbnail/'
+export const IMAGE_FILENAME: string = import.meta.env.VITE_IMAGE_FILENAME || '{id}_p{part}.{ext}'
+export const IMAGE_FORMAT_PREVIEW: string = import.meta.env.VITE_IMAGE_FORMAT_PREVIEW || 'webp'
+export const IMAGE_FORMAT_THUMBNAIL: string = import.meta.env.VITE_IMAGE_FORMAT_THUMBNAIL || 'webp'
 export const IMAGE_PREVIEW_MAX_WIDTH = 2000
 export const IMAGE_PREVIEW_MAX_HEIGHT = 2000
 export const IMAGE_THUMBNAIL_MAX_WIDTH = 500

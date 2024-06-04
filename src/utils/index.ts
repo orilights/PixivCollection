@@ -1,4 +1,4 @@
-import { IMAGE_FORMAT_PREVIEW, IMAGE_FORMAT_THUMBNAIL, IMAGE_PATH_ORIGINAL, IMAGE_PATH_PREVIEW, IMAGE_PATH_THUMBNAIL, LINK_PIXIV_ARTWORK, LINK_PIXIV_USER } from '@/config'
+import { IMAGE_FILENAME, IMAGE_FORMAT_PREVIEW, IMAGE_FORMAT_THUMBNAIL, IMAGE_PATH_ORIGINAL, IMAGE_PATH_PREVIEW, IMAGE_PATH_THUMBNAIL, LINK_PIXIV_ARTWORK, LINK_PIXIV_USER } from '@/config'
 import { ImageType } from '@/types'
 
 export function formatBytes(bytes: number) {
@@ -25,15 +25,31 @@ export function formatTime(time: string) {
 }
 
 export function getImageUrl(image: Image, imageType: ImageType) {
+  const filename = IMAGE_FILENAME
+    .replace('{id}', image.id.toString())
+    .replace('{part}', image.part.toString())
+  let imagePath = ''
+  let imageExt = ''
   switch (imageType) {
     case ImageType.Original:
-      return `${IMAGE_PATH_ORIGINAL}${image.id}_p${image.part}.${image.ext}`
+      imagePath = IMAGE_PATH_ORIGINAL
+      imageExt = image.ext
+      break
     case ImageType.Preview:
-      return `${IMAGE_PATH_PREVIEW}${image.id}_p${image.part}.${IMAGE_FORMAT_PREVIEW}`
+      imagePath = IMAGE_PATH_PREVIEW
+      imageExt = IMAGE_FORMAT_PREVIEW
+      break
     case ImageType.Thumbnail:
-      return `${IMAGE_PATH_THUMBNAIL}${image.id}_p${image.part}.${IMAGE_FORMAT_THUMBNAIL}`
+      imagePath = IMAGE_PATH_THUMBNAIL
+      imageExt = IMAGE_FORMAT_THUMBNAIL
+      break
   }
-  return ''
+  if (!imagePath.endsWith('/'))
+    imagePath += '/'
+  if (imageExt === '<ext>')
+    imageExt = image.ext
+
+  return imagePath + filename.replace('{ext}', imageExt)
 }
 
 export function openPixivIllust(pid: number) {

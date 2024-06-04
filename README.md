@@ -61,7 +61,8 @@ pnpm build
 - `VITE_IMAGE_PATH_ORIGINAL`: 图片原图路径，默认为 `./image/original`
 - `VITE_IMAGE_PATH_PREVIEW`: 图片预览图路径，默认为 `./image/preview`
 - `VITE_IMAGE_PATH_THUMBNAIL`: 图片缩略图路径，默认为 `./image/thumbnail`
-- `VITE_IMAGE_FORMAT_PREVIEW`: 图片预览图格式，默认为 `webp`
-- `VITE_IMAGE_FORMAT_THUMBNAIL`: 图片缩略图格式，默认为 `webp`
+- `VITE_IMAGE_FILENAME`: 图片名称格式，默认为 `{id}_p{part}.{ext}`
+- `VITE_IMAGE_FORMAT_PREVIEW`: 图片预览图格式，默认为 `webp`，设置为 `<ext>` 时为与原图相同格式
+- `VITE_IMAGE_FORMAT_THUMBNAIL`: 图片缩略图格式，默认为 `webp`，设置为 `<ext>` 时为与原图相同格式
 - `VITE_IMAGE_ALLOW_DOWNLOAD_ORIGINAL`: 是否允许下载原图，默认为 `true`
 - `VITE_MASONRY_LOAD_DELAY`: 瀑布流图片加载延迟，单位毫秒，默认为 `300`
