@@ -66,3 +66,4 @@ pnpm build
 - `VITE_IMAGE_FORMAT_THUMBNAIL`: 图片缩略图格式，默认为 `webp`，设置为 `<ext>` 时为与原图相同格式
 - `VITE_IMAGE_ALLOW_DOWNLOAD_ORIGINAL`: 是否允许下载原图，默认为 `true`
 - `VITE_MASONRY_LOAD_DELAY`: 瀑布流图片加载延迟，单位毫秒，默认为 `300`
+- `INJECT_HEAD`: Head 标签末尾插入内容，默认为空，可用于插入统计代码
