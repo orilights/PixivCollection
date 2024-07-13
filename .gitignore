@@ -24,4 +24,4 @@ dist-ssr
 *.sln
 *.sw?
 
-public
+serve_image.bat
