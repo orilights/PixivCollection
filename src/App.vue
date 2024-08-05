@@ -8,19 +8,17 @@
       <Sidebar />
       <SidebarMask />
       <Navbar />
-      <Tip v-show="!imagesFiltered.length">
-        <template v-if="loading">
-          <IconLoading class="mx-auto w-[60px] pb-2" :dark="colorScheme === 'light'" />
-          <div class="text-center">
-            数据加载中<br>
-            {{ formatBytes(receivedLength) }}<span v-if="contentLength"> / {{ formatBytes(contentLength) }}</span>
-          </div>
-        </template>
-        <template v-else>
-          无数据
-        </template>
-      </Tip>
       <MasonryView />
+      <Tip v-if="loading">
+        <IconLoading class="mx-auto w-[60px] pb-2" :dark="colorScheme === 'light'" />
+        <div class="text-center">
+          数据加载中<br>
+          {{ formatBytes(receivedLength) }}<span v-if="contentLength"> / {{ formatBytes(contentLength) }}</span>
+        </div>
+      </Tip>
+      <Tip v-if="!loading && !imagesFiltered.length">
+        无数据
+      </Tip>
       <ImageViewer />
       <DebugInfo v-if="debug.enable" />
     </div>
@@ -29,13 +27,14 @@
 
 <script setup lang="ts">
 import { SettingType } from '@orilight/vue-settings'
-import { DATA_FILE } from '@/config'
 import { useStore } from '@/store'
 import { formatBytes } from '@/utils'
+import { DATA_FILE, ONLINE_MODE } from '@/config'
 
 const store = useStore()
 
 const {
+  loading,
   preferColorScheme,
   colorScheme,
   imagesFiltered,
@@ -44,7 +43,6 @@ const {
   debug,
 } = toRefs(store)
 
-const loading = ref(true)
 const receivedLength = ref(0)
 const contentLength = ref(0)
 
@@ -94,7 +92,12 @@ async function fetchData() {
 
 onMounted(() => {
   regSettings()
-  fetchData()
+  if (ONLINE_MODE) {
+    store.fetchFromAPI()
+  }
+  else {
+    fetchData()
+  }
 })
 
 onUnmounted(() => {

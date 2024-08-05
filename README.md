@@ -21,6 +21,8 @@
   - 通过图片id、图片标题、作者id、作者昵称、标签、标签翻译搜索图片
 - 夜间模式
 - 全屏模式
+- 在线模式
+  - 使用 hibiapi 获取数据，需要配置 `VITE_ONLINE` 开头的相关环境变量
 
 ## 部署
 
@@ -66,4 +68,8 @@ pnpm build
 - `VITE_IMAGE_FORMAT_THUMBNAIL`: 图片缩略图格式，默认为 `webp`，设置为 `<ext>` 时为与原图相同格式
 - `VITE_IMAGE_ALLOW_DOWNLOAD_ORIGINAL`: 是否允许下载原图，默认为 `true`
 - `VITE_MASONRY_LOAD_DELAY`: 瀑布流图片加载延迟，单位毫秒，默认为 `300`
+- `VITE_ONLINE_MODE`: 开启在线模式，默认为 `false`
+- `VITE_ONLINE_API`: hibiapi Pixiv 收藏夹接口，默认为空
+- `VITE_ONLINE_USER_ID`: Pixiv 用户 ID，默认为空
+- `VITE_ONLINE_PXIMG`: Pixiv 图片代理，默认为 `pximg.orilight.top`
 - `INJECT_HEAD`: Head 标签末尾插入内容，默认为空，可用于插入统计代码

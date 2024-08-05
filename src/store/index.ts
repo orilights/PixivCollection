@@ -1,11 +1,16 @@
 import { Settings } from '@orilight/vue-settings'
 import { useFullscreen, usePreferredColorScheme } from '@vueuse/core'
 import { defineStore } from 'pinia'
+import { transformData } from '@/utils'
+import { ONLINE_API, ONLINE_USER_ID } from '@/config'
 
 export const useStore = defineStore('main', {
   state: () => ({
     showSidebar: false,
     showNav: true,
+
+    loading: true,
+    max_bookmark_id: 0,
 
     images: <Image[]>[],
     imagesLoaded: new Set(),
@@ -32,7 +37,7 @@ export const useStore = defineStore('main', {
       mergeSameIdImage: true,
       infoAtBottom: false,
       showTagTranslation: true,
-      imageSortBy: 'id_desc' as 'id_desc' | 'id_asc' | 'bookmark_desc',
+      imageSortBy: 'default' as 'default' | 'id_desc' | 'id_asc' | 'bookmark_desc',
       virtualListEnable: true,
       showShadow: false,
     },
@@ -148,8 +153,9 @@ export const useStore = defineStore('main', {
             if (tag.name === this.filterConfig.tag.name)
               return tag
             return undefined
-          })) === undefined)
+          })) === undefined) {
             return false
+          }
         }
         // 过滤_形状
         if (this.filterConfig.shape.enable) {
@@ -207,6 +213,28 @@ export const useStore = defineStore('main', {
     },
   },
   actions: {
+    async fetchFromAPI() {
+      this.loading = true
+      try {
+        const response = await fetch(`${ONLINE_API}?id=${ONLINE_USER_ID}&max_bookmark_id=${this.max_bookmark_id}`)
+        const data = await response.json()
+        this.images = [...this.images, ...transformData(data.illusts)]
+        this.max_bookmark_id = Number.parseInt(data.next_url.split('max_bookmark_id=')[1])
+        this.sortImages()
+      }
+      catch (e) {
+        console.error(e)
+      }
+      finally {
+        this.loading = false
+      }
+    },
+    loadMore() {
+      if (this.loading)
+        return
+
+      this.fetchFromAPI()
+    },
     openImageViewer(image: Image, prev: () => void, next: () => void, index: number): void {
       this.imageViewer.show = true
       this.imageViewer.info = image
@@ -290,6 +318,8 @@ export const useStore = defineStore('main', {
       )
     },
     sortImages(): void {
+      if (this.masonryConfig.imageSortBy === 'default')
+        return
       this.images.sort((a, b) => {
         if (a.id === b.id)
           return a.part - b.part

@@ -19,6 +19,11 @@ declare global {
     dominant_color: string
     bookmark: number
     view: number
+    link?: {
+      thumbnail: string
+      preview: string
+      original: string
+    }
     searchStr?: string
   }
   interface Tag {

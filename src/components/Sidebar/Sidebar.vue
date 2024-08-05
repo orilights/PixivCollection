@@ -68,7 +68,7 @@
         </div>
       </SidebarBlock>
       <SidebarBlock>
-        <div class="flex items-center">
+        <div v-if="!ONLINE_MODE" class="flex items-center">
           合并显示多P<Switch v-model="masonryConfig.mergeSameIdImage" class="ml-3" />
         </div>
         <div class="flex items-center">
@@ -95,6 +95,9 @@
             </option>
             <option value="bookmark_desc">
               收藏数降序
+            </option>
+            <option value="default">
+              不排序
             </option>
           </select>
         </div>
@@ -348,6 +351,10 @@
           作者: {{ authorCount }}
           标签: {{ tagCount }}
         </div>
+        <div class="text-xs">
+          在线模式: {{ ONLINE_MODE ? '是' : '否' }}
+          用户ID: {{ ONLINE_USER_ID }}
+        </div>
         <div class="flex items-center">
           Debug<Switch v-model="debug.enable" class="ml-3" />
         </div>
@@ -364,6 +371,8 @@ import {
   MASONRY_IMAGE_GAP_LIST,
   MASONRY_IMAGE_SIZE_LIST,
   MASONRY_MAX_COLUMNS,
+  ONLINE_MODE,
+  ONLINE_USER_ID,
 } from '@/config'
 import { useStore } from '@/store'
 import { exportFile } from '@/utils'

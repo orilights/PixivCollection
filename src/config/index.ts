@@ -2,6 +2,11 @@ export const LINK_GITHUB = 'https://github.com/orilights/PixivCollection'
 export const LINK_PIXIV_ARTWORK = 'https://www.pixiv.net/artworks/{id}'
 export const LINK_PIXIV_USER = 'https://www.pixiv.net/users/{id}'
 
+export const ONLINE_MODE = import.meta.env.VITE_ONLINE_MODE === 'true'
+export const ONLINE_API = import.meta.env.VITE_ONLINE_API
+export const ONLINE_USER_ID = Number.parseInt(import.meta.env.VITE_ONLINE_USER_ID)
+export const ONLINE_PXIMG = import.meta.env.VITE_ONLINE_PXIMG || 'pximg.orilight.top'
+
 export const DATA_FILE = import.meta.env.VITE_DATA_FILE || './images.json'
 
 export const IMAGE_PATH_ORIGINAL: string = import.meta.env.VITE_IMAGE_PATH_ORIGINAL || './image/original/'

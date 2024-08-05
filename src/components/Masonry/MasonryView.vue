@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { useElementBounding, useElementSize, useThrottle } from '@vueuse/core'
-import { MASONRY_INFO_AREA_HEIGHT, MASONRY_MIN_COLUMNS, MASONRY_RENDER_RANGE } from '@/config'
+import { MASONRY_INFO_AREA_HEIGHT, MASONRY_MIN_COLUMNS, MASONRY_RENDER_RANGE, ONLINE_MODE } from '@/config'
 import { useStore } from '@/store'
 
 const store = useStore()
@@ -64,11 +64,13 @@ const imagesPlaced = computed(() => {
   for (let i = 0; i < imagesFiltered.value.length; i++) {
     const colPlace = getColToPlace(colsTop)
     const imageIndex = i
-    if (masonryConfig.value.mergeSameIdImage) {
+    if (masonryConfig.value.mergeSameIdImage || ONLINE_MODE) {
       while (
         i < imagesFiltered.value.length - 1
         && imagesFiltered.value[i].id === imagesFiltered.value[i + 1].id
-      ) i++
+      ) {
+        i++
+      }
     }
 
     const item = {
@@ -99,6 +101,11 @@ const imagesRenderList = computed(() => {
     const itemHeight = item.height + itemExtraHeight.value
     return item.top + itemHeight > renderRangeTop && item.top < renderRangeBottom
   })
+  if (ONLINE_MODE) {
+    if (containerHeight.value + containerTop.value - window.innerHeight < 200) {
+      store.loadMore()
+    }
+  }
   if (store.debug.enable) {
     const f = (v: number) => +v.toFixed(3)
     store.debug.masonryContainerSize = [f(containerWidth.value), f(containerHeight.value)]
