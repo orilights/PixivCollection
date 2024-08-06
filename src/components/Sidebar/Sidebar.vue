@@ -334,6 +334,9 @@
         <div class="flex items-center">
           显示卡片阴影<Switch v-model="masonryConfig.showShadow" class="ml-3" />
         </div>
+        <div v-if="MODE === 'development'" class="flex items-center">
+          Debug<Switch v-model="debug.enable" class="ml-3" />
+        </div>
         <div class="mt-1">
           <CButton class="mb-1" @click="clearLocalSettings">
             还原默认设置
@@ -345,18 +348,45 @@
             导出当前筛选结果
           </CButton>
         </div>
+      </SidebarBlock>
+      <SidebarBlock>
         <div class="text-xs">
-          图片: {{ images.length }}
-          作品: {{ illustCount }}
-          作者: {{ authorCount }}
-          标签: {{ tagCount }}
+          <div class="font-bold">
+            统计数据
+          </div>
+          <div>
+            图片: {{ images.length }}
+            作品: {{ illustCount }}
+            作者: {{ authorCount }}
+            标签: {{ tagCount }}
+          </div>
         </div>
+      </SidebarBlock>
+      <SidebarBlock>
         <div class="text-xs">
-          在线模式: {{ ONLINE_MODE ? '是' : '否' }}
-          用户ID: {{ ONLINE_USER_ID }}
-        </div>
-        <div class="flex items-center">
-          Debug<Switch v-model="debug.enable" class="ml-3" />
+          <div class="font-bold">
+            构建信息
+          </div>
+          <div>
+            运行模式: {{ MODE }}
+          </div>
+          <div>
+            在线模式: {{ ONLINE_MODE }}
+            <template v-if="ONLINE_MODE">
+              <br>
+              用户ID: {{ ONLINE_USER_ID }}
+            </template>
+          </div>
+          <div>
+            构建日期：{{ formatTime(BUILD_DATE) }}
+          </div>
+          <div>
+            Vercel: {{ VERCEL_ENV }}
+            <template v-if="VERCEL_ENV">
+              <br>
+              commit: {{ VERCEL_GIT_COMMIT_SHA.slice(0, 7) }}
+            </template>
+          </div>
         </div>
       </SidebarBlock>
     </div>
@@ -365,17 +395,21 @@
 
 <script setup lang="ts">
 import {
+  BUILD_DATE,
   FILTER_BOOKMARKS,
   FILTER_SHAPES,
   LINK_GITHUB,
   MASONRY_IMAGE_GAP_LIST,
   MASONRY_IMAGE_SIZE_LIST,
   MASONRY_MAX_COLUMNS,
+  MODE,
   ONLINE_MODE,
   ONLINE_USER_ID,
+  VERCEL_ENV,
+  VERCEL_GIT_COMMIT_SHA,
 } from '@/config'
 import { useStore } from '@/store'
-import { exportFile } from '@/utils'
+import { exportFile, formatTime } from '@/utils'
 
 const store = useStore()
 const {

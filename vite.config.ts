@@ -36,5 +36,15 @@ export default defineConfig({
         },
       },
     }),
+    {
+      name: 'html-transform',
+      transformIndexHtml(html) {
+        const buildDate = new Date().toISOString()
+        return html.replace(
+          '<body>',
+          `<body data-build-date="${buildDate}">`,
+        )
+      },
+    },
   ],
 })
