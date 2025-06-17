@@ -27,6 +27,11 @@
 
 <script setup lang="ts">
 import { SettingType } from '@orilight/vue-settings'
+import {
+  ClickScrollPlugin,
+  OverlayScrollbars,
+  SizeObserverPlugin,
+} from 'overlayscrollbars'
 import { DATA_FILE, ONLINE_MODE } from '@/config'
 import { useStore } from '@/store'
 import { formatBytes } from '@/utils'
@@ -40,11 +45,24 @@ const {
   imagesFiltered,
   masonryConfig,
   filterConfig,
+  imageViewer,
   debug,
+  showSidebar,
 } = toRefs(store)
 
 const receivedLength = ref(0)
 const contentLength = ref(0)
+
+let osInstance: OverlayScrollbars | null = null
+
+watch(() => [imageViewer.value.show, showSidebar.value], (show) => {
+  if (show.some(i => i)) {
+    osInstance?.options({ overflow: { y: 'hidden' }, scrollbars: { visibility: 'hidden' } })
+  }
+  else {
+    osInstance?.options({ overflow: { y: 'scroll' }, scrollbars: { visibility: 'auto' } })
+  }
+})
 
 function regSettings() {
   store.settings.register('preferColorScheme', preferColorScheme)
@@ -91,6 +109,14 @@ async function fetchData() {
 }
 
 onMounted(() => {
+  OverlayScrollbars.plugin([SizeObserverPlugin, ClickScrollPlugin])
+  osInstance = OverlayScrollbars(document.body, {
+    scrollbars: {
+      autoHide: 'move',
+      clickScroll: true,
+      autoHideSuspend: true,
+    },
+  })
   regSettings()
   if (ONLINE_MODE) {
     store.fetchFromAPI()
@@ -102,6 +128,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   store.settings.unregisterAll()
+  osInstance?.destroy()
 })
 </script>
 

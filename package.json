@@ -12,6 +12,7 @@
   "dependencies": {
     "@orilight/vue-settings": "^1.2.2",
     "@vueuse/core": "^13.3.0",
+    "overlayscrollbars": "^2.11.4",
     "pinia": "^3.0.3",
     "vue": "^3.5.16"
   },

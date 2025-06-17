@@ -2,7 +2,9 @@
   <Transition name="popup-l">
     <div
       v-show="showSidebar"
-      class="fixed left-0 top-[60px] z-30 h-[calc(100vh-60px)] w-full overflow-y-auto overflow-x-hidden bg-white px-2 py-3 transition-all duration-500 dark:bg-[#242424] sm:top-0 sm:h-screen sm:w-[400px] lg:block"
+      ref="sidebarRef"
+      class="!fixed left-0 top-[60px] z-30 h-[calc(100vh-60px)] w-full bg-white px-2 py-3 transition-all duration-500 dark:bg-[#242424] sm:top-0 sm:h-screen sm:w-[400px] lg:block"
+      data-overlayscrollbars-initialize
     >
       <div class="mx-10 mb-2 flex justify-between lg:hidden">
         <button
@@ -395,6 +397,11 @@
 
 <script setup lang="ts">
 import {
+  ClickScrollPlugin,
+  OverlayScrollbars,
+  SizeObserverPlugin,
+} from 'overlayscrollbars'
+import {
   BUILD_DATE,
   FILTER_BOOKMARKS,
   FILTER_SHAPES,
@@ -422,6 +429,9 @@ const {
   debug,
 } = toRefs(store)
 
+let osInstance: OverlayScrollbars | null = null
+
+const sidebarRef = ref<HTMLDivElement | null>(null)
 const years = ref<number[]>([])
 const authors = ref<AuthorData[]>([])
 const tags = ref<TagData[]>([])
@@ -461,6 +471,18 @@ const filteredTags = computed(() => {
     else
       return tags.value.slice(0, 10)
   }
+})
+
+onMounted(() => {
+  osInstance = OverlayScrollbars(sidebarRef.value!, {
+    scrollbars: {
+      autoHide: 'move',
+    },
+  })
+})
+
+onUnmounted(() => {
+  osInstance?.destroy()
 })
 
 watchEffect(() => {

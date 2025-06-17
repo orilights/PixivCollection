@@ -1,9 +1,9 @@
 import path from 'node:path'
 import process from 'node:process'
-import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { defineConfig } from 'vite'
 import simpleHtmlPlugin from 'vite-plugin-simple-html'
 
 export default defineConfig({
@@ -41,8 +41,8 @@ export default defineConfig({
       transformIndexHtml(html) {
         const buildDate = new Date().toISOString()
         return html.replace(
-          '<body>',
-          `<body data-build-date="${buildDate}">`,
+          '<body',
+          `<body data-build-date="${buildDate}"`,
         )
       },
     },
