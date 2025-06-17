@@ -27,9 +27,9 @@
 
 <script setup lang="ts">
 import { SettingType } from '@orilight/vue-settings'
+import { DATA_FILE, ONLINE_MODE } from '@/config'
 import { useStore } from '@/store'
 import { formatBytes } from '@/utils'
-import { DATA_FILE, ONLINE_MODE } from '@/config'
 
 const store = useStore()
 

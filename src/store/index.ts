@@ -1,8 +1,8 @@
 import { Settings } from '@orilight/vue-settings'
 import { useFullscreen, usePreferredColorScheme } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { transformData } from '@/utils'
 import { ONLINE_API, ONLINE_USER_ID } from '@/config'
+import { transformData } from '@/utils'
 
 export const useStore = defineStore('main', {
   state: () => ({
@@ -284,7 +284,8 @@ export const useStore = defineStore('main', {
                   tag => tag.translated_name
                     ? tag.name + tag.translated_name
                     : tag.name,
-                ).join()
+                )
+                .join()
             ).toLowerCase()
           }
         })

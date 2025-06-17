@@ -78,8 +78,8 @@
 
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { useStore } from '@/store'
 import { LINK_GITHUB, NAVBAR_HIDE_DISTANCE } from '@/config'
+import { useStore } from '@/store'
 
 const store = useStore()
 const {

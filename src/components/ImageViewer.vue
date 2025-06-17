@@ -122,15 +122,15 @@
 
 <script setup lang="ts">
 import { useMouse, useWindowSize } from '@vueuse/core'
-import { useStore } from '@/store'
 import {
   IMAGE_ALLOW_DOWNLOAD_ORIGINAL,
   IMAGE_PREVIEW_MAX_HEIGHT,
   IMAGE_PREVIEW_MAX_WIDTH,
   IMAGE_VIEWER_MIN_RATIO,
 } from '@/config'
-import { copyToClipboard, formatTime, getImageUrl, openPixivIllust, openPixivUser } from '@/utils'
+import { useStore } from '@/store'
 import { ImageType } from '@/types'
+import { copyToClipboard, formatTime, getImageUrl, openPixivIllust, openPixivUser } from '@/utils'
 
 const store = useStore()
 const { imageViewer, filterConfig, masonryConfig } = toRefs(store)
