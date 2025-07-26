@@ -42,6 +42,7 @@ const {
   loading,
   preferColorScheme,
   colorScheme,
+  scrollbarTheme,
   imagesFiltered,
   masonryConfig,
   filterConfig,
@@ -63,6 +64,10 @@ watch(() => [imageViewer.value.show, showSidebar.value], (show) => {
     osInstance?.options({ overflow: { y: 'scroll' }, scrollbars: { visibility: 'auto' } })
   }
 })
+
+watch(scrollbarTheme, (newScheme) => {
+  osInstance?.options({ scrollbars: { theme: newScheme } })
+}, { immediate: true })
 
 function regSettings() {
   store.settings.register('preferColorScheme', preferColorScheme)

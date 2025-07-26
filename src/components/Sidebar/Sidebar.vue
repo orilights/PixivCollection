@@ -397,9 +397,7 @@
 
 <script setup lang="ts">
 import {
-  ClickScrollPlugin,
   OverlayScrollbars,
-  SizeObserverPlugin,
 } from 'overlayscrollbars'
 import {
   BUILD_DATE,
@@ -421,6 +419,7 @@ import { exportFile, formatTime } from '@/utils'
 const store = useStore()
 const {
   preferColorScheme,
+  scrollbarTheme,
   showSidebar,
   images,
   filterConfig,
@@ -484,6 +483,10 @@ onMounted(() => {
 onUnmounted(() => {
   osInstance?.destroy()
 })
+
+watch(scrollbarTheme, (newScheme) => {
+  osInstance?.options({ scrollbars: { theme: newScheme } })
+}, { immediate: true })
 
 watchEffect(() => {
   const _years: number[] = []
