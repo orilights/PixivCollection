@@ -100,8 +100,8 @@ export const useStore = defineStore('main', {
       }
       return this.preferColorScheme
     },
-    scrollbarTheme() {
-      return `os-theme-${this.colorScheme() === 'dark' ? 'light' : 'dark'}`
+    scrollbarTheme(): string {
+      return `os-theme-${this.colorScheme === 'dark' ? 'light' : 'dark'}`
     },
     imageFilter() {
       return (image: Image) => {
