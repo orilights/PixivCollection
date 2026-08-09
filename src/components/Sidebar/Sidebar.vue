@@ -492,6 +492,7 @@ watchEffect(() => {
   const _years: number[] = []
   const _tags: { [index: string]: TagData } = {}
   const _authors: { [index: string]: AuthorData } = {}
+  const _countedIllusts = new Set<number>()
   images.value.forEach((image) => {
     // 统计年份
     const year = Number(image.created_at.split('-')[0])
@@ -522,6 +523,10 @@ watchEffect(() => {
     // 过滤不健全度
     if (image.sanity_level > filterConfig.value.restrict.maxSanityLevel)
       return
+
+    if (_countedIllusts.has(image.id))
+      return
+    _countedIllusts.add(image.id)
 
     // 计算作者数据
     const { author } = image
